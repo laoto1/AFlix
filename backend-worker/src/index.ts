@@ -24,6 +24,8 @@ import chunkingRouter from './routes/chunking';
 import nettruyenRouter from './routes/nettruyen';
 import nhentaiRouter from './routes/nhentai';
 import nhentaiTagsRouter from './routes/nhentai-tags';
+import unlockRouter from './routes/unlock';
+import proxyRouter from './routes/proxy';
 
 import { cache } from 'hono/cache';
 
@@ -72,5 +74,7 @@ app.route('/api/chunking', chunkingRouter);
 app.route('/api/nettruyen', nettruyenRouter);
 app.route('/api/nhentai', nhentaiRouter);
 app.route('/api/nhentai-tags', nhentaiTagsRouter);
+app.route('/api/unlock', unlockRouter);
+app.route('/api/proxy', proxyRouter);
 
 export default app;

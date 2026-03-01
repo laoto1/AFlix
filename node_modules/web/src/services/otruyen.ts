@@ -1,3 +1,4 @@
+import { getProxiedImageUrl } from '../utils/imageProxy';
 import axios from 'axios';
 
 const OTRUYEN_API_BASE = 'https://otruyenapi.com/v1/api';

@@ -1,3 +1,4 @@
+import { getProxiedImageUrl } from '../utils/imageProxy';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Globe, Bell } from 'lucide-react';
@@ -86,7 +87,7 @@ const Home = () => {
                                 <div className="flex items-center gap-3 mb-2">
                                     <div className="w-10 h-10 rounded-full bg-[#333333] flex items-center justify-center shrink-0 overflow-hidden relative">
                                         {source.icon ? (
-                                            <img src={source.icon} alt={`${source.name} icon`} className="w-full h-full object-cover" />
+                                            <img src={getProxiedImageUrl(source.icon)} alt={`${source.name} icon`} className="w-full h-full object-cover" />
                                         ) : (
                                             <Globe className="text-[var(--color-text-muted)]" size={20} />
                                         )}

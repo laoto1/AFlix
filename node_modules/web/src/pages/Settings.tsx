@@ -5,6 +5,7 @@ import { useSettings, type Theme, type AccentColor, type Language } from '../con
 import { Settings as SettingsIcon, LogOut, Code, User, ChevronRight, Moon, Palette, Globe, Check, Link } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { getProxiedImageUrl } from '../utils/imageProxy';
 
 const Settings = () => {
     const { user, logout } = useAuth();
@@ -73,21 +74,21 @@ const Settings = () => {
                     <div className="bg-[var(--color-surface)] rounded-2xl overflow-hidden border border-[var(--color-border)] relative">
                         {user?.cover_url && (
                             <div className="absolute inset-x-0 top-0 h-24 z-0">
-                                <img src={user.cover_url} alt="Cover" className="w-full h-full object-cover opacity-40" />
+                                <img src={getProxiedImageUrl(user.cover_url)} alt="Cover" className="w-full h-full object-cover opacity-40" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface)] to-transparent" />
                             </div>
                         )}
                         <div className="relative z-10 flex items-center gap-4 p-4 border-b border-[var(--color-border)]">
                             <div className="relative w-16 h-16 shrink-0">
                                 {user?.avatar_url ? (
-                                    <img src={user.avatar_url} alt="Avatar" className="w-full h-full rounded-full object-cover border-2 border-[var(--color-surface-hover)] shadow-sm" />
+                                    <img src={getProxiedImageUrl(user.avatar_url)} alt="Avatar" className="w-full h-full rounded-full object-cover border-2 border-[var(--color-surface-hover)] shadow-sm" />
                                 ) : (
                                     <div className="w-full h-full rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-pink-500 flex items-center justify-center text-[var(--color-text)] text-2xl font-bold shadow-lg">
                                         {user?.display_name?.charAt(0).toUpperCase() || user?.username?.charAt(0).toUpperCase() || 'U'}
                                     </div>
                                 )}
                                 {user?.avatar_frame_url && (
-                                    <img src={user.avatar_frame_url} alt="Frame" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] object-contain pointer-events-none drop-shadow-md max-w-none" />
+                                    <img src={getProxiedImageUrl(user.avatar_frame_url)} alt="Frame" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] object-contain pointer-events-none drop-shadow-md max-w-none" />
                                 )}
                             </div>
                             <div className="flex-col flex-1">

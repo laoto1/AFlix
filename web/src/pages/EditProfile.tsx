@@ -7,13 +7,10 @@ import Cropper from 'react-easy-crop';
 import type { Point, Area } from 'react-easy-crop';
 import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
+import { getProxiedImageUrl } from '../utils/imageProxy';
 
 // Placeholders for frames and covers that the user will populate later
 const APP_FRAMES = [
-    'https://i.ibb.co/5xz2XS0v/ezgif-71b5d72ba8673a.gif',
-    'https://i.ibb.co/yBBnv3QQ/3.gif',
-    'https://i.ibb.co/WbBBCz3/2.gif',
-    'https://i.ibb.co/LzXk16Vg/1.png',
     'https://i.ibb.co/MksgLLVj/2.png',
     'https://i.ibb.co/pBGNgNXv/3.png',
     'https://i.ibb.co/1YHFByYM/4.png',
@@ -640,7 +637,7 @@ const EditProfile = () => {
             >
                 {/* Show their actual avatar without frame */}
                 {avatarUrl ? (
-                    <img src={avatarUrl} alt="No Frame" className="w-[60%] h-[60%] object-cover rounded-full filter drop-shadow-md opacity-50" loading="lazy" />
+                    <img src={getProxiedImageUrl(avatarUrl)} alt="No Frame" className="w-[60%] h-[60%] object-cover rounded-full filter drop-shadow-md opacity-50" loading="lazy" />
                 ) : (
                     <div className="w-[60%] h-[60%] rounded-full flex justify-center items-center text-4xl font-bold text-gray-400 bg-[#333] opacity-50">
                         {displayName?.charAt(0)?.toUpperCase() || user?.username.charAt(0).toUpperCase()}
@@ -655,7 +652,7 @@ const EditProfile = () => {
                     className={`aspect-square rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${avatarFrameUrl === f ? 'border-[#8C8CFF] scale-105 shadow-lg' : 'border-transparent bg-[#222] opacity-80 hover:opacity-100 hover:scale-105'}`}
                 >
                     <div className="w-full h-full flex items-center justify-center p-2 relative">
-                        <img src={f} alt={`Frame ${i}`} className="w-full h-full object-contain filter drop-shadow-md" loading="lazy" />
+                        <img src={getProxiedImageUrl(f)} alt={`Frame ${i}`} className="w-full h-full object-contain filter drop-shadow-md" loading="lazy" />
                     </div>
                 </div>
             ))}
@@ -686,7 +683,7 @@ const EditProfile = () => {
             >
                 {/* Fallback pattern or actual cover image */}
                 {originalCoverUrl ? (
-                    <img src={originalCoverUrl} alt="Original Cover" className="w-full h-full object-cover opacity-50 filter drop-shadow-md" loading="lazy" />
+                    <img src={getProxiedImageUrl(originalCoverUrl)} alt="Original Cover" className="w-full h-full object-cover opacity-50 filter drop-shadow-md" loading="lazy" />
                 ) : (
                     <div className="absolute inset-0 bg-gradient-to-r from-[#111] to-[#222]" />
                 )}
@@ -699,7 +696,7 @@ const EditProfile = () => {
                     onClick={() => setCoverUrl(c)}
                     className={`aspect-[3/1] rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${coverUrl === c ? 'border-[var(--color-primary)] scale-105 shadow-lg' : 'border-transparent opacity-80 hover:opacity-100 hover:scale-105'}`}
                 >
-                    <img src={c} alt={`Cover ${i}`} className="w-full h-full object-cover" loading="lazy" />
+                    <img src={getProxiedImageUrl(c)} alt={`Cover ${i}`} className="w-full h-full object-cover" loading="lazy" />
                 </div>
             ))}
         </div>
@@ -736,7 +733,7 @@ const EditProfile = () => {
                         {/* Cover Image Background */}
                         <div className="absolute inset-0 z-0 bg-[#000]">
                             {coverUrl ? (
-                                <img src={coverUrl} alt="Cover" className="w-full h-full object-cover opacity-60" />
+                                <img src={getProxiedImageUrl(coverUrl)} alt="Cover" className="w-full h-full object-cover opacity-60" />
                             ) : null}
                             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
                         </div>
@@ -750,7 +747,7 @@ const EditProfile = () => {
                                     onClick={() => avatarInputRef.current?.click()}
                                 >
                                     {avatarUrl ? (
-                                        <img src={avatarUrl} alt="Avatar" className="w-[110%] h-[110%] object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                                        <img src={getProxiedImageUrl(avatarUrl)} alt="Avatar" className="w-[110%] h-[110%] object-cover absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                                     ) : (
                                         <div className="w-full h-full flex justify-center items-center text-4xl font-bold text-gray-400 bg-[#333]">
                                             {displayName?.charAt(0)?.toUpperCase() || user?.username.charAt(0).toUpperCase()}
@@ -773,7 +770,7 @@ const EditProfile = () => {
                                 {/* Frame Overlay */}
                                 {avatarFrameUrl && (
                                     <div className="absolute -inset-4 pointer-events-none z-20">
-                                        <img src={avatarFrameUrl} alt="Frame" className="w-full h-full object-contain filter drop-shadow-md" />
+                                        <img src={getProxiedImageUrl(avatarFrameUrl)} alt="Frame" className="w-full h-full object-contain filter drop-shadow-md" />
                                     </div>
                                 )}
                             </div>

@@ -1,174 +1,19 @@
-2026-03-01T17:10:18.482Z	Initializing build environment...
-2026-03-01T17:10:20.097Z	Success: Finished initializing build environment
-2026-03-01T17:10:20.616Z	Cloning repository...
-2026-03-01T17:10:26.529Z	Restoring from dependencies cache
-2026-03-01T17:10:26.531Z	Restoring from build output cache
-2026-03-01T17:10:26.535Z	Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
-2026-03-01T17:10:26.689Z	Installing project dependencies: npm clean-install --progress=false
-2026-03-01T17:10:18.482Z	Initializing build environment...
-2026-03-01T17:10:20.097Z	Success: Finished initializing build environment
-2026-03-01T17:10:20.616Z	Cloning repository...
-2026-03-01T17:10:26.529Z	Restoring from dependencies cache
-2026-03-01T17:10:26.531Z	Restoring from build output cache
-2026-03-01T17:10:26.535Z	Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
-2026-03-01T17:10:26.689Z	Installing project dependencies: npm clean-install --progress=false
-2026-03-01T17:10:37.678Z	
-2026-03-01T17:10:37.678Z	added 248 packages, and audited 250 packages in 11s
-2026-03-01T17:10:37.678Z	
-2026-03-01T17:10:37.678Z	60 packages are looking for funding
-2026-03-01T17:10:37.678Z	  run `npm fund` for details
-2026-03-01T17:10:37.680Z	
-2026-03-01T17:10:37.680Z	found 0 vulnerabilities
-2026-03-01T17:10:37.873Z	Executing user build command: npm run build
-2026-03-01T17:10:38.146Z	
-2026-03-01T17:10:38.149Z	> web@0.0.0 build
-2026-03-01T17:10:38.149Z	> tsc -b && vite build
-2026-03-01T17:10:38.149Z	
-2026-03-01T17:10:42.806Z	vite v7.3.1 building client environment for production...
-2026-03-01T17:10:42.916Z	transforming...
-2026-03-01T17:10:47.696Z	✓ 1880 modules transformed.
-2026-03-01T17:10:48.169Z	[plugin vite:reporter] 
-2026-03-01T17:10:48.170Z	(!) /opt/buildhome/repo/web/src/utils/downloader.ts is dynamically imported by /opt/buildhome/repo/web/src/contexts/DownloadContext.tsx but also statically imported by /opt/buildhome/repo/web/src/contexts/DownloadContext.tsx, dynamic import will not move module into another chunk.
-2026-03-01T17:10:48.170Z	
-2026-03-01T17:10:48.170Z	rendering chunks...
-2026-03-01T17:10:48.202Z	computing gzip size...
-2026-03-01T17:10:48.227Z	dist/index.html                   0.45 kB │ gzip:   0.29 kB
-2026-03-01T17:10:48.227Z	dist/assets/index-D31Gv2vn.css   46.41 kB │ gzip:   8.36 kB
-2026-03-01T17:10:48.227Z	dist/assets/index-BohNSRBJ.js   620.22 kB │ gzip: 189.95 kB
-2026-03-01T17:10:48.228Z	
-2026-03-01T17:10:48.228Z	(!) Some chunks are larger than 500 kB after minification. Consider:
-2026-03-01T17:10:48.228Z	- Using dynamic import() to code-split the application
-2026-03-01T17:10:48.228Z	- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
-2026-03-01T17:10:48.228Z	- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-2026-03-01T17:10:48.228Z	✓ built in 5.36s
-2026-03-01T17:10:48.330Z	Success: Build command completed
-2026-03-01T17:10:49.450Z	Executing user deploy command: npx wrangler deploy
-2026-03-01T17:10:51.818Z	npm warn exec The following package was not found and will be installed: wrangler@4.69.0
-2026-03-01T17:11:05.528Z	
-2026-03-01T17:11:05.529Z	 ⛅️ wrangler 4.69.0
-2026-03-01T17:11:05.529Z	───────────────────
-2026-03-01T17:11:05.662Z	
-2026-03-01T17:11:05.666Z	Detected Project Settings:
-2026-03-01T17:11:05.666Z	 - Worker Name: aflix
-2026-03-01T17:11:05.666Z	 - Framework: Vite
-2026-03-01T17:11:05.666Z	 - Build Command: npm run build
-2026-03-01T17:11:05.667Z	 - Output Directory: dist
-2026-03-01T17:11:05.667Z	
-2026-03-01T17:11:05.667Z	? Do you want to modify these settings?
-2026-03-01T17:11:05.667Z	🤖 Using fallback value in non-interactive context: no
-2026-03-01T17:11:05.670Z	
-2026-03-01T17:11:05.670Z	📦 Install packages:
-2026-03-01T17:11:05.670Z	 - wrangler (devDependency)
-2026-03-01T17:11:05.670Z	
-2026-03-01T17:11:05.670Z	📝 Update package.json scripts:
-2026-03-01T17:11:05.671Z	 - "deploy": "npm run build && wrangler deploy"
-2026-03-01T17:11:05.671Z	 - "preview": "npm run build && wrangler dev"
-2026-03-01T17:11:05.671Z	
-2026-03-01T17:11:05.671Z	📄 Create wrangler.jsonc:
-2026-03-01T17:11:05.672Z	  {
-2026-03-01T17:11:05.672Z	    "$schema": "node_modules/wrangler/config-schema.json",
-2026-03-01T17:11:05.676Z	    "name": "aflix",
-2026-03-01T17:11:05.676Z	    "compatibility_date": "2025-09-27",
-2026-03-01T17:11:05.676Z	    "observability": {
-2026-03-01T17:11:05.676Z	      "enabled": true
-2026-03-01T17:11:05.676Z	    },
-2026-03-01T17:11:05.676Z	    "assets": {
-2026-03-01T17:11:05.676Z	      "not_found_handling": "single-page-application"
-2026-03-01T17:11:05.676Z	    },
-2026-03-01T17:11:05.676Z	    "compatibility_flags": [
-2026-03-01T17:11:05.676Z	      "nodejs_compat"
-2026-03-01T17:11:05.676Z	    ]
-2026-03-01T17:11:05.676Z	  }
-2026-03-01T17:11:05.676Z	
-2026-03-01T17:11:05.680Z	🛠️  Configuring project for Vite
-2026-03-01T17:11:05.680Z	
-2026-03-01T17:11:05.680Z	? Proceed with setup?
-2026-03-01T17:11:05.680Z	🤖 Using fallback value in non-interactive context: yes
-2026-03-01T17:11:14.188Z	├ Adding Wrangler files to the .gitignore file
-2026-03-01T17:11:14.188Z	│ updated .gitignore file
-2026-03-01T17:11:14.189Z	│
-2026-03-01T17:11:14.189Z	[build] Running: npm run build
-2026-03-01T17:11:14.365Z	[build] 
-2026-03-01T17:11:14.365Z	[build] > web@0.0.0 build
-2026-03-01T17:11:14.365Z	[build] > tsc -b && vite build
-2026-03-01T17:11:14.365Z	[build] 
-2026-03-01T17:11:14.365Z	[build] 
-2026-03-01T17:11:21.232Z	[build] vite v7.3.1 building client environment for production...
-2026-03-01T17:11:21.233Z	[build] 
-2026-03-01T17:11:21.305Z	[build] transforming...
-2026-03-01T17:11:21.306Z	[build] 
-2026-03-01T17:11:25.942Z	[build] ✓ 1880 modules transformed.
-2026-03-01T17:11:25.942Z	[build] 
-2026-03-01T17:11:26.471Z	[build] [plugin vite:reporter] 
-2026-03-01T17:11:26.472Z	[build] (!) /opt/buildhome/repo/web/src/utils/downloader.ts is dynamically imported by /opt/buildhome/repo/web/src/contexts/DownloadContext.tsx but also statically imported by /opt/buildhome/repo/web/src/contexts/DownloadContext.tsx, dynamic import will not move module into another chunk.
-2026-03-01T17:11:26.472Z	[build] 
-2026-03-01T17:11:26.472Z	[build] 
-2026-03-01T17:11:26.476Z	[build] rendering chunks...
-2026-03-01T17:11:26.476Z	[build] 
-2026-03-01T17:11:26.507Z	[build] computing gzip size...
-2026-03-01T17:11:26.507Z	[build] 
-2026-03-01T17:11:26.531Z	[build] dist/.assetsignore                0.02 kB
-2026-03-01T17:11:26.534Z	[build] dist/index.html                   0.45 kB │ gzip:   0.29 kB
-2026-03-01T17:11:26.535Z	[build] 
-2026-03-01T17:11:26.536Z	[build] dist/wrangler.json                1.11 kB │ gzip:   0.58 kB
-2026-03-01T17:11:26.536Z	[build] dist/assets/index-D31Gv2vn.css   46.41 kB │ gzip:   8.36 kB
-2026-03-01T17:11:26.536Z	[build] dist/assets/index-BohNSRBJ.js   620.22 kB │ gzip: 189.95 kB
-2026-03-01T17:11:26.537Z	[build] ✓ built in 5.27s
-2026-03-01T17:11:26.555Z	[build] 
-2026-03-01T17:11:26.555Z	[build] 
-2026-03-01T17:11:26.555Z	[build] (!) Some chunks are larger than 500 kB after minification. Consider:
-2026-03-01T17:11:26.555Z	[build] - Using dynamic import() to code-split the application
-2026-03-01T17:11:26.556Z	[build] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
-2026-03-01T17:11:26.556Z	[build] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-2026-03-01T17:11:26.556Z	[build] 
-2026-03-01T17:11:26.698Z	Using redirected Wrangler configuration.
-2026-03-01T17:11:26.698Z	 - Configuration being used: "dist/wrangler.json"
-2026-03-01T17:11:26.698Z	 - Original user's configuration: "wrangler.jsonc"
-2026-03-01T17:11:26.698Z	 - Deploy configuration file: ".wrangler/deploy/config.json"
-2026-03-01T17:11:29.180Z	▲ [WARNING] The local configuration being used (generated from your local configuration file) differs from the remote configuration of your Worker set via the Cloudflare Dashboard:
-2026-03-01T17:11:29.180Z	
-2026-03-01T17:11:29.180Z	   {
-2026-03-01T17:11:29.182Z	  +  assets: {
-2026-03-01T17:11:29.182Z	  +  }
-2026-03-01T17:11:29.182Z	  -  compatibility_date: "2026-03-01"
-2026-03-01T17:11:29.182Z	  +  compatibility_date: "2025-09-27"
-2026-03-01T17:11:29.182Z	  -  workers_dev: false
-2026-03-01T17:11:29.182Z	  +  workers_dev: true
-2026-03-01T17:11:29.182Z	  -  preview_urls: false
-2026-03-01T17:11:29.182Z	  +  preview_urls: true
-2026-03-01T17:11:29.182Z	     observability: {
-2026-03-01T17:11:29.182Z	  -    enabled: false
-2026-03-01T17:11:29.182Z	  +    enabled: true
-2026-03-01T17:11:29.182Z	       logs: {
-2026-03-01T17:11:29.182Z	  -      enabled: false
-2026-03-01T17:11:29.182Z	  +      enabled: true
-2026-03-01T17:11:29.182Z	       }
-2026-03-01T17:11:29.182Z	     }
-2026-03-01T17:11:29.182Z	   }
-2026-03-01T17:11:29.182Z	  
-2026-03-01T17:11:29.182Z	  
-2026-03-01T17:11:29.182Z	  Deploying the Worker will override the remote configuration with your local one.
-2026-03-01T17:11:29.182Z	
-2026-03-01T17:11:29.182Z	
-2026-03-01T17:11:29.183Z	? Would you like to continue?
-2026-03-01T17:11:29.183Z	🤖 Using fallback value in non-interactive context: yes
-2026-03-01T17:11:29.455Z	🌀 Building list of assets...
-2026-03-01T17:11:29.459Z	✨ Read 9 files from the assets directory /opt/buildhome/repo/web/dist
-2026-03-01T17:11:29.500Z	🌀 Starting asset upload...
-2026-03-01T17:11:31.551Z	No updated asset files to upload. Proceeding with deployment...
-2026-03-01T17:11:31.553Z	Total Upload: 18.74 KiB / gzip: 4.65 KiB
-2026-03-01T17:11:33.043Z	
-2026-03-01T17:11:33.043Z	Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
-2026-03-01T17:11:33.045Z	
-2026-03-01T17:11:33.052Z	✘ [ERROR] A request to the Cloudflare API (/accounts/b316c98157dd99acd7e77b227c7b54a8/workers/scripts/aflix/versions) failed.
-2026-03-01T17:11:33.052Z	
-2026-03-01T17:11:33.052Z	  Invalid _redirects configuration:
-2026-03-01T17:11:33.053Z	  Line 1: Infinite loop detected in this rule. This would cause a redirect to strip `.html` or `/index` and end up triggering this rule again. [code: 10021]
-2026-03-01T17:11:33.053Z	  To learn more about this error, visit: https://developers.cloudflare.com/workers/observability/errors/#validation-errors-10021
-2026-03-01T17:11:33.059Z	
-2026-03-01T17:11:33.060Z	  
-2026-03-01T17:11:33.060Z	  If you think this is a bug, please open an issue at: https://github.com/cloudflare/workers-sdk/issues/new/choose
-2026-03-01T17:11:33.060Z	
-2026-03-01T17:11:33.061Z	
-2026-03-01T17:11:33.084Z	🪵  Logs were written to "/opt/buildhome/.config/.wrangler/logs/wrangler-2026-03-01_17-11-04_870.log"
-2026-03-01T17:11:33.165Z	Failed: error occurred while running deploy command
+GET
+https://i.ibb.co/CKXyvH78/logo-otruyen-1.png
+NS_BINDING_ABORTED
+
+GET
+https://i.ibb.co/gZLv3XWH/nh.png
+NS_BINDING_ABORTED
+
+GET
+https://img.otruyenapi.com/uploads/covers/be-con-thien-tai-bi-mat-di-tim-cha.jpg?1770975964
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. be-con-thien-tai-bi-mat-di-tim-cha.jpg
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. nh.png
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details.
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. a-72d1fd7c47cc7a98c8f64d175773344b.png
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. 036404a048d498394e3847bf4d156c55e7969439.png
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. e89d86814300cd74c2160596cb1936b2db9f58c0.png
