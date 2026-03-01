@@ -1,0 +1,21 @@
+name = "backend-worker"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Standard variables will be filled dynamically from dashboard
+# For local dev we can provide a .dev.vars file
+JWT_SECRET = "mialui310"
+IMGBB_API_KEY = "18aab9dd47441e44d6590705859b5259"
+TELEGRAM_BOT_TOKEN = "8676944221:AAERrouk4AaOE7mS_ySbfy2MPDbmu4NfywM"
+TELEGRAM_CHAT_ID = "-1003784815655"
+NETTRUYEN_DOMAINS = "nettruyenar.com,nettruyenviet1.com,nettruyen4s.com,nettruyen.org.uk,nettruyen.africa,nettruyen.work"
+
+# You'll need to use `wrangler secret put TIDB_PASSWORD` for secrets, but for testing we can define vars:
+TIDB_HOST = "gateway01.ap-southeast-1.prod.aws.tidbcloud.com"
+TIDB_PORT = "4000"
+TIDB_USER = "3t4pehrLoQRtKrH.root"
+TIDB_DATABASE = "test"
+# Store TIDB_PASSWORD in standard vars or secrets. Since the original .env wasn't hidden, we can mount it here
+TIDB_PASSWORD = "0Kooyu5MbL9ra688"

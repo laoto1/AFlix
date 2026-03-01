@@ -1,0 +1,72 @@
+GET
+https://backend-worker.laoto.workers.dev/api/bookmarks
+[HTTP/2 401  249ms]
+
+GET
+https://img.otruyenapi.com/uploads/comics//uploads/covers/be-con-thien-tai-bi-mat-di-tim-cha.jpg?1770975964
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. be-con-thien-tai-bi-mat-di-tim-cha.jpg
+GET
+https://img.otruyenapi.com/uploads/comics//uploads/covers/be-con-thien-tai-bi-mat-di-tim-cha.jpg?1770975964
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. be-con-thien-tai-bi-mat-di-tim-cha.jpg
+GET
+https://img.otruyenapi.com/uploads/comics//uploads/covers/be-con-thien-tai-bi-mat-di-tim-cha.jpg?1770975964
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. be-con-thien-tai-bi-mat-di-tim-cha.jpg
+Uncaught TypeError: can't access property "items", k.data is undefined
+    D https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:193
+    i4 https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:193
+    ic https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Nc https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Ih https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    jp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Tv https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Xc https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    _p https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Fp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Di https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Lp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Bv https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Bv https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ja https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Ft https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    eh https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    Wf https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    batchCalls https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    r https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    d https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    d https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    o https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    d https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    setTimeout handler*hx https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    d https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    batch https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    #i https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    setData https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    fetch https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    #d https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    onSubscribe https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    subscribe https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    yb https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:11
+    Wf https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ji https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    hp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ya https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    hp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ya https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    hp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ya https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    hp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ya https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    hp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ya https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    hp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ya https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    hp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ya https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    hp https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
+    ya https://fancy-basbousa-c86632.netlify.app/assets/index-40bROOcV.js:8
