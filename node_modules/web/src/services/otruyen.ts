@@ -76,14 +76,16 @@ export const fetchCategories = async () => {
 };
 
 export const getImageUrl = (thumb_url: string) => {
+    let finalUrl = '';
     if (!thumb_url) return '';
-    if (thumb_url.startsWith('http')) return thumb_url;
-    
-    if (thumb_url.includes('uploads/')) {
+    if (thumb_url.startsWith('http')) {
+        finalUrl = thumb_url;
+    } else if (thumb_url.includes('uploads/')) {
         const cleanPath = thumb_url.startsWith('/') ? thumb_url : '/' + thumb_url;
-        return `https://img.otruyenapi.com${cleanPath}`;
+        finalUrl = `https://img.otruyenapi.com${cleanPath}`;
+    } else {
+        const path = thumb_url.startsWith('/') ? thumb_url : '/' + thumb_url;
+        finalUrl = `${IMAGE_CDN}${path}`;
     }
-    
-    const path = thumb_url.startsWith('/') ? thumb_url : '/' + thumb_url;
-    return `${IMAGE_CDN}${path}`;
+    return getProxiedImageUrl(finalUrl);
 };
