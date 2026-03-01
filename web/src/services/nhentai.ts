@@ -1,30 +1,28 @@
 import axios from 'axios';
 
-const api = axios.create({
-    baseURL: '/api/nhentai'
-});
+const BASE = '/api/nhentai';
 
 export const fetchNhentaiComics = async (page: number) => {
-    const res = await api.get(`?action=latest&page=${page}`);
+    const res = await axios.get(`${BASE}?action=latest&page=${page}`);
     return res.data;
 };
 
 export const fetchNhentaiPopular = async (page: number, sort: string = 'popular-today') => {
-    const res = await api.get(`?action=popular&page=${page}&sort=${sort}`);
+    const res = await axios.get(`${BASE}?action=popular&page=${page}&sort=${sort}`);
     return res.data;
 };
 
 export const fetchNhentaiSearch = async (query: string, page: number) => {
-    const res = await api.get(`?action=search&q=${encodeURIComponent(query)}&page=${page}`);
+    const res = await axios.get(`${BASE}?action=search&q=${encodeURIComponent(query)}&page=${page}`);
     return res.data;
 };
 
 export const fetchNhentaiDetail = async (slug: string) => {
-    const res = await api.get(`?action=detail&slug=${slug}`);
+    const res = await axios.get(`${BASE}?action=detail&slug=${slug}`);
     return res.data;
 };
 
 export const fetchNhentaiChapter = async (slug: string) => {
-    const res = await api.get(`?action=chapter&slug=${slug}`);
+    const res = await axios.get(`${BASE}?action=chapter&slug=${slug}`);
     return res.data;
 };
