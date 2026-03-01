@@ -194,7 +194,7 @@ nhentai.get('/', async (req, res) => {
                             server_data: [{
                                 chapter_name: 'Full',
                                 update_time: uploadedAt,
-                                chapter_api_data: `api/nhentai?action=chapter&slug=${slug}`
+                                chapter_api_data: `/api/nhentai?action=chapter&slug=${slug}`
                             }]
                         }]
                     }

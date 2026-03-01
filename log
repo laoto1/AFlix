@@ -1,26 +1,215 @@
-index:
-Mar 2, 02:42:16 AM: b0613456 ERROR  Unhandled Promise Rejection 	{"errorType":"Runtime.UnhandledPromiseRejection","errorMessage":"ReferenceError: c is not defined","reason":{"errorType":"ReferenceError","errorMessage":"c is not defined","stack":["ReferenceError: c is not defined","    at /var/task/api/nettruyen.js:132:59","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at next (/var/task/node_modules/express/lib/router/route.js:149:13)","    at Route.dispatch (/var/task/node_modules/express/lib/router/route.js:119:3)","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at /var/task/node_modules/express/lib/router/index.js:284:15","    at Function.process_params (/var/task/node_modules/express/lib/router/index.js:346:12)","    at next (/var/task/node_modules/express/lib/router/index.js:280:10)","    at Function.handle (/var/task/node_modules/express/lib/router/index.js:175:3)","    at router (/var/task/node_modules/express/lib/router/index.js:47:12)"]},"promise":{},"stack":["Runtime.UnhandledPromiseRejection: ReferenceError: c is not defined","    at process.<anonymous> (file:///var/runtime/index.mjs:1448:17)","    at process.emit (node:events:519:28)","    at emitUnhandledRejection (node:internal/process/promises:252:13)","    at throwUnhandledRejectionsMode (node:internal/process/promises:388:19)","    at processPromiseRejections (node:internal/process/promises:475:17)","    at process.processTicksAndRejections (node:internal/process/task_queues:106:32)"]}
-Mar 2, 02:42:16 AM: b0613456 Duration: 852.62 ms	Memory Usage: 128 MB
-Mar 2, 02:43:25 AM: 03b8a366 ERROR  Unhandled Promise Rejection 	{"errorType":"Runtime.UnhandledPromiseRejection","errorMessage":"ReferenceError: c is not defined","reason":{"errorType":"ReferenceError","errorMessage":"c is not defined","stack":["ReferenceError: c is not defined","    at /var/task/api/nettruyen.js:132:59","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at next (/var/task/node_modules/express/lib/router/route.js:149:13)","    at Route.dispatch (/var/task/node_modules/express/lib/router/route.js:119:3)","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at /var/task/node_modules/express/lib/router/index.js:284:15","    at Function.process_params (/var/task/node_modules/express/lib/router/index.js:346:12)","    at next (/var/task/node_modules/express/lib/router/index.js:280:10)","    at Function.handle (/var/task/node_modules/express/lib/router/index.js:175:3)","    at router (/var/task/node_modules/express/lib/router/index.js:47:12)"]},"promise":{},"stack":["Runtime.UnhandledPromiseRejection: ReferenceError: c is not defined","    at process.<anonymous> (file:///var/runtime/index.mjs:1448:17)","    at process.emit (node:events:519:28)","    at emitUnhandledRejection (node:internal/process/promises:252:13)","    at throwUnhandledRejectionsMode (node:internal/process/promises:388:19)","    at processPromiseRejections (node:internal/process/promises:475:17)","    at process.processTicksAndRejections (node:internal/process/task_queues:106:32)"]}
-Mar 2, 02:43:25 AM: 03b8a366 Duration: 850.66 ms	Memory Usage: 126 MB
-Mar 2, 02:44:18 AM: 4c3b8d06 ERROR  Unhandled Promise Rejection 	{"errorType":"Runtime.UnhandledPromiseRejection","errorMessage":"ReferenceError: c is not defined","reason":{"errorType":"ReferenceError","errorMessage":"c is not defined","stack":["ReferenceError: c is not defined","    at /var/task/api/nettruyen.js:132:59","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at next (/var/task/node_modules/express/lib/router/route.js:149:13)","    at Route.dispatch (/var/task/node_modules/express/lib/router/route.js:119:3)","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at /var/task/node_modules/express/lib/router/index.js:284:15","    at Function.process_params (/var/task/node_modules/express/lib/router/index.js:346:12)","    at next (/var/task/node_modules/express/lib/router/index.js:280:10)","    at Function.handle (/var/task/node_modules/express/lib/router/index.js:175:3)","    at router (/var/task/node_modules/express/lib/router/index.js:47:12)"]},"promise":{},"stack":["Runtime.UnhandledPromiseRejection: ReferenceError: c is not defined","    at process.<anonymous> (file:///var/runtime/index.mjs:1448:17)","    at process.emit (node:events:519:28)","    at emitUnhandledRejection (node:internal/process/promises:252:13)","    at throwUnhandledRejectionsMode (node:internal/process/promises:388:19)","    at processPromiseRejections (node:internal/process/promises:475:17)","    at process.processTicksAndRejections (node:internal/process/task_queues:106:32)"]}
-Mar 2, 02:44:18 AM: 4c3b8d06 Duration: 777.29 ms	Memory Usage: 129 MB
-
-
-url:
-An unhandled error in the function code triggered the following message:
-
-Runtime.UnhandledPromiseRejection - ReferenceError: c is not defined
-Stack trace
-
-Runtime.UnhandledPromiseRejection: ReferenceError: c is not defined
-    at process.<anonymous> (file:///var/runtime/index.mjs:1448:17)
-    at process.emit (node:events:519:28)
-    at emitUnhandledRejection (node:internal/process/promises:252:13)
-    at throwUnhandledRejectionsMode (node:internal/process/promises:388:19)
-    at processPromiseRejections (node:internal/process/promises:475:17)
-    at process.processTicksAndRejections (node:internal/process/task_queues:106:32)
-
-Connection details
-
-Netlify internal ID: 01KJNF2HZKR5XSYE657Q2YZBD2
+Failed to download chapter as zip: Error: Invalid chapter data format
+    Wb https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    _w https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    _w https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    Ri https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Mp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    so https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Op https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    zp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    wp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    _p https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Fp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Mi https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Lp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Uv https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Uv https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ra https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ft https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ci https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Nh https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    d https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    onClick https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    Pp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    nu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Vd https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    nu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    bu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    py https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    Yp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    tu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    au https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    au https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    createRoot https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    <anonymous> https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:273
+index-BC-c-gNJ.js:193:96470
+    Wb https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    _w https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    _w https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    Ri https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Mp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    so https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Op https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    zp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    wp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    _p https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Fp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Mi https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Lp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Uv https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    (Bất đồng bộ: VoidFunction)
+    Uv https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ra https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ft https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ci https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Nh https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    d https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    onClick https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    Pp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    nu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Vd https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    nu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    bu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    py https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    (Bất đồng bộ: EventListener.handleEvent)
+    Yp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    tu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    au https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    au https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    createRoot https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    <ẩn danh> https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:273
+Download failed: Error: Invalid chapter data format
+    Wb https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    _w https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    _w https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    Ri https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Mp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    so https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Op https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    zp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    wp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    _p https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Fp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Mi https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Lp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Uv https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Uv https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ra https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ft https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ci https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Nh https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    d https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    onClick https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    Pp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    nu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Vd https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    nu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    bu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    py https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    Yp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    tu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    au https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    au https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    createRoot https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    <anonymous> https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:273
+index-BC-c-gNJ.js:193:100752
+    _w https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    _w https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    Ri https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    xa https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    hp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Mp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    so https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Op https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    zp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    wp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    _p https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Fp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Mi https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Lp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Uv https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    (Bất đồng bộ: VoidFunction)
+    Uv https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ra https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ft https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Ci https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Nh https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    d https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    onClick https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:193
+    Pp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    nu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    Vd https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    nu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    bu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    py https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    (Bất đồng bộ: EventListener.handleEvent)
+    Yp https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    tu https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    au https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    au https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:8
+    createRoot https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:9
+    <ẩn danh> https://aflix.laoto.workers.dev/assets/index-BC-c-gNJ.js:273
