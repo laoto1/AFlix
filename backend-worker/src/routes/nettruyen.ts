@@ -239,8 +239,8 @@ nettruyen.get('/', async (c) => {
         // ── LATEST ──
         if (action === 'latest') {
             const paths = page === '1'
-                ? [`/danh-sach-truyen?status=-1&sort=15`, `/danh-sach-truyen/?status=-1&sort=15`]
-                : [`/danh-sach-truyen?status=-1&sort=15&page=${page}`, `/danh-sach-truyen/${page}?status=-1&sort=15`];
+                ? [`/tim-truyen?sort=15`, `/tim-truyen/?sort=15`]
+                : [`/tim-truyen?sort=15&page=${page}`, `/tim-truyen/${page}?sort=15`];
             const { data: html, domain } = await fetchPathsFallbacks(c.env, paths);
             return parseItemList(html, domain, page);
         }
@@ -254,12 +254,12 @@ nettruyen.get('/', async (c) => {
             else if (time === 'month') { sortParam = 'views_month'; altSort = '11'; }
 
             const paths = page === '1'
-                ? [`/danh-sach-truyen?sort=${sortParam}`, `/tim-truyen?status=-1&sort=${altSort}`]
+                ? [`/tim-truyen?sort=${sortParam}`, `/tim-truyen?sort=${altSort}`]
                 : [
-                    `/danh-sach-truyen?sort=${sortParam}&page=${page}`,
-                    `/danh-sach-truyen/${page}?sort=${sortParam}`,
-                    `/tim-truyen?status=-1&sort=${altSort}&page=${page}`,
-                    `/tim-truyen/${page}?status=-1&sort=${altSort}`
+                    `/tim-truyen?sort=${sortParam}&page=${page}`,
+                    `/tim-truyen/${page}?sort=${sortParam}`,
+                    `/tim-truyen?sort=${altSort}&page=${page}`,
+                    `/tim-truyen/${page}?sort=${altSort}`
                 ];
             const { data: html, domain } = await fetchPathsFallbacks(c.env, paths);
             return parseItemList(html, domain, page);

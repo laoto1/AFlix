@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 
 const unlock = new Hono();
 
-unlock.post('/', async (c) => {
+const unlockHandler = async (c: any) => {
     try {
         const body = await c.req.json();
         const { key } = body;
@@ -16,6 +16,9 @@ unlock.post('/', async (c) => {
     } catch {
         return c.json({ error: 'Invalid request' }, 400);
     }
-});
+};
+
+unlock.post('/', unlockHandler);
+unlock.post('', unlockHandler);
 
 export default unlock;

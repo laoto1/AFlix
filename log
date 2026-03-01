@@ -1,32 +1,219 @@
-2026-03-01T17:50:40.467Z	Initializing build environment...
-2026-03-01T17:50:41.899Z	Success: Finished initializing build environment
-2026-03-01T17:50:42.473Z	Cloning repository...
-2026-03-01T17:50:40.467Z	Initializing build environment...
-2026-03-01T17:50:41.899Z	Success: Finished initializing build environment
-2026-03-01T17:50:42.473Z	Cloning repository...
-2026-03-01T17:50:48.739Z	Restoring from dependencies cache
-2026-03-01T17:50:48.742Z	Restoring from build output cache
-2026-03-01T17:50:48.747Z	Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
-2026-03-01T17:50:53.570Z	Success: Dependencies restored from build cache.
-2026-03-01T17:50:53.572Z	Installing project dependencies: npm clean-install --progress=false
-2026-03-01T17:51:02.721Z	
-2026-03-01T17:51:02.721Z	added 248 packages, and audited 250 packages in 8s
-2026-03-01T17:51:02.724Z	
-2026-03-01T17:51:02.724Z	60 packages are looking for funding
-2026-03-01T17:51:02.724Z	  run `npm fund` for details
-2026-03-01T17:51:02.724Z	
-2026-03-01T17:51:02.724Z	found 0 vulnerabilities
-2026-03-01T17:51:02.948Z	Executing user build command: npm run build
-2026-03-01T17:51:03.251Z	
-2026-03-01T17:51:03.252Z	> web@0.0.0 build
-2026-03-01T17:51:03.252Z	> tsc -b && vite build
-2026-03-01T17:51:03.252Z	
-2026-03-01T17:51:07.483Z	src/services/otruyen.ts(1,1): error TS6133: 'getProxiedImageUrl' is declared but its value is never read.
-2026-03-01T17:51:07.788Z	npm error Lifecycle script `build` failed with error:
-2026-03-01T17:51:07.788Z	npm error code 2
-2026-03-01T17:51:07.788Z	npm error path /opt/buildhome/repo/web
-2026-03-01T17:51:07.788Z	npm error workspace web@0.0.0
-2026-03-01T17:51:07.788Z	npm error location /opt/buildhome/repo/web
-2026-03-01T17:51:07.788Z	npm error command failed
-2026-03-01T17:51:07.789Z	npm error command sh -c tsc -b && vite build
-2026-03-01T17:51:07.801Z	Failed: error occurred while running build command
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/covers/be-con-thien-tai-bi-mat-di-tim-cha.jpg?1770975964
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/uy-ban-thuong-mai-cong-bang-thumb.jpg
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/xanh-tham-mau-lanh-lung-do-tham-sac-quy-quyet-thumb.jpg
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/yugo-ke-thuong-thuyet-thumb.jpg
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/xuyen-khong-toi-tu-tien-gioi-lam-tru-than-thumb.jpg
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/con-trai-ut-cua-ba-tuoc-la-mot-nguoi-choi-thumb.jpg
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/quy-vuc-an-pham-nhan-thumb.jpg
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/covers/be-con-thien-tai-bi-mat-di-tim-cha.jpg?1770975964
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/vi-nhan-kiem-thumb.jpg
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/yugo-ke-thuong-thuyet-thumb.jpg
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/doi-truong-linh-danh-thue-thumb.jpg
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/CKXyvH78/logo-otruyen-1.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/gZLv3XWH/nh.png
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/39c78Cmh/4557a6466d60.jpg
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/nqkXw31q/3be0ba2d5c58.jpg
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/1t68Tdhq/64c7df7e54649e990d9c79e14dcbd4e89100873a.png
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/MksgLLVj/2.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/pBGNgNXv/3.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/1YHFByYM/4.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/PvrmmCss/6.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/Xr7yWLLN/5.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/nsyBp6vq/7.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/Y4jmkk8G/8.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/ynqZcxTk/9.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/HLsJ4b8C/11.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/0phqLcCY/10.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/CKLVsgQg/20.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/kgLW4Qf0/22.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/F4x4hkVx/21.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/s9bw34Hr/25.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/TBLkSQ1g/23.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/5XDgw583/24.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/SXNQSF7R/a-72d1fd7c47cc7a98c8f64d175773344b.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/RpBgT5Rw/e89d86814300cd74c2160596cb1936b2db9f58c0.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/pt3tw5P/036404a048d498394e3847bf4d156c55e7969439.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/7DHnpj7/3b225d543fc27e1570267bc738e6ad183995790c.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/1t68Tdhq/64c7df7e54649e990d9c79e14dcbd4e89100873a.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/rRYXcwx2/17a95655f928f54092fe0364fc4fdce091d0e9fc.png
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/WNC8nXxP/a-554b7c34f7b6c709f19535aacb128e7b.png
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/39c78Cmh/4557a6466d60.jpg
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/nqkXw31q/3be0ba2d5c58.jpg
+NS_BINDING_ABORTED
+
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/1t68Tdhq/64c7df7e54649e990d9c79e14dcbd4e89100873a.png
+NS_BINDING_ABORTED
+
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
+GET
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/vi-nhan-kiem-thumb.jpg
+NS_BINDING_ABORTED
+
+XHR
+POST
+https://backend-worker.laoto.workers.dev/api/unlock
+[HTTP/2 404  47ms]
+
