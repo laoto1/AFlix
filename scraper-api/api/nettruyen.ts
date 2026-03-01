@@ -2,10 +2,76 @@ const express = require('express');
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-const DOMAIN = 'nettruyen4s.com';
+// ── Multi-Domain Failover ──
+const DEFAULT_DOMAINS = [
+    'nettruyen4s.com',
+    'nettruyenar.com',
+    'nettruyenviet1.com',
+    'nettruyen.org.uk',
+    'nettruyen.africa',
+    'nettruyen.work',
+];
+
+const getDomains = (): string[] => {
+    const envDomains = process.env.NETTRUYEN_DOMAINS;
+    if (envDomains) {
+        const list = envDomains.split(',').map(d => d.trim()).filter(Boolean);
+        if (list.length > 0) return list;
+    }
+    return DEFAULT_DOMAINS;
+};
+
+// Cache the last working domain for 30 minutes to avoid wasted failover attempts
+let cachedDomain: string | null = null;
+let cachedDomainExpiry = 0;
+
+const getOrderedDomains = (): string[] => {
+    const domains = getDomains();
+    if (cachedDomain && Date.now() < cachedDomainExpiry && domains.includes(cachedDomain)) {
+        // Put cached working domain first, then the rest
+        return [cachedDomain, ...domains.filter(d => d !== cachedDomain)];
+    }
+    return domains;
+};
+
+const setCachedDomain = (domain: string) => {
+    cachedDomain = domain;
+    cachedDomainExpiry = Date.now() + 30 * 60 * 1000; // 30 minutes
+};
+
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
-const makeAbsoluteUrl = (url, domain) => {
+const fetchPage = async (path: string, headers: any): Promise<{ html: string; domain: string }> => {
+    const domains = getOrderedDomains();
+    let lastError: any = null;
+
+    for (const domain of domains) {
+        try {
+            const url = path.startsWith('http') ? path : `https://${domain}${path}`;
+            const resp = await axios.get(url, {
+                headers: { ...headers, Referer: `https://${domain}/` },
+                timeout: 5000,
+            });
+
+            // Validate: response must contain HTML (not a WAF block page or empty)
+            const html = resp.data;
+            if (typeof html === 'string' && html.length > 500 && html.includes('<')) {
+                setCachedDomain(domain);
+                return { html, domain };
+            }
+            // Invalid response, try next domain
+            lastError = new Error(`Domain ${domain} returned invalid/blocked response (${typeof html === 'string' ? html.length : 0} bytes)`);
+        } catch (err: any) {
+            lastError = err;
+            console.log(`[Nettruyen] Domain ${domain} failed: ${err.message}`);
+            // Continue to next domain
+        }
+    }
+
+    throw lastError || new Error('All Nettruyen domains exhausted');
+};
+
+const makeAbsoluteUrl = (url: string, domain: string): string => {
     if (!url) return '';
     url = url.trim();
 
@@ -26,23 +92,14 @@ const makeAbsoluteUrl = (url, domain) => {
     return `https://${domain}/${url}`;
 };
 
-const extractSlug = (href) => {
+const extractSlug = (href: string): string => {
     const match = href.match(/\/(?:manga|truyen-tranh)\/([^/?#]+)/);
     return match ? match[1] : '';
 };
 
-const extractChapterSlug = (href) => {
+const extractChapterSlug = (href: string): string => {
     const match = href.match(/\/(?:manga|truyen-tranh)\/[^/]+\/([^/?#]+)/);
     return match ? match[1] : '';
-};
-
-const fetchPage = async (path, headers) => {
-    const url = path.startsWith('http') ? path : `https://${DOMAIN}${path}`;
-    const resp = await axios.get(url, {
-        headers: { ...headers, Referer: `https://${DOMAIN}/` },
-        timeout: 5000,
-    });
-    return resp.data;
 };
 
 const parseItemList = (html, domain, pageStr) => {
@@ -112,8 +169,8 @@ nettruyen.get('/', async (req, res) => {
             const path = page === '1'
                 ? `/search?sort=15`
                 : `/search?sort=15&page=${page}`;
-            const html = await fetchPage(path, headers);
-            return res.json(parseItemList(html, DOMAIN, page));
+            const { html, domain } = await fetchPage(path, headers);
+            return res.json(parseItemList(html, domain, page));
         }
 
         // ── POPULAR ──
@@ -126,8 +183,8 @@ nettruyen.get('/', async (req, res) => {
             const path = page === '1'
                 ? `/search?sort=${sortParam}`
                 : `/search?sort=${sortParam}&page=${page}`;
-            const html = await fetchPage(path, headers);
-            return res.json(parseItemList(html, DOMAIN, page));
+            const { html, domain } = await fetchPage(path, headers);
+            return res.json(parseItemList(html, domain, page));
         }
 
         // ── COMPLETED ──
@@ -135,32 +192,32 @@ nettruyen.get('/', async (req, res) => {
             const path = page === '1'
                 ? `/search?status=2`
                 : `/search?status=2&page=${page}`;
-            const html = await fetchPage(path, headers);
-            return res.json(parseItemList(html, DOMAIN, page));
+            const { html, domain } = await fetchPage(path, headers);
+            return res.json(parseItemList(html, domain, page));
         }
 
         // ── SEARCH ──
         if (action === 'search') {
             const encodedQuery = encodeURIComponent(q as string);
             const path = `/search?keyword=${encodedQuery}&page=${page}`;
-            const html = await fetchPage(path, headers);
-            return res.json(parseItemList(html, DOMAIN, page));
+            const { html, domain } = await fetchPage(path, headers);
+            return res.json(parseItemList(html, domain, page));
         }
 
         // ── GENRE SEARCH ──
         if (action === 'genre') {
             if (!slug) return res.json({ error: 'Missing slug' });
             const path = `/the-loai/${slug}?page=${page}`;
-            const html = await fetchPage(path, headers);
-            return res.json(parseItemList(html, DOMAIN, page));
+            const { html, domain } = await fetchPage(path, headers);
+            return res.json(parseItemList(html, domain, page));
         }
 
         // ── DETAIL ──
         if (action === 'detail') {
             if (!slug) return res.status(400).json({ error: 'Missing slug' });
 
-            const html = await fetchPage(`/manga/${slug}`, headers);
-            const $ = cheerio.load(html);
+            const { html: detailHtml, domain: detailDomain } = await fetchPage(`/manga/${slug}`, headers);
+            const $ = cheerio.load(detailHtml);
 
             const title = $('h1.title-detail').text().trim() || $('article h1').text().trim();
             const altTitle = $('h2.other-name').text().trim();
@@ -172,7 +229,7 @@ nettruyen.get('/', async (req, res) => {
                 || $('#item-detail .col-image img').attr('data-original')
                 || $('meta[property="og:image"]').attr('content')
                 || '';
-            thumb = makeAbsoluteUrl(thumb, DOMAIN);
+            thumb = makeAbsoluteUrl(thumb, detailDomain);
 
             const categories = [];
             $('.kind .col-xs-8 a, .kind p:last-child a').each((_, el) => {
@@ -233,8 +290,8 @@ nettruyen.get('/', async (req, res) => {
                 return res.status(400).json({ error: 'Missing slug or chapter' });
             }
 
-            const html = await fetchPage(`/manga/${slug}/${chapter}`, headers);
-            const $ = cheerio.load(html);
+            const { html: chapterHtml, domain: chapterDomain } = await fetchPage(`/manga/${slug}/${chapter}`, headers);
+            const $ = cheerio.load(chapterHtml);
 
             const images = [];
             $('.reading-detail .page-chapter img, .chapter-content .page-chapter img').each((_, el) => {
@@ -243,7 +300,7 @@ nettruyen.get('/', async (req, res) => {
                     || $(el).attr('src')
                     || '';
 
-                src = makeAbsoluteUrl(src, DOMAIN);
+                src = makeAbsoluteUrl(src, chapterDomain);
                 if (src && !src.includes('logo') && !src.includes('ads')) {
                     images.push(src);
                 }
@@ -262,8 +319,8 @@ nettruyen.get('/', async (req, res) => {
 
         // ── CATEGORIES ──
         if (action === 'categories') {
-            const html = await fetchPage('/', headers);
-            const $ = cheerio.load(html);
+            const { html: catHtml } = await fetchPage('/', headers);
+            const $ = cheerio.load(catHtml);
 
             const categories = [];
             $('.dropdown-menu .clearfix li a, .megamenu li a').each((_, el) => {
