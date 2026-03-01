@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { fetchChapter } from '../services/otruyen';
 import { fetchNhentaiChapter } from '../services/nhentai';
-import { fetchNettruyenChapter } from '../services/nettruyen';
 import { Loader2 } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 
@@ -26,12 +26,17 @@ interface ChapterViewProps {
 export const ChapterView = ({ sourceId, slug, chapterId, chapterApiUrl, onPageIntersecting, onEndReached, bgColor, customFilters, readingMode, activePage }: ChapterViewProps) => {
     const { data: chapterData, isLoading } = useQuery({
         queryKey: ['chapter', sourceId, slug, chapterApiUrl],
-        queryFn: () => {
+        queryFn: async () => {
             if (sourceId === 'nhentai') return fetchNhentaiChapter(slug);
-            if (sourceId === 'nettruyen') return fetchNettruyenChapter(slug, chapterId);
+            if (sourceId === 'nettruyen') {
+                // chapterApiUrl already has the correct path like /api/nettruyen?action=chapter&slug=...&chapter=chapter-1
+                // Use default axios (which has the Worker URL interceptor) instead of otruyen's custom instance
+                const res = await axios.get(chapterApiUrl);
+                return res.data;
+            }
             return fetchChapter(chapterApiUrl);
         },
-        enabled: (sourceId === 'nhentai' || sourceId === 'nettruyen') ? !!slug : !!chapterApiUrl,
+        enabled: (sourceId === 'nhentai') ? !!slug : !!chapterApiUrl,
         staleTime: 1000 * 60 * 60, // 1 hour
     });
 
