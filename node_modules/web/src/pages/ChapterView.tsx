@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchChapter } from '../services/otruyen';
 import { fetchNhentaiChapter } from '../services/nhentai';
+import { fetchNettruyenChapter } from '../services/nettruyen';
 import { Loader2 } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 
@@ -25,8 +26,12 @@ interface ChapterViewProps {
 export const ChapterView = ({ sourceId, slug, chapterId, chapterApiUrl, onPageIntersecting, onEndReached, bgColor, customFilters, readingMode, activePage }: ChapterViewProps) => {
     const { data: chapterData, isLoading } = useQuery({
         queryKey: ['chapter', sourceId, slug, chapterApiUrl],
-        queryFn: () => sourceId === 'nhentai' ? fetchNhentaiChapter(slug) : fetchChapter(chapterApiUrl),
-        enabled: (sourceId === 'nhentai') ? !!slug : !!chapterApiUrl,
+        queryFn: () => {
+            if (sourceId === 'nhentai') return fetchNhentaiChapter(slug);
+            if (sourceId === 'nettruyen') return fetchNettruyenChapter(slug, chapterId);
+            return fetchChapter(chapterApiUrl);
+        },
+        enabled: (sourceId === 'nhentai' || sourceId === 'nettruyen') ? !!slug : !!chapterApiUrl,
         staleTime: 1000 * 60 * 60, // 1 hour
     });
 
