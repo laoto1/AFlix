@@ -49,7 +49,7 @@ class WorkerPool {
             let fetchUrl = url;
             if (worker) {
                 const baseUrl = worker.endsWith('/') ? worker.slice(0, -1) : worker;
-                fetchUrl = `${baseUrl}/?url=${encodeURIComponent(url)}`;
+                fetchUrl = `${baseUrl}/api/proxy?url=${encodeURIComponent(url)}`;
             }
             
             try {
