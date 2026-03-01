@@ -1,219 +1,26 @@
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/covers/be-con-thien-tai-bi-mat-di-tim-cha.jpg?1770975964
-NS_BINDING_ABORTED
+index:
+Mar 2, 02:42:16 AM: b0613456 ERROR  Unhandled Promise Rejection 	{"errorType":"Runtime.UnhandledPromiseRejection","errorMessage":"ReferenceError: c is not defined","reason":{"errorType":"ReferenceError","errorMessage":"c is not defined","stack":["ReferenceError: c is not defined","    at /var/task/api/nettruyen.js:132:59","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at next (/var/task/node_modules/express/lib/router/route.js:149:13)","    at Route.dispatch (/var/task/node_modules/express/lib/router/route.js:119:3)","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at /var/task/node_modules/express/lib/router/index.js:284:15","    at Function.process_params (/var/task/node_modules/express/lib/router/index.js:346:12)","    at next (/var/task/node_modules/express/lib/router/index.js:280:10)","    at Function.handle (/var/task/node_modules/express/lib/router/index.js:175:3)","    at router (/var/task/node_modules/express/lib/router/index.js:47:12)"]},"promise":{},"stack":["Runtime.UnhandledPromiseRejection: ReferenceError: c is not defined","    at process.<anonymous> (file:///var/runtime/index.mjs:1448:17)","    at process.emit (node:events:519:28)","    at emitUnhandledRejection (node:internal/process/promises:252:13)","    at throwUnhandledRejectionsMode (node:internal/process/promises:388:19)","    at processPromiseRejections (node:internal/process/promises:475:17)","    at process.processTicksAndRejections (node:internal/process/task_queues:106:32)"]}
+Mar 2, 02:42:16 AM: b0613456 Duration: 852.62 ms	Memory Usage: 128 MB
+Mar 2, 02:43:25 AM: 03b8a366 ERROR  Unhandled Promise Rejection 	{"errorType":"Runtime.UnhandledPromiseRejection","errorMessage":"ReferenceError: c is not defined","reason":{"errorType":"ReferenceError","errorMessage":"c is not defined","stack":["ReferenceError: c is not defined","    at /var/task/api/nettruyen.js:132:59","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at next (/var/task/node_modules/express/lib/router/route.js:149:13)","    at Route.dispatch (/var/task/node_modules/express/lib/router/route.js:119:3)","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at /var/task/node_modules/express/lib/router/index.js:284:15","    at Function.process_params (/var/task/node_modules/express/lib/router/index.js:346:12)","    at next (/var/task/node_modules/express/lib/router/index.js:280:10)","    at Function.handle (/var/task/node_modules/express/lib/router/index.js:175:3)","    at router (/var/task/node_modules/express/lib/router/index.js:47:12)"]},"promise":{},"stack":["Runtime.UnhandledPromiseRejection: ReferenceError: c is not defined","    at process.<anonymous> (file:///var/runtime/index.mjs:1448:17)","    at process.emit (node:events:519:28)","    at emitUnhandledRejection (node:internal/process/promises:252:13)","    at throwUnhandledRejectionsMode (node:internal/process/promises:388:19)","    at processPromiseRejections (node:internal/process/promises:475:17)","    at process.processTicksAndRejections (node:internal/process/task_queues:106:32)"]}
+Mar 2, 02:43:25 AM: 03b8a366 Duration: 850.66 ms	Memory Usage: 126 MB
+Mar 2, 02:44:18 AM: 4c3b8d06 ERROR  Unhandled Promise Rejection 	{"errorType":"Runtime.UnhandledPromiseRejection","errorMessage":"ReferenceError: c is not defined","reason":{"errorType":"ReferenceError","errorMessage":"c is not defined","stack":["ReferenceError: c is not defined","    at /var/task/api/nettruyen.js:132:59","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at next (/var/task/node_modules/express/lib/router/route.js:149:13)","    at Route.dispatch (/var/task/node_modules/express/lib/router/route.js:119:3)","    at Layer.handle [as handle_request] (/var/task/node_modules/express/lib/router/layer.js:95:5)","    at /var/task/node_modules/express/lib/router/index.js:284:15","    at Function.process_params (/var/task/node_modules/express/lib/router/index.js:346:12)","    at next (/var/task/node_modules/express/lib/router/index.js:280:10)","    at Function.handle (/var/task/node_modules/express/lib/router/index.js:175:3)","    at router (/var/task/node_modules/express/lib/router/index.js:47:12)"]},"promise":{},"stack":["Runtime.UnhandledPromiseRejection: ReferenceError: c is not defined","    at process.<anonymous> (file:///var/runtime/index.mjs:1448:17)","    at process.emit (node:events:519:28)","    at emitUnhandledRejection (node:internal/process/promises:252:13)","    at throwUnhandledRejectionsMode (node:internal/process/promises:388:19)","    at processPromiseRejections (node:internal/process/promises:475:17)","    at process.processTicksAndRejections (node:internal/process/task_queues:106:32)"]}
+Mar 2, 02:44:18 AM: 4c3b8d06 Duration: 777.29 ms	Memory Usage: 129 MB
 
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/uy-ban-thuong-mai-cong-bang-thumb.jpg
-NS_BINDING_ABORTED
 
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/xanh-tham-mau-lanh-lung-do-tham-sac-quy-quyet-thumb.jpg
-NS_BINDING_ABORTED
+url:
+An unhandled error in the function code triggered the following message:
 
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/yugo-ke-thuong-thuyet-thumb.jpg
-NS_BINDING_ABORTED
+Runtime.UnhandledPromiseRejection - ReferenceError: c is not defined
+Stack trace
 
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/xuyen-khong-toi-tu-tien-gioi-lam-tru-than-thumb.jpg
-NS_BINDING_ABORTED
+Runtime.UnhandledPromiseRejection: ReferenceError: c is not defined
+    at process.<anonymous> (file:///var/runtime/index.mjs:1448:17)
+    at process.emit (node:events:519:28)
+    at emitUnhandledRejection (node:internal/process/promises:252:13)
+    at throwUnhandledRejectionsMode (node:internal/process/promises:388:19)
+    at processPromiseRejections (node:internal/process/promises:475:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:106:32)
 
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/con-trai-ut-cua-ba-tuoc-la-mot-nguoi-choi-thumb.jpg
-NS_BINDING_ABORTED
+Connection details
 
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/quy-vuc-an-pham-nhan-thumb.jpg
-NS_BINDING_ABORTED
-
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/covers/be-con-thien-tai-bi-mat-di-tim-cha.jpg?1770975964
-NS_BINDING_ABORTED
-
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/vi-nhan-kiem-thumb.jpg
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/yugo-ke-thuong-thuyet-thumb.jpg
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/doi-truong-linh-danh-thue-thumb.jpg
-NS_BINDING_ABORTED
-
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/CKXyvH78/logo-otruyen-1.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/gZLv3XWH/nh.png
-NS_BINDING_ABORTED
-
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/39c78Cmh/4557a6466d60.jpg
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/nqkXw31q/3be0ba2d5c58.jpg
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/1t68Tdhq/64c7df7e54649e990d9c79e14dcbd4e89100873a.png
-NS_BINDING_ABORTED
-
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/MksgLLVj/2.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/pBGNgNXv/3.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/1YHFByYM/4.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/PvrmmCss/6.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/Xr7yWLLN/5.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/nsyBp6vq/7.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/Y4jmkk8G/8.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/ynqZcxTk/9.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/HLsJ4b8C/11.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/0phqLcCY/10.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/CKLVsgQg/20.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/kgLW4Qf0/22.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/F4x4hkVx/21.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/s9bw34Hr/25.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/TBLkSQ1g/23.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/5XDgw583/24.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/SXNQSF7R/a-72d1fd7c47cc7a98c8f64d175773344b.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/RpBgT5Rw/e89d86814300cd74c2160596cb1936b2db9f58c0.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/pt3tw5P/036404a048d498394e3847bf4d156c55e7969439.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/7DHnpj7/3b225d543fc27e1570267bc738e6ad183995790c.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/1t68Tdhq/64c7df7e54649e990d9c79e14dcbd4e89100873a.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/rRYXcwx2/17a95655f928f54092fe0364fc4fdce091d0e9fc.png
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/WNC8nXxP/a-554b7c34f7b6c709f19535aacb128e7b.png
-NS_BINDING_ABORTED
-
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/39c78Cmh/4557a6466d60.jpg
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/nqkXw31q/3be0ba2d5c58.jpg
-NS_BINDING_ABORTED
-
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://i.ibb.co/1t68Tdhq/64c7df7e54649e990d9c79e14dcbd4e89100873a.png
-NS_BINDING_ABORTED
-
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. proxy
-GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://img.otruyenapi.com/uploads/comics/vi-nhan-kiem-thumb.jpg
-NS_BINDING_ABORTED
-
-XHR
-POST
-https://backend-worker.laoto.workers.dev/api/unlock
-[HTTP/2 404  47ms]
-
+Netlify internal ID: 01KJNF2HZKR5XSYE657Q2YZBD2

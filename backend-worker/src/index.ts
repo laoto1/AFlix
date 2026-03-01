@@ -21,9 +21,6 @@ import bookmarksRouter from './routes/bookmarks';
 import historyRouter from './routes/history';
 import uploadRouter from './routes/upload';
 import chunkingRouter from './routes/chunking';
-import nettruyenRouter from './routes/nettruyen';
-import nhentaiRouter from './routes/nhentai';
-import nhentaiTagsRouter from './routes/nhentai-tags';
 import unlockRouter from './routes/unlock';
 import proxyRouter from './routes/proxy';
 
@@ -41,26 +38,85 @@ app.use('*', cors({
 app.options('*', (c) => c.text('', 200));
 
 // Apply 1-hour Serverless Caching to massive scraping endpoints to maximize Edge performance and avoid rate limits
+// --- Scraper Caching Proxies ---
+// We offload scraping to Netlify to bypass Cloudflare Worker WAF blocks (Turnstile/403).
+// The worker will still cache the results for 1 hour to prevent Netlify from exhausting free tier limits.
+
+const NETLIFY_API_BASE = 'https://astounding-banoffee-2f3992.netlify.app';
+
 app.get(
     '/api/nettruyen/*',
-    cache({
-        cacheName: 'flix-scraping-cache',
-        cacheControl: 'max-age=3600',
-    })
+    async (c) => {
+        try {
+            const reqUrl = new URL(c.req.url);
+            const proxyUrl = new URL(reqUrl.pathname + reqUrl.search, NETLIFY_API_BASE);
+            const res = await fetch(proxyUrl.toString(), {
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' }
+            });
+            const data = await res.text();
+            
+            return new Response(data, {
+                status: res.status,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'public, max-age=3600'
+                }
+            });
+        } catch(err: any) {
+            return c.json({ error: 'Proxy fetch failed', message: err.message }, 500 as any);
+        }
+    }
 );
+
 app.get(
     '/api/nhentai/*',
-    cache({
-        cacheName: 'flix-scraping-cache',
-        cacheControl: 'max-age=3600',
-    })
+    async (c) => {
+        try {
+            const reqUrl = new URL(c.req.url);
+            const proxyUrl = new URL(reqUrl.pathname + reqUrl.search, NETLIFY_API_BASE);
+            const res = await fetch(proxyUrl.toString(), {
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' }
+            });
+            const data = await res.text();
+            
+            return new Response(data, {
+                status: res.status,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'public, max-age=3600'
+                }
+            });
+        } catch(err: any) {
+            return c.json({ error: 'Proxy fetch failed', message: err.message }, 500 as any);
+        }
+    }
 );
+
 app.get(
     '/api/nhentai-tags/*',
-    cache({
-        cacheName: 'flix-scraping-cache',
-        cacheControl: 'max-age=86400', // Cache tags for 24 hours
-    })
+    async (c) => {
+        try {
+            const reqUrl = new URL(c.req.url);
+            const proxyUrl = new URL(reqUrl.pathname + reqUrl.search, NETLIFY_API_BASE);
+            const res = await fetch(proxyUrl.toString(), {
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' }
+            });
+            const data = await res.text();
+            
+            return new Response(data, {
+                status: res.status,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'public, max-age=86400'
+                }
+            });
+        } catch(err: any) {
+            return c.json({ error: 'Proxy fetch failed', message: err.message }, 500 as any);
+        }
+    }
 );
 
 app.get('/', (c) => c.text('Cloudflare Worker Gateway Active'));
@@ -71,9 +127,6 @@ app.route('/api/bookmarks', bookmarksRouter);
 app.route('/api/history', historyRouter);
 app.route('/api/upload', uploadRouter);
 app.route('/api/chunking', chunkingRouter);
-app.route('/api/nettruyen', nettruyenRouter);
-app.route('/api/nhentai', nhentaiRouter);
-app.route('/api/nhentai-tags', nhentaiTagsRouter);
 app.route('/api/unlock', unlockRouter);
 app.route('/api/proxy', proxyRouter);
 
