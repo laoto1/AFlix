@@ -1,9 +1,8 @@
+https://backend-worker.laoto.workers.dev/api/stv-proxy/truyen/qidian/1/1047647375/879658407/
+[HTTP/2 403  56ms]  error code: 1003
 GET
-https://backend-worker.laoto.workers.dev/api/proxy?url=https://p6-novel.byteimg.com/tos-cn-i-snk2bdmkp8/7426c4114a04dbdd0a6a193abfc627fc13da87650dd017e1547a3f1a7228b8a4~tplv-shrink:640:0.image
-NS_BINDING_ABORTED
-
+https://backend-worker.luanhock22.workers.dev/api/stv-proxy/truyen/qidian/1/1047647375/879658407/
+[HTTP/2 403  59ms]  error code: 1003
 GET
-https://www.69shu.org/files/article/image/115/115844/115844s.jpg
-NS_BINDING_ABORTED
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details.
-Cookie “acw_tc” will soon be rejected because it is foreign and does not have the “Partitioned“ attribute.
+https://backend-worker.mialui1112.workers.dev/api/stv-proxy/truyen/qidian/1/1047647375/879658407/
+[HTTP/3 403  57ms]  error code: 1003
