@@ -455,10 +455,16 @@ const translations: Record<Language, Record<string, string>> = {
         'chapters.pending': '等待中',
         'chapters.paused': '已暂停',
         'chapters.failed': '失败',
+
+        // Misc
+        'reader.chapter': '第 {number} 話',
+        'comic.continue_reading': '继续阅读',
+        'comic.start_reading': '开始阅读',
+        'comic.latest_chapter': '最新话',
         'comic.author': '作者',
         'comic.status': '状态',
         'comic.status.ongoing': '连载中',
-        'comic.status.completed': '已完结',
+        'comic.status.completed': '完结',
 
         // Home & Library
         'home.browse': '浏览源',
