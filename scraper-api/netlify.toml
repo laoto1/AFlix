@@ -3,6 +3,10 @@
   functions = "api"
   publish = "api"
 
+[functions]
+  included_files = ["api/index.js"]
+  node_bundler = "zisi"
+
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/index"

@@ -1,40 +1,9 @@
-GETMixed Content: Upgrading insecure display request ‘http://rs.sfacg.com/web/novel/images/NovelCover/Big/2025/03/e35c8a75-9e93-4336-b34b-730f3df9bd29.jpg’ to use ‘https’ e35c8a75-9e93-4336-b34b-730f3df9bd29.jpg
-Mixed Content: Upgrading insecure display request ‘http://p6-novel.byteimg.com/origin/novel-pic/c8558b42293fe7fc7b485e2159fbcac4’ to use ‘https’ c8558b42293fe7fc7b485e2159fbcac4
-Mixed Content: Upgrading insecure display request ‘http://rs.sfacg.com/web/novel/images/NovelCover/Big/2025/09/63d36ca7-bb7b-46a0-97a6-5b55ed98ecbb.jpg’ to use ‘https’ 63d36ca7-bb7b-46a0-97a6-5b55ed98ecbb.jpg
-Mixed Content: Upgrading insecure display request ‘http://p6-novel.byteimg.com/origin/novel-pic/p2o43da4425bd3b338cef72fa545aaff9c1’ to use ‘https’
-https://p6-novel.byteimg.com/tos-cn-i-snk2bdmkp8/f8fd6d5f82f18973736dc4ce96055f4b14c4024f75db53e365ee9186cba68466~tplv-shrink:640:0.image  NS_BINDING_ABORTED
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. f8fd6d5f82f18973736dc4ce96055f4b14c4024f75db53e365ee9186cba68466~tplv-shrink:640:0.image
-Mixed Content: Upgrading insecure display request ‘http://img.wenku8.com/image/4/4205/4205s.jpg’ to use ‘https’ 4205s.jpg
-Mixed Content: Upgrading insecure display request ‘http://rs.sfacg.com/web/novel/images/NovelCover/Big/2025/03/e35c8a75-9e93-4336-b34b-730f3df9bd29.jpg’ to use ‘https’ e35c8a75-9e93-4336-b34b-730f3df9bd29.jpg
-Mixed Content: Upgrading insecure display request ‘http://p6-novel.byteimg.com/origin/novel-pic/p2o808ed81f038e03fcd20e5ce917470ce1’ to use ‘https’ p2o808ed81f038e03fcd20e5ce917470ce1
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/703/000703438.jpg’ to use ‘https’ 000703438.jpg
-Mixed Content: Upgrading insecure display request ‘http://p6-novel.byteimg.com/origin/novel-pic/p2o6a59b37968868a73c37e4cbae9b83e1c’ to use ‘https’ p2o6a59b37968868a73c37e4cbae9b83e1c
-Mixed Content: Upgrading insecure display request ‘http://rs.sfacg.com/web/novel/images/NovelCover/Big/2025/03/0d002c1f-169f-422b-befa-4cd369752918.jpg’ to use ‘https’ 0d002c1f-169f-422b-befa-4cd369752918.jpg
-Mixed Content: Upgrading insecure display request ‘http://p3-novel.byteimg.com/origin/novel-pic/p2o4fe953cb40d73fa009016c2f7d482f2d’ to use ‘https’
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/577/000577264.jpg’ to use ‘https’ 000577264.jpg
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/499/000499896.jpg’ to use ‘https’ 000499896.jpg
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/406/000406326.jpg’ to use ‘https’ 000406326.jpg
 GET
-https://www.sobiquge.com/files/article/image/25/25095/25095s.jpg
+https://backend-worker.laoto.workers.dev/api/proxy?url=https://p6-novel.byteimg.com/tos-cn-i-snk2bdmkp8/7426c4114a04dbdd0a6a193abfc627fc13da87650dd017e1547a3f1a7228b8a4~tplv-shrink:640:0.image
 NS_BINDING_ABORTED
 
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/1/1049/001049805.jpg’ to use ‘https’ 001049805.jpg
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/167/000167682.jpg’ to use ‘https’ 000167682.jpg
-Mixed Content: Upgrading insecure display request ‘http://www.xinyushuwu.com/files/article/image/2/2599/2599s.jpg’ to use ‘https’ 2599s.jpg
 GET
-https://www.xinyushuwu.com/files/article/image/2/2599/2599s.jpg
+https://www.69shu.org/files/article/image/115/115844/115844s.jpg
 NS_BINDING_ABORTED
-
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/1/1030/001030475.jpg’ to use ‘https’ 001030475.jpg
-GET
-https://www.sobiquge.com/files/article/image/12/12305/12305s.jpg
-NS_BINDING_ABORTED
-
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/476/000476350.jpg’ to use ‘https’ 000476350.jpg
-Mixed Content: Upgrading insecure display request ‘http://www.shu05.com/files/article/image/93/93838/93838s.jpg’ to use ‘https’ 93838s.jpg
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/457/000457141.jpg’ to use ‘https’ 000457141.jpg
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/506/000506926.jpg’ to use ‘https’ 000506926.jpg
-Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/880/000880505.jpg’ to use ‘https’ 000880505.jpg
-Cookie “sid” will soon be rejected because it is foreign and does not have the “Partitioned“ attribute. 2599s.jpg
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. 25095s.jpg
-A resource is blocked by OpaqueResponseBlocking, please check browser console for details. 12305s.jpg
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details.
+Cookie “acw_tc” will soon be rejected because it is foreign and does not have the “Partitioned“ attribute.

@@ -7,7 +7,7 @@ export const getProxiedImageUrl = (url: string | undefined | null): string => {
         // Novel cover domains causing Mixed Content / OpaqueResponseBlocking
         'sfacg.com', 'byteimg.com', 'faloo.com', 'wenku8.com',
         'sangtacvietcdn.xyz', 'sobiquge.com', 'xinyushuwu.com', 'shu05.com',
-        'bookcover.yuewen.com',
+        'bookcover.yuewen.com', '69shu.org',
     ];
 
     const needsProxy = proxyDomains.some(d => url.includes(d)) || url.startsWith('http://');
