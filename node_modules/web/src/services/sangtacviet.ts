@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 // ── SangTacViet Novel Service ──
-// Uses the default axios instance which has the WorkerPool interceptor
 
 export interface Novel {
     _id: string;
@@ -10,6 +9,11 @@ export interface Novel {
     bookid: string;
     slug: string;
     thumb_url: string;
+    author: string;
+    views: string;
+    likes: string;
+    chapters_count: string;
+    tags: string[];
     category: { name: string; slug: string }[];
     updatedAt: string;
 }
@@ -44,8 +48,10 @@ export interface NovelChapterContent {
     content: string;
 }
 
-export async function fetchNovelLatest(page: number = 1) {
-    const res = await axios.get(`/api/sangtacviet?action=latest&page=${page}`);
+export async function fetchNovelListing(page: number = 1, sort: string = 'update', step?: string) {
+    let url = `/api/sangtacviet?action=listing&page=${page}&sort=${sort}`;
+    if (step) url += `&step=${step}`;
+    const res = await axios.get(url);
     return res.data;
 }
 

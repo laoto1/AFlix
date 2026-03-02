@@ -23,28 +23,14 @@ async function ensureSession(): Promise<string> {
         const setCookies = res.headers['set-cookie'];
         if (setCookies) {
             sessionCookies = setCookies.map((c: string) => c.split(';')[0]);
-            sessionExpiry = Date.now() + 30 * 60 * 1000; // 30 min
+            sessionExpiry = Date.now() + 30 * 60 * 1000;
         }
-    } catch (e) {
-        // ignore
-    }
+    } catch (e) { /* ignore */ }
     return sessionCookies.join('; ');
 }
 
-async function fetchPage(path: string): Promise<string> {
-    const cookie = await ensureSession();
-    const url = path.startsWith('http') ? path : `${DOMAIN}${path}`;
-    const res = await axios.get(url, {
-        headers: {
-            'User-Agent': UA,
-            'Cookie': cookie,
-            'Referer': DOMAIN,
-        },
-        timeout: 15000,
-        responseType: 'text',
-    });
-    // Update cookies from response
-    const setCookies = res.headers['set-cookie'];
+function updateCookies(headers: any) {
+    const setCookies = headers['set-cookie'];
     if (setCookies) {
         const newCookies = setCookies.map((c: string) => c.split(';')[0]);
         for (const nc of newCookies) {
@@ -53,13 +39,24 @@ async function fetchPage(path: string): Promise<string> {
             sessionCookies.push(nc);
         }
     }
+}
+
+async function fetchPage(path: string): Promise<string> {
+    const cookie = await ensureSession();
+    const url = path.startsWith('http') ? path : `${DOMAIN}${path}`;
+    const res = await axios.get(url, {
+        headers: { 'User-Agent': UA, 'Cookie': cookie, 'Referer': DOMAIN },
+        timeout: 15000,
+        responseType: 'text',
+    });
+    updateCookies(res.headers);
     return res.data;
 }
 
-async function ajaxPost(params: string, query: string = ''): Promise<string> {
+async function postData(path: string, body: string): Promise<string> {
     const cookie = await ensureSession();
-    const url = `${DOMAIN}/index.php${query ? '?' + query : ''}`;
-    const res = await axios.post(url, params, {
+    const url = path.startsWith('http') ? path : `${DOMAIN}${path}`;
+    const res = await axios.post(url, body, {
         headers: {
             'User-Agent': UA,
             'Cookie': cookie,
@@ -69,60 +66,55 @@ async function ajaxPost(params: string, query: string = ''): Promise<string> {
         timeout: 15000,
         responseType: 'text',
     });
-    // Update cookies
-    const setCookies = res.headers['set-cookie'];
-    if (setCookies) {
-        const newCookies = setCookies.map((c: string) => c.split(';')[0]);
-        for (const nc of newCookies) {
-            const key = nc.split('=')[0];
-            sessionCookies = sessionCookies.filter(c => !c.startsWith(key + '='));
-            sessionCookies.push(nc);
-        }
-    }
+    updateCookies(res.headers);
     return res.data;
-}
-
-function extractNovelSlug(href: string): { host: string; bookid: string } | null {
-    // URL format: /truyen/{host}/1/{bookid}/
-    const match = href.match(/\/truyen\/([^/]+)\/\d+\/([^/]+)/);
-    if (match) return { host: match[1], bookid: match[2] };
-    return null;
 }
 
 function parseNovelListFromHtml(html: string): any[] {
     const $ = cheerio.load(html);
     const novels: any[] = [];
 
-    // Find all links to novels: /truyen/{host}/1/{bookid}/
-    $('a[href*="/truyen/"]').each((_, el) => {
+    $('a.booksearch').each((_, el) => {
         const $el = $(el);
         const href = $el.attr('href') || '';
-        const slug = extractNovelSlug(href);
-        if (!slug) return;
+        const match = href.match(/\/truyen\/([^/]+)\/\d+\/([^/]+)/);
+        if (!match) return;
 
-        // Get text content as title
-        let title = $el.text().trim();
-        if (!title || title.length < 2) return;
-        // Skip navigation/footer links
-        if (title.length > 200) return;
+        const host = match[1];
+        const bookid = match[2];
+        const title = $el.find('.searchbooktitle').text().trim();
+        const author = $el.find('.searchbookauthor').text().trim();
+        const cover = $el.find('img').attr('src') || '';
 
-        // Avoid duplicates
-        if (novels.find(n => n.bookid === slug.bookid && n.host === slug.host)) return;
+        // Extract stats from .info span texts
+        const infoSpans = $el.find('.info span');
+        let views = '', likes = '', chapters = '';
+        infoSpans.each((i, sp) => {
+            const text = $(sp).text().trim();
+            if (i === 0) views = text;
+            if (i === 1) likes = text;
+            if (i === 2) chapters = text;
+        });
 
-        // Try to find cover from parent or sibling img
-        let cover = '';
-        const parentImg = $el.find('img').attr('src') || $el.parent().find('img').attr('src') || '';
-        if (parentImg) cover = parentImg;
+        // Extract tags
+        const tags: string[] = [];
+        $el.find('.searchtag').each((_, t) => {
+            tags.push($(t).text().trim());
+        });
 
         novels.push({
-            _id: `${slug.host}-${slug.bookid}`,
+            _id: `${host}-${bookid}`,
             name: title,
-            host: slug.host,
-            bookid: slug.bookid,
-            slug: `${slug.host}/${slug.bookid}`,
+            host,
+            bookid,
+            slug: `${host}/${bookid}`,
             thumb_url: cover,
-            chaptersLatest: [],
-            category: [],
+            author,
+            views,
+            likes,
+            chapters_count: chapters,
+            tags,
+            category: tags.slice(2).map(t => ({ name: t, slug: t })),
             updatedAt: '',
         });
     });
@@ -133,21 +125,35 @@ function parseNovelListFromHtml(html: string): any[] {
 const sangtacviet = express.Router();
 
 sangtacviet.get('/', async (req: any, res: any) => {
-    const { action, page = '1', host = '', bookid = '', keyword = '', chapterId = '' } = req.query || {};
+    const {
+        action, page = '1', host = '', bookid = '', keyword = '', chapterId = '',
+        sort = 'update', step = '', category = '', type = '',
+    } = req.query || {};
 
     try {
-        // ── LATEST ──
-        if (action === 'latest') {
+        // ── LISTING (latest, popular, completed, random) ──
+        if (action === 'listing') {
             const pageNum = parseInt(page as string) || 1;
-            const path = `/?find=&minc=0&sort=update&tag=&p=${pageNum - 1}`;
-            const html = await fetchPage(path);
+            let queryStr = `?find=&minc=0&sort=${sort}&tag=`;
+            if (step) queryStr += `&step=${step}`;
+            if (category) queryStr += `&category=${category}`;
+            if (type) queryStr += `&type=${type}`;
+            queryStr += `&p=${pageNum}`;
+
+            const html = await postData(`/io/searchtp/searchBooks${queryStr}`, 'ignores=');
             const novels = parseNovelListFromHtml(html);
 
             return res.json({
                 status: 'success',
                 data: {
                     items: novels,
-                    params: { pagination: { currentPage: pageNum } },
+                    params: {
+                        pagination: {
+                            currentPage: pageNum,
+                            totalItems: novels.length >= 48 ? pageNum * 48 + 48 : pageNum * 48,
+                            totalItemsPerPage: 48,
+                        },
+                    },
                 },
             });
         }
@@ -155,15 +161,15 @@ sangtacviet.get('/', async (req: any, res: any) => {
         // ── SEARCH ──
         if (action === 'search') {
             if (!keyword) return res.status(400).json({ error: 'Missing keyword' });
-            const path = `/?find=&findinname=${encodeURIComponent(keyword as string)}`;
-            const html = await fetchPage(path);
+            const queryStr = `?find=&findinname=${encodeURIComponent(keyword as string)}&minc=0&sort=update&tag=`;
+            const html = await postData(`/io/searchtp/searchBooks${queryStr}`, 'ignores=');
             const novels = parseNovelListFromHtml(html);
 
             return res.json({
                 status: 'success',
                 data: {
                     items: novels,
-                    params: { pagination: { currentPage: 1 } },
+                    params: { pagination: { currentPage: 1, totalItems: novels.length, totalItemsPerPage: 48 } },
                 },
             });
         }
@@ -172,42 +178,30 @@ sangtacviet.get('/', async (req: any, res: any) => {
         if (action === 'detail') {
             if (!host || !bookid) return res.status(400).json({ error: 'Missing host or bookid' });
 
-            const path = `/truyen/${host}/1/${bookid}/`;
-            const html = await fetchPage(path);
+            const html = await fetchPage(`/truyen/${host}/1/${bookid}/`);
             const $ = cheerio.load(html);
 
-            // Extract from OG meta tags
             const title = $('meta[property="og:novel:book_name"]').attr('content') || $('h1#book_name2').text().trim() || '';
             const author = $('meta[property="og:novel:author"]').attr('content') || '';
             const cover = $('meta[property="og:image"]').attr('content') || '';
             const status = $('meta[property="og:novel:status"]').attr('content') || '';
-            const category = $('meta[property="og:novel:category"]').attr('content') || '';
+            const categoryMeta = $('meta[property="og:novel:category"]').attr('content') || '';
             const updateTime = $('meta[property="og:novel:update_time"]').attr('content') || '';
             const description = $('meta[property="og:description"]').attr('content') || '';
             const originalName = $('#oriname').text().trim() || '';
 
-            // Parse categories
-            const categories = category.split(',').map(c => c.trim()).filter(Boolean).map(c => ({
-                name: c,
-                slug: c.toLowerCase().replace(/\s+/g, '-'),
+            const categories = categoryMeta.split(',').map(c => c.trim()).filter(Boolean).map(c => ({
+                name: c, slug: c.toLowerCase().replace(/\s+/g, '-'),
             }));
 
             return res.json({
                 status: 'success',
                 data: {
                     item: {
-                        _id: `${host}-${bookid}`,
-                        name: title,
-                        host,
-                        bookid,
-                        slug: `${host}/${bookid}`,
-                        origin_name: originalName,
-                        author,
+                        _id: `${host}-${bookid}`, name: title, host, bookid,
+                        slug: `${host}/${bookid}`, origin_name: originalName, author,
                         status: status === 'Còn tiếp' ? 'ongoing' : status === 'Hoàn thành' ? 'completed' : status,
-                        thumb_url: cover,
-                        content: description,
-                        category: categories,
-                        updatedAt: updateTime,
+                        thumb_url: cover, content: description, category: categories, updatedAt: updateTime,
                         chapters: [],
                         chapter_api_data: `/api/sangtacviet?action=chapters&host=${host}&bookid=${bookid}`,
                     },
@@ -215,104 +209,47 @@ sangtacviet.get('/', async (req: any, res: any) => {
             });
         }
 
-        // ── CHAPTERS (list) ──
+        // ── CHAPTERS ──
         if (action === 'chapters') {
             if (!host || !bookid) return res.status(400).json({ error: 'Missing host or bookid' });
 
-            // First ensure we have a session by visiting the novel page
             await fetchPage(`/truyen/${host}/1/${bookid}/`);
-
-            // Then fetch chapter list via AJAX
             const query = `ngmar=chapterlist&h=${host}&bookid=${bookid}&sajax=getchapterlist`;
-            const data = await ajaxPost(`sajax=getchapterlist&h=${host}&bookid=${bookid}`, query);
+            const data = await postData(`/index.php?${query}`, `sajax=getchapterlist&h=${host}&bookid=${bookid}`);
 
-            // Try to parse as JSON
             let chapters: any[] = [];
             try {
                 if (data && data.trim()) {
                     const parsed = JSON.parse(data);
-                    // Parse chapter list from response
-                    if (Array.isArray(parsed)) {
-                        chapters = parsed.map((ch: any, idx: number) => ({
-                            _id: ch.id || ch.cid || String(idx + 1),
-                            name: ch.name || ch.n || `Chương ${idx + 1}`,
-                            chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${ch.id || ch.cid || idx + 1}`,
-                        }));
-                    } else if (parsed.data && Array.isArray(parsed.data)) {
-                        chapters = parsed.data.map((ch: any, idx: number) => ({
-                            _id: ch.id || ch.cid || String(idx + 1),
-                            name: ch.name || ch.n || `Chương ${idx + 1}`,
-                            chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${ch.id || ch.cid || idx + 1}`,
-                        }));
-                    }
+                    const arr = Array.isArray(parsed) ? parsed : (parsed.data || []);
+                    chapters = arr.map((ch: any, idx: number) => ({
+                        _id: ch.id || ch.cid || String(idx + 1),
+                        name: ch.name || ch.n || `Chương ${idx + 1}`,
+                        chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${ch.id || ch.cid || idx + 1}`,
+                    }));
                 }
-            } catch (e) {
-                // If AJAX fails, try scraping from the HTML page directly
-                const html = await fetchPage(`/truyen/${host}/1/${bookid}/`);
-                const $ = cheerio.load(html);
+            } catch (e) { /* ignore */ }
 
-                // Try to extract chapter data from inline scripts
-                const scripts = $('script').toArray();
-                for (const script of scripts) {
-                    const text = $(script).html() || '';
-                    const match = text.match(/var\s+(?:chapterData|chaplist)\s*=\s*(\[[\s\S]*?\]);/);
-                    if (match) {
-                        try {
-                            chapters = JSON.parse(match[1]).map((ch: any, idx: number) => ({
-                                _id: ch.id || ch.cid || String(idx + 1),
-                                name: ch.name || ch.n || `Chương ${idx + 1}`,
-                                chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${ch.id || ch.cid || idx + 1}`,
-                            }));
-                        } catch (e2) { /* ignore */ }
-                    }
-                }
-
-                // If still empty, generate generic chapters from the page title
-                if (chapters.length === 0) {
-                    const titleMatch = $('title').text().match(/(\d+)\s*chương/i) || $('title').text().match(/(\d+)\s*chuong/i);
-                    const chapterCount = titleMatch ? parseInt(titleMatch[1]) : 0;
-                    for (let i = 1; i <= chapterCount; i++) {
-                        chapters.push({
-                            _id: String(i),
-                            name: `Chương ${i}`,
-                            chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${i}`,
-                        });
-                    }
-                }
-            }
-
-            return res.json({
-                status: 'success',
-                data: {
-                    items: chapters,
-                },
-            });
+            return res.json({ status: 'success', data: { items: chapters } });
         }
 
-        // ── CHAPTER (content) ──
+        // ── CHAPTER CONTENT ──
         if (action === 'chapter') {
             if (!host || !bookid || !chapterId) {
                 return res.status(400).json({ error: 'Missing host, bookid, or chapterId' });
             }
 
-            // Ensure session by visiting novel page first
             await fetchPage(`/truyen/${host}/1/${bookid}/`);
-
-            // Fetch chapter content via AJAX
             const query = `bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1`;
-            const data = await ajaxPost(`sajax=readchapter`, query);
+            const data = await postData(`/index.php?${query}`, 'sajax=readchapter');
 
-            let content = '';
-            let chapterName = `Chương ${chapterId}`;
-            let bookName = '';
+            let content = '', chapterName = `Chương ${chapterId}`, bookName = '';
 
             try {
                 if (data && data.trim()) {
                     let jsonStr = data;
-                    // Sometimes response has prefix before JSON
                     const jsonStart = data.indexOf('{"');
                     if (jsonStart > 0) jsonStr = data.substring(jsonStart);
-
                     const parsed = JSON.parse(jsonStr);
                     if (parsed.code === '0' || parsed.code === 0) {
                         content = parsed.content || parsed.c || '';
@@ -321,7 +258,6 @@ sangtacviet.get('/', async (req: any, res: any) => {
                     }
                 }
             } catch (e) {
-                // If AJAX fails, try loading the chapter HTML page directly
                 try {
                     const html = await fetchPage(`/truyen/${host}/1/${bookid}/${chapterId}/`);
                     const $ = cheerio.load(html);
@@ -332,27 +268,15 @@ sangtacviet.get('/', async (req: any, res: any) => {
 
             return res.json({
                 status: 'success',
-                data: {
-                    item: {
-                        _id: chapterId,
-                        name: chapterName,
-                        book_name: bookName,
-                        content: content,
-                    },
-                },
+                data: { item: { _id: chapterId, name: chapterName, book_name: bookName, content } },
             });
         }
 
-        return res.status(400).json({
-            error: 'Unsupported action. Use: latest, search, detail, chapters, chapter',
-        });
+        return res.status(400).json({ error: 'Unsupported action. Use: listing, search, detail, chapters, chapter' });
 
     } catch (error: any) {
         console.error('SangTacViet API Error:', error.message);
-        return res.status(500).json({
-            error: 'Failed to fetch from sangtacviet',
-            details: error.message,
-        });
+        return res.status(500).json({ error: 'Failed to fetch from sangtacviet', details: error.message });
     }
 });
 

@@ -58092,19 +58092,8 @@ async function ensureSession() {
   }
   return sessionCookies.join("; ");
 }
-async function fetchPage(path) {
-  const cookie = await ensureSession();
-  const url2 = path.startsWith("http") ? path : `${DOMAIN}${path}`;
-  const res = await axios_default.get(url2, {
-    headers: {
-      "User-Agent": UA,
-      "Cookie": cookie,
-      "Referer": DOMAIN
-    },
-    timeout: 15e3,
-    responseType: "text"
-  });
-  const setCookies = res.headers["set-cookie"];
+function updateCookies(headers) {
+  const setCookies = headers["set-cookie"];
   if (setCookies) {
     const newCookies = setCookies.map((c) => c.split(";")[0]);
     for (const nc of newCookies) {
@@ -58113,12 +58102,22 @@ async function fetchPage(path) {
       sessionCookies.push(nc);
     }
   }
+}
+async function fetchPage(path) {
+  const cookie = await ensureSession();
+  const url2 = path.startsWith("http") ? path : `${DOMAIN}${path}`;
+  const res = await axios_default.get(url2, {
+    headers: { "User-Agent": UA, "Cookie": cookie, "Referer": DOMAIN },
+    timeout: 15e3,
+    responseType: "text"
+  });
+  updateCookies(res.headers);
   return res.data;
 }
-async function ajaxPost(params, query = "") {
+async function postData(path, body) {
   const cookie = await ensureSession();
-  const url2 = `${DOMAIN}/index.php${query ? "?" + query : ""}`;
-  const res = await axios_default.post(url2, params, {
+  const url2 = path.startsWith("http") ? path : `${DOMAIN}${path}`;
+  const res = await axios_default.post(url2, body, {
     headers: {
       "User-Agent": UA,
       "Cookie": cookie,
@@ -58128,46 +58127,47 @@ async function ajaxPost(params, query = "") {
     timeout: 15e3,
     responseType: "text"
   });
-  const setCookies = res.headers["set-cookie"];
-  if (setCookies) {
-    const newCookies = setCookies.map((c) => c.split(";")[0]);
-    for (const nc of newCookies) {
-      const key = nc.split("=")[0];
-      sessionCookies = sessionCookies.filter((c) => !c.startsWith(key + "="));
-      sessionCookies.push(nc);
-    }
-  }
+  updateCookies(res.headers);
   return res.data;
-}
-function extractNovelSlug(href) {
-  const match = href.match(/\/truyen\/([^/]+)\/\d+\/([^/]+)/);
-  if (match) return { host: match[1], bookid: match[2] };
-  return null;
 }
 function parseNovelListFromHtml(html3) {
   const $2 = load(html3);
   const novels = [];
-  $2('a[href*="/truyen/"]').each((_, el) => {
+  $2("a.booksearch").each((_, el) => {
     const $el = $2(el);
     const href = $el.attr("href") || "";
-    const slug = extractNovelSlug(href);
-    if (!slug) return;
-    let title = $el.text().trim();
-    if (!title || title.length < 2) return;
-    if (title.length > 200) return;
-    if (novels.find((n) => n.bookid === slug.bookid && n.host === slug.host)) return;
-    let cover = "";
-    const parentImg = $el.find("img").attr("src") || $el.parent().find("img").attr("src") || "";
-    if (parentImg) cover = parentImg;
+    const match = href.match(/\/truyen\/([^/]+)\/\d+\/([^/]+)/);
+    if (!match) return;
+    const host = match[1];
+    const bookid = match[2];
+    const title = $el.find(".searchbooktitle").text().trim();
+    const author = $el.find(".searchbookauthor").text().trim();
+    const cover = $el.find("img").attr("src") || "";
+    const infoSpans = $el.find(".info span");
+    let views = "", likes = "", chapters = "";
+    infoSpans.each((i, sp) => {
+      const text3 = $2(sp).text().trim();
+      if (i === 0) views = text3;
+      if (i === 1) likes = text3;
+      if (i === 2) chapters = text3;
+    });
+    const tags = [];
+    $el.find(".searchtag").each((_2, t) => {
+      tags.push($2(t).text().trim());
+    });
     novels.push({
-      _id: `${slug.host}-${slug.bookid}`,
+      _id: `${host}-${bookid}`,
       name: title,
-      host: slug.host,
-      bookid: slug.bookid,
-      slug: `${slug.host}/${slug.bookid}`,
+      host,
+      bookid,
+      slug: `${host}/${bookid}`,
       thumb_url: cover,
-      chaptersLatest: [],
-      category: [],
+      author,
+      views,
+      likes,
+      chapters_count: chapters,
+      tags,
+      category: tags.slice(2).map((t) => ({ name: t, slug: t })),
       updatedAt: ""
     });
   });
@@ -58175,48 +58175,68 @@ function parseNovelListFromHtml(html3) {
 }
 var sangtacviet = express.Router();
 sangtacviet.get("/", async (req, res) => {
-  const { action, page = "1", host = "", bookid = "", keyword = "", chapterId = "" } = req.query || {};
+  const {
+    action,
+    page = "1",
+    host = "",
+    bookid = "",
+    keyword = "",
+    chapterId = "",
+    sort = "update",
+    step = "",
+    category = "",
+    type = ""
+  } = req.query || {};
   try {
-    if (action === "latest") {
+    if (action === "listing") {
       const pageNum = parseInt(page) || 1;
-      const path = `/?find=&minc=0&sort=update&tag=&p=${pageNum - 1}`;
-      const html3 = await fetchPage(path);
+      let queryStr = `?find=&minc=0&sort=${sort}&tag=`;
+      if (step) queryStr += `&step=${step}`;
+      if (category) queryStr += `&category=${category}`;
+      if (type) queryStr += `&type=${type}`;
+      queryStr += `&p=${pageNum}`;
+      const html3 = await postData(`/io/searchtp/searchBooks${queryStr}`, "ignores=");
       const novels = parseNovelListFromHtml(html3);
       return res.json({
         status: "success",
         data: {
           items: novels,
-          params: { pagination: { currentPage: pageNum } }
+          params: {
+            pagination: {
+              currentPage: pageNum,
+              totalItems: novels.length >= 48 ? pageNum * 48 + 48 : pageNum * 48,
+              totalItemsPerPage: 48
+            }
+          }
         }
       });
     }
     if (action === "search") {
       if (!keyword) return res.status(400).json({ error: "Missing keyword" });
-      const path = `/?find=&findinname=${encodeURIComponent(keyword)}`;
-      const html3 = await fetchPage(path);
+      const queryStr = `?find=&findinname=${encodeURIComponent(keyword)}&minc=0&sort=update&tag=`;
+      const html3 = await postData(`/io/searchtp/searchBooks${queryStr}`, "ignores=");
       const novels = parseNovelListFromHtml(html3);
       return res.json({
         status: "success",
         data: {
           items: novels,
-          params: { pagination: { currentPage: 1 } }
+          params: { pagination: { currentPage: 1, totalItems: novels.length, totalItemsPerPage: 48 } }
         }
       });
     }
     if (action === "detail") {
       if (!host || !bookid) return res.status(400).json({ error: "Missing host or bookid" });
-      const path = `/truyen/${host}/1/${bookid}/`;
-      const html3 = await fetchPage(path);
+      const html3 = await fetchPage(`/truyen/${host}/1/${bookid}/`);
       const $2 = load(html3);
       const title = $2('meta[property="og:novel:book_name"]').attr("content") || $2("h1#book_name2").text().trim() || "";
       const author = $2('meta[property="og:novel:author"]').attr("content") || "";
       const cover = $2('meta[property="og:image"]').attr("content") || "";
       const status = $2('meta[property="og:novel:status"]').attr("content") || "";
-      const category = $2('meta[property="og:novel:category"]').attr("content") || "";
+      const categoryMeta = $2('meta[property="og:novel:category"]').attr("content") || "";
       const updateTime = $2('meta[property="og:novel:update_time"]').attr("content") || "";
       const description = $2('meta[property="og:description"]').attr("content") || "";
       const originalName = $2("#oriname").text().trim() || "";
-      const categories = category.split(",").map((c) => c.trim()).filter(Boolean).map((c) => ({
+      const categories = categoryMeta.split(",").map((c) => c.trim()).filter(Boolean).map((c) => ({
         name: c,
         slug: c.toLowerCase().replace(/\s+/g, "-")
       }));
@@ -58246,61 +58266,21 @@ sangtacviet.get("/", async (req, res) => {
       if (!host || !bookid) return res.status(400).json({ error: "Missing host or bookid" });
       await fetchPage(`/truyen/${host}/1/${bookid}/`);
       const query = `ngmar=chapterlist&h=${host}&bookid=${bookid}&sajax=getchapterlist`;
-      const data2 = await ajaxPost(`sajax=getchapterlist&h=${host}&bookid=${bookid}`, query);
+      const data2 = await postData(`/index.php?${query}`, `sajax=getchapterlist&h=${host}&bookid=${bookid}`);
       let chapters = [];
       try {
         if (data2 && data2.trim()) {
           const parsed = JSON.parse(data2);
-          if (Array.isArray(parsed)) {
-            chapters = parsed.map((ch, idx) => ({
-              _id: ch.id || ch.cid || String(idx + 1),
-              name: ch.name || ch.n || `Ch\u01B0\u01A1ng ${idx + 1}`,
-              chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${ch.id || ch.cid || idx + 1}`
-            }));
-          } else if (parsed.data && Array.isArray(parsed.data)) {
-            chapters = parsed.data.map((ch, idx) => ({
-              _id: ch.id || ch.cid || String(idx + 1),
-              name: ch.name || ch.n || `Ch\u01B0\u01A1ng ${idx + 1}`,
-              chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${ch.id || ch.cid || idx + 1}`
-            }));
-          }
+          const arr = Array.isArray(parsed) ? parsed : parsed.data || [];
+          chapters = arr.map((ch, idx) => ({
+            _id: ch.id || ch.cid || String(idx + 1),
+            name: ch.name || ch.n || `Ch\u01B0\u01A1ng ${idx + 1}`,
+            chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${ch.id || ch.cid || idx + 1}`
+          }));
         }
       } catch (e) {
-        const html3 = await fetchPage(`/truyen/${host}/1/${bookid}/`);
-        const $2 = load(html3);
-        const scripts = $2("script").toArray();
-        for (const script of scripts) {
-          const text3 = $2(script).html() || "";
-          const match = text3.match(/var\s+(?:chapterData|chaplist)\s*=\s*(\[[\s\S]*?\]);/);
-          if (match) {
-            try {
-              chapters = JSON.parse(match[1]).map((ch, idx) => ({
-                _id: ch.id || ch.cid || String(idx + 1),
-                name: ch.name || ch.n || `Ch\u01B0\u01A1ng ${idx + 1}`,
-                chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${ch.id || ch.cid || idx + 1}`
-              }));
-            } catch (e2) {
-            }
-          }
-        }
-        if (chapters.length === 0) {
-          const titleMatch = $2("title").text().match(/(\d+)\s*chương/i) || $2("title").text().match(/(\d+)\s*chuong/i);
-          const chapterCount = titleMatch ? parseInt(titleMatch[1]) : 0;
-          for (let i = 1; i <= chapterCount; i++) {
-            chapters.push({
-              _id: String(i),
-              name: `Ch\u01B0\u01A1ng ${i}`,
-              chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${i}`
-            });
-          }
-        }
       }
-      return res.json({
-        status: "success",
-        data: {
-          items: chapters
-        }
-      });
+      return res.json({ status: "success", data: { items: chapters } });
     }
     if (action === "chapter") {
       if (!host || !bookid || !chapterId) {
@@ -58308,10 +58288,8 @@ sangtacviet.get("/", async (req, res) => {
       }
       await fetchPage(`/truyen/${host}/1/${bookid}/`);
       const query = `bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1`;
-      const data2 = await ajaxPost(`sajax=readchapter`, query);
-      let content = "";
-      let chapterName = `Ch\u01B0\u01A1ng ${chapterId}`;
-      let bookName = "";
+      const data2 = await postData(`/index.php?${query}`, "sajax=readchapter");
+      let content = "", chapterName = `Ch\u01B0\u01A1ng ${chapterId}`, bookName = "";
       try {
         if (data2 && data2.trim()) {
           let jsonStr = data2;
@@ -58335,25 +58313,13 @@ sangtacviet.get("/", async (req, res) => {
       }
       return res.json({
         status: "success",
-        data: {
-          item: {
-            _id: chapterId,
-            name: chapterName,
-            book_name: bookName,
-            content
-          }
-        }
+        data: { item: { _id: chapterId, name: chapterName, book_name: bookName, content } }
       });
     }
-    return res.status(400).json({
-      error: "Unsupported action. Use: latest, search, detail, chapters, chapter"
-    });
+    return res.status(400).json({ error: "Unsupported action. Use: listing, search, detail, chapters, chapter" });
   } catch (error) {
     console.error("SangTacViet API Error:", error.message);
-    return res.status(500).json({
-      error: "Failed to fetch from sangtacviet",
-      details: error.message
-    });
+    return res.status(500).json({ error: "Failed to fetch from sangtacviet", details: error.message });
   }
 });
 module.exports = sangtacviet;
