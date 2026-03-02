@@ -10,6 +10,18 @@ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 let sessionCookies: string[] = [];
 let sessionExpiry = 0;
 
+function updateCookies(headers: any) {
+    const setCookies = headers['set-cookie'];
+    if (setCookies) {
+        const newCookies = (Array.isArray(setCookies) ? setCookies : [setCookies]).map((c: string) => c.split(';')[0]);
+        for (const nc of newCookies) {
+            const key = nc.split('=')[0];
+            sessionCookies = sessionCookies.filter(c => !c.startsWith(key + '='));
+            sessionCookies.push(nc);
+        }
+    }
+}
+
 async function ensureSession(): Promise<string> {
     if (Date.now() < sessionExpiry && sessionCookies.length > 0) {
         return sessionCookies.join('; ');
@@ -20,28 +32,14 @@ async function ensureSession(): Promise<string> {
             maxRedirects: 5,
             validateStatus: () => true,
         });
-        const setCookies = res.headers['set-cookie'];
-        if (setCookies) {
-            sessionCookies = setCookies.map((c: string) => c.split(';')[0]);
-            sessionExpiry = Date.now() + 30 * 60 * 1000;
-        }
+        updateCookies(res.headers);
+        sessionExpiry = Date.now() + 30 * 60 * 1000;
     } catch (e) { /* ignore */ }
     return sessionCookies.join('; ');
 }
 
-function updateCookies(headers: any) {
-    const setCookies = headers['set-cookie'];
-    if (setCookies) {
-        const newCookies = setCookies.map((c: string) => c.split(';')[0]);
-        for (const nc of newCookies) {
-            const key = nc.split('=')[0];
-            sessionCookies = sessionCookies.filter(c => !c.startsWith(key + '='));
-            sessionCookies.push(nc);
-        }
-    }
-}
-
-async function fetchPage(path: string): Promise<string> {
+// Fetch a page and extract the _acx cookie from inline script
+async function fetchPageWithAcx(path: string): Promise<{ html: string; acx: string }> {
     const cookie = await ensureSession();
     const url = path.startsWith('http') ? path : `${DOMAIN}${path}`;
     const res = await axios.get(url, {
@@ -50,7 +48,13 @@ async function fetchPage(path: string): Promise<string> {
         responseType: 'text',
     });
     updateCookies(res.headers);
-    return res.data;
+
+    // Extract _acx cookie from inline script: document.cookie='_acx=...; path=/'
+    const html = res.data;
+    const acxMatch = html.match(/_acx=([^;'"]+)/);
+    const acx = acxMatch ? acxMatch[1] : '';
+
+    return { html, acx };
 }
 
 async function postData(path: string, body: string): Promise<string> {
@@ -58,9 +62,7 @@ async function postData(path: string, body: string): Promise<string> {
     const url = path.startsWith('http') ? path : `${DOMAIN}${path}`;
     const res = await axios.post(url, body, {
         headers: {
-            'User-Agent': UA,
-            'Cookie': cookie,
-            'Referer': DOMAIN,
+            'User-Agent': UA, 'Cookie': cookie, 'Referer': DOMAIN,
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         timeout: 15000,
@@ -86,7 +88,6 @@ function parseNovelListFromHtml(html: string): any[] {
         const author = $el.find('.searchbookauthor').text().trim();
         const cover = $el.find('img').attr('src') || '';
 
-        // Extract stats from .info span texts
         const infoSpans = $el.find('.info span');
         let views = '', likes = '', chapters = '';
         infoSpans.each((i, sp) => {
@@ -96,7 +97,6 @@ function parseNovelListFromHtml(html: string): any[] {
             if (i === 2) chapters = text;
         });
 
-        // Extract tags
         const tags: string[] = [];
         $el.find('.searchtag').each((_, t) => {
             tags.push($(t).text().trim());
@@ -104,16 +104,10 @@ function parseNovelListFromHtml(html: string): any[] {
 
         novels.push({
             _id: `${host}-${bookid}`,
-            name: title,
-            host,
-            bookid,
+            name: title, host, bookid,
             slug: `${host}/${bookid}`,
-            thumb_url: cover,
-            author,
-            views,
-            likes,
-            chapters_count: chapters,
-            tags,
+            thumb_url: cover, author, views, likes,
+            chapters_count: chapters, tags,
             category: tags.slice(2).map(t => ({ name: t, slug: t })),
             updatedAt: '',
         });
@@ -131,7 +125,7 @@ sangtacviet.get('/', async (req: any, res: any) => {
     } = req.query || {};
 
     try {
-        // ── LISTING (latest, popular, completed, random) ──
+        // ── LISTING ──
         if (action === 'listing') {
             const pageNum = parseInt(page as string) || 1;
             let queryStr = `?find=&minc=0&sort=${sort}&tag=`;
@@ -178,7 +172,7 @@ sangtacviet.get('/', async (req: any, res: any) => {
         if (action === 'detail') {
             if (!host || !bookid) return res.status(400).json({ error: 'Missing host or bookid' });
 
-            const html = await fetchPage(`/truyen/${host}/1/${bookid}/`);
+            const { html } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/`);
             const $ = cheerio.load(html);
 
             const title = $('meta[property="og:novel:book_name"]').attr('content') || $('h1#book_name2').text().trim() || '';
@@ -194,6 +188,28 @@ sangtacviet.get('/', async (req: any, res: any) => {
                 name: c, slug: c.toLowerCase().replace(/\s+/g, '-'),
             }));
 
+            // Extract available hosts from the detail page
+            const availableHosts: any[] = [];
+            $('a[href*="/truyen/"]').each((_, el) => {
+                const href = $(el).attr('href') || '';
+                const hostMatch = href.match(/\/truyen\/([^/]+)\/\d+\/([^/]+)/);
+                if (!hostMatch) return;
+                const hName = hostMatch[1];
+                const hBookId = hostMatch[2];
+                const text = $(el).text().trim();
+                // Extract chapter count from text like "69shu(843)"
+                const countMatch = text.match(/\((\d+)\)/);
+                const count = countMatch ? parseInt(countMatch[1]) : 0;
+                if (hName && hBookId && !availableHosts.find(h => h.host === hName && h.bookid === hBookId)) {
+                    availableHosts.push({
+                        host: hName,
+                        bookid: hBookId,
+                        name: hName,
+                        chapters_count: count,
+                    });
+                }
+            });
+
             return res.json({
                 status: 'success',
                 data: {
@@ -202,6 +218,7 @@ sangtacviet.get('/', async (req: any, res: any) => {
                         slug: `${host}/${bookid}`, origin_name: originalName, author,
                         status: status === 'Còn tiếp' ? 'ongoing' : status === 'Hoàn thành' ? 'completed' : status,
                         thumb_url: cover, content: description, category: categories, updatedAt: updateTime,
+                        available_hosts: availableHosts,
                         chapters: [],
                         chapter_api_data: `/api/sangtacviet?action=chapters&host=${host}&bookid=${bookid}`,
                     },
@@ -213,22 +230,42 @@ sangtacviet.get('/', async (req: any, res: any) => {
         if (action === 'chapters') {
             if (!host || !bookid) return res.status(400).json({ error: 'Missing host or bookid' });
 
-            await fetchPage(`/truyen/${host}/1/${bookid}/`);
-            const query = `ngmar=chapterlist&h=${host}&bookid=${bookid}&sajax=getchapterlist`;
-            const data = await postData(`/index.php?${query}`, `sajax=getchapterlist&h=${host}&bookid=${bookid}`);
+            // First visit the detail page to get the _acx cookie
+            const { acx } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/`);
+
+            // Build cookies with _acx
+            const cookie = sessionCookies.join('; ') + (acx ? `; _acx=${acx}` : '');
+
+            // GET the chapter list with the _acx cookie
+            const url = `${DOMAIN}/index.php?ngmar=chapterlist&h=${host}&bookid=${bookid}&sajax=getchapterlist`;
+            const chRes = await axios.get(url, {
+                headers: { 'User-Agent': UA, 'Cookie': cookie, 'Referer': `${DOMAIN}/truyen/${host}/1/${bookid}/` },
+                timeout: 15000,
+                responseType: 'text',
+            });
+            updateCookies(chRes.headers);
 
             let chapters: any[] = [];
-            try {
-                if (data && data.trim()) {
+            const data = chRes.data;
+            if (data && data.trim()) {
+                try {
                     const parsed = JSON.parse(data);
-                    const arr = Array.isArray(parsed) ? parsed : (parsed.data || []);
-                    chapters = arr.map((ch: any, idx: number) => ({
-                        _id: ch.id || ch.cid || String(idx + 1),
-                        name: ch.name || ch.n || `Chương ${idx + 1}`,
-                        chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${ch.id || ch.cid || idx + 1}`,
-                    }));
-                }
-            } catch (e) { /* ignore */ }
+                    if (parsed.code === 1 && parsed.data) {
+                        // Format: "vip-/-chapterId-/- chapterName-//-..."
+                        const chapterEntries = parsed.data.split('-//-').filter((s: string) => s.trim());
+                        chapters = chapterEntries.map((entry: string, idx: number) => {
+                            const parts = entry.split('-/-');
+                            const chId = parts[1]?.trim() || String(idx + 1);
+                            const chName = parts[2]?.trim() || `Chương ${idx + 1}`;
+                            return {
+                                _id: chId,
+                                name: chName,
+                                chapter_api_data: `/api/sangtacviet?action=chapter&host=${host}&bookid=${bookid}&chapterId=${chId}`,
+                            };
+                        });
+                    }
+                } catch (e) { /* ignore parse errors */ }
+            }
 
             return res.json({ status: 'success', data: { items: chapters } });
         }
@@ -239,11 +276,22 @@ sangtacviet.get('/', async (req: any, res: any) => {
                 return res.status(400).json({ error: 'Missing host, bookid, or chapterId' });
             }
 
-            await fetchPage(`/truyen/${host}/1/${bookid}/`);
-            const query = `bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1`;
-            const data = await postData(`/index.php?${query}`, 'sajax=readchapter');
+            const { acx } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/`);
+            const cookie = sessionCookies.join('; ') + (acx ? `; _acx=${acx}` : '');
+
+            const url = `${DOMAIN}/index.php?bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1`;
+            const chRes = await axios.post(url, 'sajax=readchapter', {
+                headers: {
+                    'User-Agent': UA, 'Cookie': cookie,
+                    'Referer': `${DOMAIN}/truyen/${host}/1/${bookid}/${chapterId}/`,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                timeout: 15000,
+                responseType: 'text',
+            });
 
             let content = '', chapterName = `Chương ${chapterId}`, bookName = '';
+            const data = chRes.data;
 
             try {
                 if (data && data.trim()) {
@@ -251,15 +299,16 @@ sangtacviet.get('/', async (req: any, res: any) => {
                     const jsonStart = data.indexOf('{"');
                     if (jsonStart > 0) jsonStr = data.substring(jsonStart);
                     const parsed = JSON.parse(jsonStr);
-                    if (parsed.code === '0' || parsed.code === 0) {
+                    if (parsed.code === '0' || parsed.code === 0 || parsed.content) {
                         content = parsed.content || parsed.c || '';
                         chapterName = parsed.chaptername || parsed.cn || chapterName;
                         bookName = parsed.bookname || parsed.bn || '';
                     }
                 }
             } catch (e) {
+                // Fallback: try loading the chapter page directly
                 try {
-                    const html = await fetchPage(`/truyen/${host}/1/${bookid}/${chapterId}/`);
+                    const { html } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/${chapterId}/`);
                     const $ = cheerio.load(html);
                     content = $('#maincontent').html() || '';
                     chapterName = $('title').text().trim() || chapterName;

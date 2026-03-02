@@ -1,29 +1,40 @@
-2026-03-02T15:58:11.617Z	Initializing build environment...
-2026-03-02T15:58:15.384Z	Success: Finished initializing build environment
-2026-03-02T15:58:15.791Z	Cloning repository...
-2026-03-02T15:58:23.954Z	Restoring from dependencies cache
-2026-03-02T15:58:23.957Z	Restoring from build output cache
-2026-03-02T15:58:23.961Z	Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
-2026-03-02T15:58:29.087Z	Success: Dependencies restored from build cache.
-2026-03-02T15:58:29.090Z	Installing project dependencies: npm clean-install --progress=false
-2026-03-02T15:58:38.904Z	
-2026-03-02T15:58:38.904Z	added 248 packages, and audited 250 packages in 9s
-2026-03-02T15:58:38.904Z	
-2026-03-02T15:58:38.905Z	60 packages are looking for funding
-2026-03-02T15:58:38.905Z	  run `npm fund` for details
-2026-03-02T15:58:38.906Z	
-2026-03-02T15:58:38.906Z	found 0 vulnerabilities
-2026-03-02T15:58:39.135Z	Executing user build command: npm run build
-2026-03-02T15:58:39.474Z	
-2026-03-02T15:58:39.474Z	> web@0.0.0 build
-2026-03-02T15:58:39.475Z	> tsc -b && vite build
-2026-03-02T15:58:39.475Z	
-2026-03-02T15:58:44.312Z	src/pages/NovelReader.tsx(11,11): error TS6133: 't' is declared but its value is never read.
-2026-03-02T15:58:44.682Z	npm error Lifecycle script `build` failed with error:
-2026-03-02T15:58:44.682Z	npm error code 2
-2026-03-02T15:58:44.682Z	npm error path /opt/buildhome/repo/web
-2026-03-02T15:58:44.682Z	npm error workspace web@0.0.0
-2026-03-02T15:58:44.682Z	npm error location /opt/buildhome/repo/web
-2026-03-02T15:58:44.682Z	npm error command failed
-2026-03-02T15:58:44.682Z	npm error command sh -c tsc -b && vite build
-2026-03-02T15:58:44.700Z	Failed: error occurred while running build command
+GETMixed Content: Upgrading insecure display request ‘http://rs.sfacg.com/web/novel/images/NovelCover/Big/2025/03/e35c8a75-9e93-4336-b34b-730f3df9bd29.jpg’ to use ‘https’ e35c8a75-9e93-4336-b34b-730f3df9bd29.jpg
+Mixed Content: Upgrading insecure display request ‘http://p6-novel.byteimg.com/origin/novel-pic/c8558b42293fe7fc7b485e2159fbcac4’ to use ‘https’ c8558b42293fe7fc7b485e2159fbcac4
+Mixed Content: Upgrading insecure display request ‘http://rs.sfacg.com/web/novel/images/NovelCover/Big/2025/09/63d36ca7-bb7b-46a0-97a6-5b55ed98ecbb.jpg’ to use ‘https’ 63d36ca7-bb7b-46a0-97a6-5b55ed98ecbb.jpg
+Mixed Content: Upgrading insecure display request ‘http://p6-novel.byteimg.com/origin/novel-pic/p2o43da4425bd3b338cef72fa545aaff9c1’ to use ‘https’
+https://p6-novel.byteimg.com/tos-cn-i-snk2bdmkp8/f8fd6d5f82f18973736dc4ce96055f4b14c4024f75db53e365ee9186cba68466~tplv-shrink:640:0.image  NS_BINDING_ABORTED
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. f8fd6d5f82f18973736dc4ce96055f4b14c4024f75db53e365ee9186cba68466~tplv-shrink:640:0.image
+Mixed Content: Upgrading insecure display request ‘http://img.wenku8.com/image/4/4205/4205s.jpg’ to use ‘https’ 4205s.jpg
+Mixed Content: Upgrading insecure display request ‘http://rs.sfacg.com/web/novel/images/NovelCover/Big/2025/03/e35c8a75-9e93-4336-b34b-730f3df9bd29.jpg’ to use ‘https’ e35c8a75-9e93-4336-b34b-730f3df9bd29.jpg
+Mixed Content: Upgrading insecure display request ‘http://p6-novel.byteimg.com/origin/novel-pic/p2o808ed81f038e03fcd20e5ce917470ce1’ to use ‘https’ p2o808ed81f038e03fcd20e5ce917470ce1
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/703/000703438.jpg’ to use ‘https’ 000703438.jpg
+Mixed Content: Upgrading insecure display request ‘http://p6-novel.byteimg.com/origin/novel-pic/p2o6a59b37968868a73c37e4cbae9b83e1c’ to use ‘https’ p2o6a59b37968868a73c37e4cbae9b83e1c
+Mixed Content: Upgrading insecure display request ‘http://rs.sfacg.com/web/novel/images/NovelCover/Big/2025/03/0d002c1f-169f-422b-befa-4cd369752918.jpg’ to use ‘https’ 0d002c1f-169f-422b-befa-4cd369752918.jpg
+Mixed Content: Upgrading insecure display request ‘http://p3-novel.byteimg.com/origin/novel-pic/p2o4fe953cb40d73fa009016c2f7d482f2d’ to use ‘https’
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/577/000577264.jpg’ to use ‘https’ 000577264.jpg
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/499/000499896.jpg’ to use ‘https’ 000499896.jpg
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/406/000406326.jpg’ to use ‘https’ 000406326.jpg
+GET
+https://www.sobiquge.com/files/article/image/25/25095/25095s.jpg
+NS_BINDING_ABORTED
+
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/1/1049/001049805.jpg’ to use ‘https’ 001049805.jpg
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/167/000167682.jpg’ to use ‘https’ 000167682.jpg
+Mixed Content: Upgrading insecure display request ‘http://www.xinyushuwu.com/files/article/image/2/2599/2599s.jpg’ to use ‘https’ 2599s.jpg
+GET
+https://www.xinyushuwu.com/files/article/image/2/2599/2599s.jpg
+NS_BINDING_ABORTED
+
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/1/1030/001030475.jpg’ to use ‘https’ 001030475.jpg
+GET
+https://www.sobiquge.com/files/article/image/12/12305/12305s.jpg
+NS_BINDING_ABORTED
+
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/476/000476350.jpg’ to use ‘https’ 000476350.jpg
+Mixed Content: Upgrading insecure display request ‘http://www.shu05.com/files/article/image/93/93838/93838s.jpg’ to use ‘https’ 93838s.jpg
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/457/000457141.jpg’ to use ‘https’ 000457141.jpg
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/506/000506926.jpg’ to use ‘https’ 000506926.jpg
+Mixed Content: Upgrading insecure display request ‘http://img.faloo.com/Novel/498x705/0/880/000880505.jpg’ to use ‘https’ 000880505.jpg
+Cookie “sid” will soon be rejected because it is foreign and does not have the “Partitioned“ attribute. 2599s.jpg
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. 25095s.jpg
+A resource is blocked by OpaqueResponseBlocking, please check browser console for details. 12305s.jpg
