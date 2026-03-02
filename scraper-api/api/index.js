@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const nettruyenRouter = require('./nettruyen').nettruyen || require('./nettruyen');
 const nhentaiRouter = require('./nhentai').nhentai || require('./nhentai');
+const sangtacvietRouter = require('./sangtacviet').sangtacviet || require('./sangtacviet');
 
 const app = express();
 app.use(cors());
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
 // Mount specialized scrapers
 app.use('/api/nettruyen', nettruyenRouter);
 app.use('/api/nhentai', nhentaiRouter);
+app.use('/api/sangtacviet', sangtacvietRouter);
 
 // Export for Netlify serverless
 module.exports.handler = serverless(app);

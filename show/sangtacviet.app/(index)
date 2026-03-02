@@ -1,0 +1,1692 @@
+<head>
+		<link rel="dns-prefetch" href="//static.sangtacvietcdn.xyz">
+		<link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+		<meta http-equiv="Content-Language" content="vi-vn">
+		<meta name="robots" content="noindex, nofollow">
+		<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow" /><link rel="canonical" href="https://sangtacviet.vip/">	    <meta charset="utf-8">
+	    <title>Sáng Tác Việt - Nền tảng văn học mạng mở mới</title>
+	    	<meta name="keywords" content="tấn giang,đọc truyện,faloo,ciweimao,truyện full,qidian,sfacg,khởi điểm">
+					    <meta name="description" content="Nền tảng đọc truyện tự do, tự dịch truyện, đọc miễn phí một số nguồn vip.">
+					    <meta property="og:description" content="Đọc truyện scan, truyện free, tự động dịch truyện...">
+					    <meta property="og:title" content="Sáng Tác Việt">
+					    <meta property="og:type" content="novel">
+					    <meta property="og:image" property="https://sangtacviet.com/favicon.png">	    <script type="text/javascript">
+	    	if(location.hash.indexOf("rtc")>=0){
+	    		location.hash="";
+	    	}
+	    	if(location.hash.indexOf("showerror")>=0){
+	    		window.onerror=function(msg, url, lineNo, columnNo, error){
+	    			alert(msg+"\n"+url+"\n"+columnNo+"\n"+lineNo);
+	    		}
+	    	}
+	    	//const isInStandaloneMode = () =>
+			//    (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes//('android-app://');
+			// 	if (isInStandaloneMode()) {
+			// 		ui.appmode();
+			//}
+
+	    </script>
+	    <script src="/jqr.js"></script>
+		<link rel="stylesheet" href="/bootstrap.min.css?origin=">
+		<link rel="stylesheet" href="/font/font.css?v=4">
+		<link rel="stylesheet" href="/asset/all.min.css">
+		<link rel="stylesheet" type="text/css" href="/main.css?v=7">
+		<link rel="stylesheet" type="text/css" href="/asset/theme.default.css?v=0">
+				<style type="text/css">
+			.fa-download{
+				min-width: 30px;
+				font-size: 30px;
+			}
+			.cgcolor{
+				font-size: 15px;
+			    line-height: 1.2;
+			    width: 25px;
+			    text-align: center;
+			}
+			.noti{
+				padding: 0 6px;
+				height: 60px;
+				border: 1px solid #dddddd;
+				margin-top: -1px;
+			}
+			.noti h6{
+				margin: 6px 0 0 0;
+				font-size: 14px;
+			}
+			#searchbox{
+				line-height: 2;
+			}
+			#commentportion .sec-bot{
+				border-bottom-left-radius: 4px;
+    			border-bottom-right-radius: 4px;
+			}
+			.blk-item2{
+				display: block;
+				font-size: 12px;
+				font-weight: 600;
+				padding: 10px;
+				text-align: center;
+			}
+			.blk-item2 i{
+				font-size: 30px;
+			}
+			.col-3{
+				padding: 0;
+			}
+			.blk-item2 i:after{
+				content: "";
+				display: block;
+			}
+			.nip{border:none;background-color:#eee;outline:none;padding: 4px;border-radius: 6px;}.nip{border: none;width: 100%;background: #eee;padding: 6px;border-radius: 6px;outline: none;}
+
+		</style>
+		<script type="text/javascript" src="/stv.ui.js?v=1.283"></script>
+		<script type="text/javascript">
+			window.onerror=function(msg, url, lineNo, columnNo, error){
+				if(!(msg.contain("is not a")) && !(msg.contain("ghz is not defined")) && !(msg.contain("find variable: ghz"))){
+					if(url.join){
+						url=url.join(",");
+					}
+					if(error && error.stack){
+						msg += "\n" + error.stack;
+					}
+					ajax("sajax=reportscripterror&data="+encodeURIComponent(msg)+"&file="+encodeURIComponent(url)+"&line="+lineNo+":"+columnNo,function() {});
+				}
+			}
+		</script>
+				<script src="/bootstrap.min.js"></script>
+		<script src="/stv.host.js?v=035"></script>
+        <script>
+//perf fix
+var oldReg = RegExp;
+window.RegExp = function(a){
+	if(a && a.indexOf){
+		if(a.indexOf("cloudfront") < 0){
+			return oldReg.apply(this,arguments);
+		}
+		return new oldReg();
+	}
+	return oldReg.apply(this,arguments);
+}
+
+        	var userperm=1;		var isMobile= false; 
+// device detection
+if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
+    || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) { 
+    isMobile= true;
+}
+	var store = window.localStorage;
+	function getCookie(cname) {
+		var name = cname + "=";
+		//var decodedCookie = decodeURIComponent(document.cookie);
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			try {
+				var c = decodeURIComponent(ca[i]);
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			} catch(e) {
+				console.log('Cookie error: '+ca[i]);
+			}
+		}
+		return "";
+	}
+	function timeElapsed(time, suffix){
+		if(!time){ return " ";}
+		var btime = time;
+		if(time.indexOf("GMT") <= 0){
+			time = time + " GMT+0700";
+		}
+		var timedifsec=(new Date().getTime()-new Date(time).getTime())/1000;
+
+		if(!timedifsec){
+			return btime;
+		}
+		var timedif={
+			second:Math.floor(timedifsec)
+			,minute:Math.floor(timedifsec/60)
+			,hour:Math.floor(timedifsec/3600)
+			,day:Math.floor(timedifsec/86400)
+			,week:Math.floor(timedifsec/604800)
+		}
+		if(!suffix){
+			return timedif;
+		}else{
+			if(timedif.week>0){
+				return timedif.week+" tuần trước";
+			}else
+			if(timedif.day>0){
+				return timedif.day+" ngày trước";
+			}else
+			if(timedif.hour>0){
+				return timedif.hour+" giờ trước";
+			}else 
+			if(timedif.minute>0){
+				return timedif.minute+" phút trước";
+			}else
+			if(timedif.second < 1){
+				return "vừa mới";
+			} else return timedif.second+" giây trước";
+		}
+	}
+	function jumpPage() {
+		if (typeof(thispage) == "undefined") return;
+		if (window.setting.nofastnav) return;
+		var event = document.all ? window.event : arguments[0];
+		try{
+			if (event.keyCode == 37) document.getElementById("navprevtop").click();
+			//if (event.keyCode== 82) gotox();
+			if (event.keyCode == 39) document.getElementById("navnexttop").click();
+		}catch(e){}
+		
+	}
+	document.onkeydown = jumpPage;
+	function enmobile() {
+		if (isMobile) {
+			g("namewdf").style.width = "100%";
+		}
+	}
+	function parseid(){
+		var sp=g("hiddenid").innerHTML.split(";");
+		return {bookid:sp[0],host:sp[2],chapter:sp[1]}
+	}
+	var namew;
+	document.addEventListener("DOMContentLoaded", function(event) {
+		loadConfig();
+		try{
+			enmobile();
+		}catch(c){}
+		namew = document.getElementById("namewd");
+		try {
+			excute();
+		} catch (c) {}
+		if (window.applyNodeList) {
+			defineSys();
+		}
+	});
+	loadConfig();
+        </script>
+    </head>
+    <body>
+<div id="full">
+	<div id="tm-top-nav">
+	    <div class="container">
+			<a id="tm-top-nav-home" style="color: grey" href="/">Trang chủ</a> | 
+			<a id="tm-top-nav-fanpage" href="https://www.facebook.com/105795507712320/" style="color: grey">Fanpage</a> |
+			<a id="tm-top-nav-forum" href="/forum/" style="color: grey">Diễn đàn</a>
+		</div>
+	</div>
+    <nav class="navbar navbar-expand-lg bg-light" id="mainbar">
+		<div id="tm-nav-search-top" class="container" style="display:block;line-height: 50px;">
+			<a href="/"><img alt="Logo sangtacviet" id="tm-nav-search-logo" src="/favicon.png"></a>
+			<div id="tm-nav-search-top-right" style="float: right;">
+								</button>
+				<a href='#' onclick='openloginmodal()'>Đăng nhập</a>			</div>
+			<form class="" style="width:auto;margin: 0">
+				<div class="input-group">
+					<input id="id" autocomplete="off" class="form-control col-auto" onkeydown="if(event.keyCode==13){event.preventDefault();goto();}"
+						type="text" name="id" placeholder="Link truyện/Tìm kiếm">
+					<button id="tm-btn-goto" aria-label="Nút tìm kiếm" type="button" class="my-0 my-lg-0 fas fa-arrow-right" onclick="goto()"></button>
+					<button id="tm-btn-rescan" aria-label="Nút tải lại" type="button" class="my-0 my-lg-0 fas fa-redo" onclick="gotox()"></button>
+					<span id="tm-nav-search-popup" style="display: block;">
+						<div id="searchbox">
+						</div>
+					</span>
+					
+				</div>
+				<script type="text/javascript">
+  					var _c="_gac",_d="_gid",c=getCookie,_h="charCodeAt";
+				</script>
+			</form>
+		</div>
+	</nav> 
+	<div id="tm-bot-nav" class="bg-dark">
+		<div id="naviga" class="container">
+				<a onclick="ui.swiftload(this)" href="/"><i class="fas fa-home"></i> Trang chủ</a>
+				<a onclick="ui.swiftload(this)" href="/truyen-ngon/"><i class="fas fa-comment"></i> Thế giới</a>
+				<a onclick="ui.swiftload(this)" href="/search/">Tìm Truyện</a>
+				<a href="/day-sach/">Đẩy Sách</a>
+				<a href="/surf.php">Dịch trang web</a>
+				<a onclick="ui.swiftload(this)" href="/trans/">Dịch</a>
+				
+		</div>	
+	</div>
+    <div id="shownbtnctn"></div>
+    <div id="inner">
+
+<div hidden data-nosnippet class="container bg-light" style="display: block;font-size: 14px;color: gray;padding: 6px 16px; border-left: 4px solid red">
+	Truy cập <a style="-animation: color-change 1.5s linear infinite; /*Fix lỗi user bị mù*/" href="https://sangtacviet.app">sangtacviet.app</a> nếu bạn không thể truy cập trang web.
+</div>
+<div data-nosnippet class="container bg-light" style="display: block;font-size: 14px;color: gray;padding: 6px 16px; border-left: 4px solid red">
+	Cáp biển APG đã bị hỏng, truy cập website có thể bị chậm. Giờ cao điểm buổi tối nhà mạng sẽ điều chỉnh băng thông khiến bạn có khả năng không truy cập được.
+</div>
+<link rel="stylesheet" type="text/css" href="/asset/vipuser2.css?t=1772462924"><style type="text/css">
+	.bookthumb{
+		border: 2px solid #6690fa4d;
+	    width: 100%;
+	    padding-top: 125%;
+	    position: relative;
+	    margin: 0;
+	    border-radius: 8px;
+	    overflow: hidden;
+	}
+	.bookthumb img{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+	}
+	.bookthumb2[vf="3"]:before{
+	    content:"Key Siêu Cấp";
+	    position:absolute;
+	    padding:0 20px;
+	    top:25px;
+	    left:-25px;
+	    z-index:10;
+	    background-color:gold;
+	    color:black;
+	    transform:rotate(315deg);
+	}
+	.bookthumb[vf="3"]{
+	    overflow:hidden
+	}
+	#inner .cap{
+		padding: 4px;
+		color: #050505d9;
+    	font-family: roboto;
+	}
+	.tusachsearcher{
+		border: 1px solid #e8e8e8;
+		width: 100%; 
+		font-size: 14px;
+		padding: 6px;
+		margin-top: 12px;
+	}
+	.book-grid{
+		padding: 4px;
+	}
+	.book-list-item{
+		-padding: 4px;
+	    -background-color: #defadd;
+	    margin-bottom: 8px;
+	    -border-radius: 6px;
+	}
+	.book-list-item img{
+		width: 50px;
+	    height: 50px;
+	    float: left;
+	    border-radius: 4px;
+	    margin-right: 5px;
+	}
+	@keyframes 
+	flashing-green {
+	  0% {
+	    color: black;
+	  }
+	  50% {
+	    color: greenyellow;
+	  }
+	  100% {
+	    color: black;
+	  }
+	}
+
+	.flashing-green {
+	  animation: flashing-green 1s infinite;
+	}
+</style>
+<div class="container">
+<div class="row">
+	<div class="col-md-4">
+	<div style="font-size:12px;width: 100%;margin-bottom: 8px">
+		<div style="font-size:22px;margin-top:20px;">Truyện vừa đọc<span onclick="loadTusachModal()" style="float:right;margin-top: 10px;font-size: 14px;"><i class="fas fa-wrench"></i></i></span><input class="tusachsearcher" type="text" placeholder="Truyện lưu ở đây dễ bị mất, hãy dùng đánh dấu hoặc theo dõi" onkeyup="fastfindtusach(this.value)"></div>
+
+		<div id="tusach" style="max-height:270px;height: 270px;overflow-y:auto;border:1px solid #e8e8e8"></div>
+	</div>
+		<script>
+			function fastfindtusach(keyw){
+				var tr=keyw=="";
+				var rg= new RegExp(keyw, "i");
+				q(".roundblock").forEach(function(e){
+					if(!tr&&!rg.test(e.children[0].innerHTML) ){
+						e.style.display = 'none';
+					}else {
+						e.style.display = 'flex';
+					}
+				});
+			}
+			function reloadBook(){
+				var s= localStorage;
+				var ss=s.getItem("tusach");
+				if(ss==null){
+					var d = document.getElementById("tusach");
+					d.innerHTML="Chưa đọc truyện nào, hãy bắt đầu đọc truyện để lưu";
+					d.style.visibility = 'visible';
+					d.style.height = 'auto';
+					return;
+				}else{
+					var sss=ss.split("~/~");
+					var d = document.getElementById("tusach");
+					d.style.visibility="hidden";
+					var limit = 0;
+					sss.forEach(function(e){
+						if(limit > 300){
+							return;
+						}
+						if(e!=""){
+							try{
+								var f=JSON.parse(e);
+								var div = document.createElement("div");
+								div.className="roundblock";
+								var ti =document.createElement("a");
+								ti.href="/truyen/"+f.host+"/1/"+f.id+"/";
+								ti.className="title";
+								var currs=f.current.split("-,-");
+								ti.innerHTML=f.name.replace(/(\<i .*?\>|\<\/i\>|\<br\>|\ufffe|)/gi,"")+'<br>'+(currs[1].length > 40 ? currs[1].substring(0,40):currs[1]);
+								div.appendChild(ti);
+								ti=document.createElement("div");
+								ti.className="btngroup";
+								div.appendChild(ti);
+								var btn1= document.createElement("button");
+								btn1.className="btn";
+								btn1.textContent="…";
+								
+								btn1.setAttribute("onclick","document.location='/truyen/"+f.host+"/1/"+f.id+"/"+currs[0]+"/'");
+								ti.appendChild(btn1);
+								btn1=document.createElement("button");
+								btn1.className="btn";
+								btn1.textContent="✕";
+								btn1.setAttribute("onclick","removebookfromts(this,'"+f.host+"','"+f.id+"')");
+								ti.appendChild(btn1);
+								d.appendChild(div);
+								limit++;
+							}catch(ukne){}
+							
+							//d.innerHTML+="<a class='cap' href='/truyen/"+f[0]+"/1/"+f[2]+"/'>"+f[4]+"</a> - <a href='/truyen/"+f[0]+"/"+f[1]+"/"+f[2]+"/"+f[3]+"/'>Đọc tiếp</a><br>";
+						}
+					});
+					d.style.visibility = 'visible';
+					d.style.height = 'auto';
+
+				}
+			}
+			setTimeout(reloadBook, 100);
+			function removebookfromts(element,a,b){
+				var s=localStorage;
+				var ss=s.getItem("tusach");
+				var sss=ss.split("~/~");
+				var arr=[];
+				for(var i = 0;i<sss.length;i++){
+					var e=sss[i];
+					if(e!=""){
+						try{
+							var f=JSON.parse(e);
+							if(f.host==a && f.id == b){
+
+							}else {
+								arr.push(e);
+							}
+						}catch(ukne){}
+						
+					}else arr.push(e);
+				}
+				sss=arr.join("~/~");
+				s.setItem("tusach",sss);
+				clearTimeout(window.timersync);
+				window.timersync = setTimeout(function(){
+					syncdo("update");
+				},4000);
+				//
+				var pre=element.parentElement.parentElement;
+				$(pre).hide("slow",function(){pre.remove();});
+			}
+		</script>
+	</div>
+	<div class="col-md-8 d-none d-md-block" style="display:  flex;flex-direction: column;max-height: 240px;">
+		<div style="font-size:20px;margin:20px 0 14px 0;">Dịch nhanh &gt;<button type="button" class="btn" style="float: right;border: 1px solid #e8e8e8;line-height: 1" onclick="trans()">Dịch</button></div>
+		<script type="text/javascript">
+			function trans(){
+				var xhttp = new XMLHttpRequest();
+				var data = "ajax=trans&content="+encodeURI(g("totrans").value);
+				xhttp.open("POST", "/index.php?ngmar=trans", true);
+				xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xhttp.onreadystatechange = function () {
+							if (this.readyState == 4 && this.status == 200) {
+								g("translated").value=this.responseText.replace(/\t/g,"").replace(/ = /g," ").replace(/(\<i .*?\>|\<\/i\>|\<br\>|\ufffe|)/gi,"");
+							}
+				};
+				 xhttp.send(data);
+			}
+		</script>
+		<div class="row" style="flex-basis: 100%;padding: 0px 15px">
+			<textarea id="totrans" style="border:1px solid #e8e8e8;background-color: #f8f8f8;flex-basis: 50%"></textarea>
+			<textarea id="translated" style="border:1px solid #e8e8e8;background-color: #f8f8f8;flex-basis: 50%"></textarea>
+		</div>
+	</div>
+</div>
+<div class="row" hidden>
+	<div class="tmc-home-section" style="color:black;font-size:14px;padding:0 15px;width: 100%;background: #ffffd9;">
+		<div style="font-size:20px;margin:20px 0;">Truyện Vip Free &gt;<a href="http://sangtacviet.com/?find=&minc=0&tag=vip," style="display: inline-block;color: gray;font-size:12px;float:right;margin-top: 10px;"> xem thêm... </a></div>
+		<div class="row book-grid">
+				</div>
+	</div>
+</div>
+<div class="row">
+	<div class="tmc-home-section" style="color:black;font-size:14px;padding:0 15px;width: 100%;background: linear-gradient(111deg, #d0f8ef, #d9ffc6); border-top-left-radius: 16px; border-top-right-radius: 16px;">
+		<div class="flex">
+			<div style="font-size:min(20px, 5vw);margin:20px 0;flex: 1">Được nhiều Like &gt;</div>
+			<a href="javascript:void(0)" onclick="useOldColor()" hrefs="/?find=&minc=0&sort=upvote&tag=" style="display: inline-block;color: gray;font-size:12px;float:right;margin-top: 25px;">Về màu cũ</a>
+		</div>
+		<div class="row book-grid">
+		
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7607689045631568920/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/p2o4da12895ae1ba86fb50c95ff222230bd~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Sụp đổ sắt: Vô danh khách, nhưng mỗi ngày ngẫu nhiên mệnh đồ </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1047811034/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1047811034/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đấu La: Ta từ quỷ diệt mà đến!</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/ciweimao/1/100467682/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://e1.kuangxiangit.com/uploads/allimg/c260209/09-02-26031634-86502.jpg" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Jujutsu Kaisen, thiền viện thẳng quá thay muốn sống sót </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1047996370/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1047996370/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Người tại đấu phá viết nhật ký! Các nàng bức ta ăn bám </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1045871575/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1045871575/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đấu La: Ta  ếch con chuyên trộm Đường Tam cơ duyên </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/dich/1/46086/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0">(lấp hố)Cẩu tại lưỡng giới tu tiên</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7599508825627954238/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/5b5bb954ab5bea22aa565030b1a185e8~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đấu La: Ta  Võ Hồn | Mahora | </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1046464994/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1046464994/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đấu La: Võ Hồn Sharingan, đồng thuật biến hồn kỹ   </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1047594523/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1047594523/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đấu La tuyệt thế: Bản thể buông xuống, ta nhục thân thành Thánh </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/ciweimao/1/100466641/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://e1.kuangxiangit.com/uploads/allimg/c260203/03-02-26095825-89035.jpg" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Hikigaya Hachiman  thanh xuân tràn ngập hoang ngôn </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/ciweimao/1/100467745/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://e1.kuangxiangit.com/uploads/allimg/c260209/09-02-26140344-10126.jpg" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Mà sai, ta chủ thần là Miyazaki Hidetaka?</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7604453170604952601/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/c981d0a25a4cd85cda435f7e985c2d75~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Dị giới | Mahora |, ta trở thành giáo hoa  thủ hộ linh </b>
+                </a>		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="tmc-home-section" style="color:black;font-size:14px;padding:0 15px;width: 100%;background: linear-gradient(116deg, rgb(250, 234, 250), rgb(223, 254, 253));overflow: hidden;">
+		<div class="flex">
+			<div style="font-size: min(20px, 5vw);flex:1;margin:20px 0;">Truyện Ngẫu Nhiên &gt; </div>
+			<button onclick="newrandombook()" style="display: inline-block;color: gray;background: none;padding: 4px;border: none;"><i class="fas fa-redo-alt"></i></button>
+		</div>
+		<div id="randombookbase" class="row book-grid">
+		<a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/uukanshu/1/365/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='https://img.uukanshu.com/fengmian/2012/10/634864412234301250.jpg' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Rock n Roll tiên sinh </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/biqubu/1/92920/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='https://www.biquyue.com/files/article/image/92/92920/92920s.jpg' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Toàn dân đóng vai: Đời thứ hai ta nghịch thiên cải mệnh </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/fanqie/1/7004354799051213860/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='https://p3-tt.byteimg.com/img/pgc-image/34d3828fa2f94ed690172df12a89c5c0~180x234.jpg' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Tổng mạn: Thế giới trò chơi </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/fanqie/1/7380722915928460312/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='http://p6-novel.byteimg.com/origin/novel-pic/p2o45c4cfaaa9752d8c6f891424b892bb9d' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Chuyển sinh làm đoàn sủng, bị ngạo kiều ác miệng thiên kim yêu </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/fanqie/1/7183402305318816825/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='http://p3-novel.byteimg.com/origin/novel-pic/p2oaa8a94655ac5a76ba19201ed9a3de398' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Kinh dị trò chơi: Từ gõ điện tử mõ bắt đầu vô địch </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/uukanshu/1/169236/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='https://img.uukanshu.com/fengmian/2021/7/637631757602968116.jpg' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Ta thiên tài như vậy vì sao còn phải thu đồ đệ </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/qidian/1/1038631691/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='https://bookcover.yuewen.com/qdbimg/349573/1038631691/180' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Từ dưỡng thi bắt đầu liều ra một cái tả đạo Tiên Quân </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/uukanshu/1/181120/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='https://img.uukanshu.com/static/www/images/fengmian.jpg' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Ta có một tòa tụ tài trận </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/fanqie/1/7256016516028566589/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='http://p6-novel.byteimg.com/origin/novel-pic/p2o7616f45b1eee84f9703a173224e37262' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Nhanh xuyên: Ba ngàn vị diện truy thê lộ </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/fanqie/1/7537183379981077528/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='https://p6-novel.byteimg.com/novel-pic/p2o34e76b59d28c132c0f8c99b2dc37fbb8~tplv-shrink:640:0.image' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Đế Vương trong lòng sủng, tiểu mỹ nhân hắn diễm quan kinh thành </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/uukanshu/1/173742/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='https://img.uukanshu.com/fengmian/2021/8/637658145453865251.jpg' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Mộc Diệp  Tirisfal thủ hộ giả </b></a><a onclick="ui.swiftload(this)" class='col-lg-2 col-md-3 col-sm-3 col-4 cap' href='/truyen/qimao/1/1728139/'><div class='bookthumb'><img loading='lazy' referrerpolicy='no-referrer' src='https://cdn.wtzw.com/bookimg/public/images/cover/2a79/46b854d3f5569347d8d9acb699de8cb2_600x800.jpg?f=webp&q=60' onerror='this.src="/nothumb.jpg"'></div><b style='line-height:1.5;display:block;margin:8px 0'> Trùng sinh 1991: Bắt đầu lão bà chạy </b></a>		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="tmc-home-section col rounded-0 rounded-lg shadow-lg shadow-none textzoom" zoom-save="lastupdate" zoom-sel=".book-list-item b" zoom-force="true" style="color:black;font-size:14px;padding:15px; background: linear-gradient(138deg, #ddf4e8, #f4eef9);">
+		<div style="font-size:min(20px, 5vw);margin-bottom:20px;">Mới cập nhật &gt;<a href="/?find=&minc=0&sort=update&tag=" style="display: inline-block;color: gray;font-size:12px;float:right;margin-top: 10px;">xem thêm...</a></div>
+		<article>
+		
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://i9-static.jjwxc.net/novelimage.php?novelid=7711806&amp;coverid=13&amp;ver=f7f97beaa2b0b38486647c1ee9090cb7" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/jjwxc/1/7711806/">
+                        <b> Vô hạn lưu pháo hôi, nhưng Mary Sue </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Vương lục</span>
+                    <i style="float:right">0 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/p2o3b18018210cf77cbf7b4f6fc34584677~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7586240146484251673/">
+                        <b> Chia tay 3 năm ngươi về nước, ta ngã ngửa ngươi khóc cái gì </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Đối dịch thị nhân gian</span>
+                    <i style="float:right">0 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/p2oc2a610290d6c5f8738f638df588f366c~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7554630002512251929/">
+                        <b> Pokemon cầu sinh: Từ thu phục Beedrill bắt đầu </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Truy trục tinh tinh  mộng</span>
+                    <i style="float:right">0 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://bookcover.yuewen.com/qdbimg/349573/1047860348/180" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/qidian/1/1047860348/">
+                        <b> Hokage: Ta hướng tương lai vay mượn </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Tác gia 3nLr5I</span>
+                    <i style="float:right">0 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/p2o0f06cb5ca71d15771c432bc32a879d40~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7547525477099899928/">
+                        <b> Cũng không có kết hôn, cái nào cần ký đơn ly hôn </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Mộng phùng tam táng</span>
+                    <i style="float:right">0 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/p2of75a13647d8705917780f21f20a0b5da~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7570675942696176702/">
+                        <b> Hồng Hoang: Minh Hà lão tổ, thả câu chư thiên </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Hồ bổng bổng</span>
+                    <i style="float:right">0 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/1a5e277ff6f4a2aba3f22f3fe9f34b17~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7569900530554653721/">
+                        <b> Tổng võ: Đa tử đa phúc, nạp thiếp liền trở nên mạnh </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Khô mộc nhi hủ</span>
+                    <i style="float:right">0 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://bookcover.yuewen.com/qdbimg/349573/1047655799/180" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/qidian/1/1047655799/">
+                        <b> Đấu La: Võ Hồn Thái Dương Chân Hoả, cướp mất Tiểu Vũ </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Lãng mạn  thập nguyệt</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/p2oc3757178e03ac280aad04301e6bd5bf7~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7604923863696165912/">
+                        <b> Về nhà ăn tết, khoang hạng nhất gặp tiếp viên hàng không tiền nhiệm phục vụ </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Tiếu dữ đàm</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://i9-static.jjwxc.net/novelimage.php?novelid=8066108&amp;coverid=155&amp;ver=922443854eb4ec6b76be0228ef656d4b" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/jjwxc/1/8066108/">
+                        <b> Thẳng nam bán mục nát thiên lôi đánh xuống </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Bán cá thủy bình</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://bookcover.yuewen.com/qdbimg/349573/1047863633/180" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/qidian/1/1047863633/">
+                        <b> Đấu La máy mô phỏng: Bắt đầu bị Bỉ Bỉ Đông đao bổ củi </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Bỉ minh phi bỉ mính</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://bookcover.yuewen.com/qdbimg/349573/1046672968/180" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/qidian/1/1046672968/">
+                        <b> Trường sinh tu tiên, ta có một tòa tiểu thế giới </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Vi  điểm tệ</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://bookcover.yuewen.com/qdbimg/349573/1046126255/180" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/qidian/1/1046126255/">
+                        <b> Mãng hoang bầy trùng: Ức vạn bầy trùng quét ngang yêu ma loạn thế </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Lộ thượng  lão ngưu</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://bookcover.yuewen.com/qdbimg/349573/1047787537/180" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/qidian/1/1047787537/">
+                        <b> Đồng thời xuyên qua: Nhân vật phản diện gì? Ta mới là nhân vật chính </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Bất tri hà xử khởi</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/p2o1c1634be0a005358c4f621502631f3f4~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7494691394095680537/">
+                        <b> Kỵ sĩ huyết cơ cùng hắn </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;">1revolver1</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/origin/novel-pic/p2ob5f7e460bf6fb6b31e7a91816867dc9e" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7391830388873645081/">
+                        <b> Nhanh xuyên sinh con, nhân vật phản diện càng sủng ai còn muốn nam chính a </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Cửu ngũ tứ thập ngũ</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/85453037d6a222ea98dfbc18d804ddd3~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7572954930135174169/">
+                        <b> Chú trở về: Vô hạn đồ đệ làm học sinh trao đổi </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Phẫn nộ  thổ đậu khối</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://bookcover.yuewen.com/qdbimg/349573/1040196728/300" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/qidian/1/1040196728/">
+                        <b> Ba tư đế quốc 1845</b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Tạp nhĩ mã liên minh</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/78c9725f53c0eb77b89876badaca3efa~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7577826826370698265/">
+                        <b> Bái sư sau, ta bị bệnh kiều sư tôn nhốt </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Bất cật oa biên thảo ni</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>
+                <div class="book-list-item ib-100">
+                    <img referrerpolicy="no-referrer" loading="lazy" src="https://p6-novel.byteimg.com/novel-pic/e12b3268fde5d913af5c956c434d516a~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    <a onclick="ui.swiftload(this)" class="cap" href="/truyen/fanqie/1/7564771431209258009/">
+                        <b> Tại thiếu ca làm hoàng đế bị trực tiếp   </b>
+                    </a>
+                    <br>
+                    <span class="cap" style="color:gray;font-size:10px;"> Cẩm dạ vi lương</span>
+                    <i style="float:right">1 phút trước</i>
+                    <div class="clear"></div>
+                </div>		</article>
+	</div>
+	<div class="col-lg-4 tmc-home-section" style="color:black;font-size:14px;padding: 8px;background: linear-gradient(135deg, #e6f2ef, #feebfe);"><div style="font-size:20px;margin-bottom:20px;">Chuyện thiên hạ &gt;</div>
+		
+		<div style="min-height:160px;" id="cboxdiv">
+			<div id="cbox" style="width:100%;">
+				<div id="cboxtabber"><span style="border-bottom: 3px solid blue;" onclick="switchchatchannel(0)">Kênh chính </span> <span onclick="plus18()"> Kênh 18+</span> <span hidden="" onclick="switchchatchannel(2)"> Discord</span></div>
+				<iframe id="cboxnor" loading='lazy' src="https://www6.cbox.ws/box/?boxid=828154&boxtag=DAdiQY" chsrc="https://www6.cbox.ws/box/?boxid=828154&boxtag=DAdiQY" width="100%" height="520" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto"></iframe>
+				<iframe id="cbox18" style="display: none" src="" chsrc="https://www6.cbox.ws/box/?boxid=842639&boxtag=pMpKNj" width="100%" height="520" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto"></iframe>	
+				<iframe id="discord" style="display: none" src="" chsrc="https://discord.com/widget?id=905444904434540604&theme=dark" width="100%" height="520" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+				
+				<span style="position: relative;display: block">
+					<button type="button" onclick="document.getElementById('cboximguploader').click();" style="width: 24px;height: 24px;position: absolute;padding: 4px;background: none;border:none;top:-76px;left: 100px;"><i class="fas fa-camera"></i></button>
+					<button type="button" onclick="recordVoice(this)" style="width: 24px;height: 24px;position: absolute;padding: 4px;background: none;border:none;top:-76px;left: 135px;"><i class="fas fa-microphone"></i></button>
+					<div style="text-align: center;font-size: 14px;background-color: #77da70aa;width: 100%;position: absolute;top:-25px;left: 0;height: 24px;display: none;" onclick="copycbox(this)" id="cboxcopy">Nhấn để copy</div>
+				<input type='file' style='display:none' hidden id='cboximguploader' onchange='sendimg(this);'>
+				<span style="font-size: 0" id="cboxresponse"></span>
+				<script type="text/javascript">
+						function switchchatchannel(channel){
+							var chns = ["cboxnor","cbox18","discord"];
+							var cname = chns[channel];
+							if(g(cname).style.display=="block"){
+								return;
+							}
+							if(channel==1){
+								if(prompt("Nhập mật khẩu 18plus nếu bạn cho rằng mình đủ 18 tuổi và chấp nhận các rủi ro về tâm lý khi truy cập.", "18")!="18plus"){
+									return;
+								}
+							}
+							for(var i=0;i<chns.length;i++){
+								if(i!=channel){
+									g(chns[i]).style.display  = 'none';
+									g(chns[i]).src= '';
+									g("cboxtabber").children[i].style.borderBottom = 'none';
+								}else{
+									g(chns[i]).style.display  = 'block';
+									g(chns[i]).src= g(chns[i]).getAttribute("chsrc");
+									g("cboxtabber").children[i].style.borderBottom = '3px solid blue';
+								}
+							}
+						}
+						var box18=false;
+						try {
+							q("meta[name=viewport]")[0].setAttribute("content","width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
+						}catch(e){}
+						
+						function plus18(){
+							if(!box18){
+								if(prompt("Nhập mật khẩu 18plus nếu bạn cho rằng mình đủ 18 tuổi và chấp nhận các rủi ro về tâm lý khi truy cập.", "18")!="18plus"){
+									return;
+								}
+								box18=true;
+								g("cboxnor").style.display  = 'none';
+								g("cboxnor").src="";
+								g("cbox18").style.display  = 'block';
+								g("cbox18").src="https://www6.cbox.ws/box/?boxid=842639&boxtag=pMpKNj";
+								g("cboxtabber").children[0].style.borderBottom = 'none';
+								g("cboxtabber").children[1].style.borderBottom = '3px solid blue';
+							}else{
+								box18=false;
+								g("cboxnor").style.display  = 'block';
+								g("cboxnor").src="https://www6.cbox.ws/box/?boxid=828154&boxtag=DAdiQY";
+								g("cbox18").style.display  = 'none';
+								g("cbox18").src="";
+								g("cboxtabber").children[1].style.borderBottom = 'none';
+								g("cboxtabber").children[0].style.borderBottom = '3px solid blue';
+							}
+						}
+						function discord(){
+							if(!box18){
+								g("cboxnor").style.display  = 'none';
+								g("cboxnor").src="";
+								g("cbox18").style.display  = 'block';
+								g("cbox18").src="https://www6.cbox.ws/box/?boxid=842639&boxtag=pMpKNj";
+								g("cboxtabber").children[0].style.borderBottom = 'none';
+								g("cboxtabber").children[1].style.borderBottom = '3px solid blue';
+							}else{
+								box18=false;
+								g("cboxnor").style.display  = 'block';
+								g("cboxnor").src="https://www6.cbox.ws/box/?boxid=828154&boxtag=DAdiQY";
+								g("cbox18").style.display  = 'none';
+								g("cbox18").src="";
+								g("cboxtabber").children[1].style.borderBottom = 'none';
+								g("cboxtabber").children[0].style.borderBottom = '3px solid blue';
+							}
+						}
+						function sendimg(a) {
+							if (a.files != null) {
+								if (a.files[0].size > 4000000) {
+									alert("Kích thước tối đa 4MB");
+									return;
+								} else {
+									var FR = new FileReader();
+									FR.addEventListener("load", function(e) {
+										var base64 = e.target.result;
+										var http = new XMLHttpRequest();
+										var url = '/index.php';
+										if(box18){
+											var params = "sajax=cboximg&imgdata=" + base64;
+										}
+										else var params = "sajax=cboximg&imgdata=" + base64;
+										http.open('POST', url, true);
+										http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+										http.onreadystatechange = function() {
+											if (http.readyState == 4 && http.status == 200) {
+												var x = http.responseText.split(":::");
+												if (x[0]=="filename") {
+													var cbr=g("cboxresponse");
+													cbr.innerHTML="[img]"+x[1]+"[/img]";
+													g("cboxcopy").style.display = 'block';
+												} else {
+													alert(http.responseText);
+												}
+											}
+										}
+										http.send(params);
+									});
+									FR.readAsDataURL(a.files[0]);
+								}
+							}
+						}
+						function sendvoice(base64) {
+							var http = new XMLHttpRequest();
+							var params = "ajax=cboxvoice&audiodata=" + encodeURIComponent(base64);
+							http.open('POST', '/index.php', true);
+							http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+							http.onreadystatechange = function() {
+								if (http.readyState == 4 && http.status == 200) {
+									var x = http.responseText.split(":::");
+									if (x[0]=="filename") {
+										var cbr=g("cboxresponse");
+										cbr.innerHTML="[audio]"+x[1]+"[/audio]";
+										g("cboxcopy").style.display = 'block';
+									} else {
+										alert(http.responseText);
+									}
+								}
+							}
+							http.send(params);
+						}
+						function recordVoice(btn){
+							if(window.isRecording){
+								window.recorder.requestData();
+								window.recorder.stop();
+								btn.classList.remove("flashing-green");
+								window.isRecording = false;
+								window.recorder = null;
+								return;
+							}
+							if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+							  console.log("getUserMedia supported.");
+							  navigator.mediaDevices
+							    .getUserMedia({audio: true})
+							    .then((stream) => {
+							    	var recorder = new MediaRecorder(stream);
+							    	window.recorder = recorder;
+							    	btn.classList.add("flashing-green");
+							    	ui.notif("Bắt đầu ghi âm, nhấp lần nữa để ngừng");
+							    	var recs = [];
+							    	recorder.ondataavailable = function(e){
+							    		recs.push(e.data);
+							    	}
+							    	recorder.onstop = function(e){
+							    		var blob = new Blob(recs, { type: "audio/ogg; codecs=opus" });
+							    		var reader = new FileReader();
+										reader.readAsDataURL(blob); 
+										reader.onloadend = function() {
+										    var base64data = reader.result;                
+										    sendvoice(base64data.substring(35));
+										}
+							    	}
+							    	recorder.start();
+							    	window.isRecording = true;
+							    })
+							    .catch((err) => {
+							      console.error(`The following getUserMedia error occurred: ${err}`);
+							    });
+							} else {
+							  console.log("getUserMedia not supported on your browser!");
+							}
+						}
+						function copycbox(d){
+							selectText("cboxresponse");
+							document.execCommand("copy");
+							d.style.display = 'none';
+						}
+							function selectText(containerid) {
+							    if (document.selection) { // IE
+							        var range = document.body.createTextRange();
+							        range.moveToElementText(document.getElementById(containerid));
+							        range.select();
+							    } else if (window.getSelection) {
+							        var range = document.createRange();
+							        range.selectNode(document.getElementById(containerid));
+							        window.getSelection().removeAllRanges();
+							        window.getSelection().addRange(range);
+							    }
+							}
+				</script>
+			</span>
+			</div>
+		</div>
+		<br>
+		<div id="tm-home-online-box">
+			<div id="tm-home-online-box-head" class="card-header t-20" style="font-weight: 500"><span id="showhideonl" onclick="showhideonl(true)">[Ẩn]</span> Đang online<i id="onlinecount" style="font-size:12px;float:right;margin-top: 10px;">0</i></div>
+			<div id="tm-home-online-box-body" class="card-body">
+				<div id="onlinebox" style="max-height:370px;overflow-y:auto;font-size:16px;line-height:1.2">
+			
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="card" hidden>
+			<div class="card-header t-20" style="font-weight: 500">Thần Vực Phú Hào</div>
+			<div class="card-body">
+								<div class="flex justify-content-center">
+					<a href="/user//">
+						<div style="width:80px;padding-top: 5px;font-size: 12px;text-align: center">
+							<img style="border-radius: 50%;width: 45px;height: 45px;" src=""><br>						</div>
+					</a>
+					<a href="/user//">
+						<div style="width:80px;padding-top: 0px;font-size: 14px;text-align: center">
+							<img style="border-radius: 50%;width: 50px;height: 50px;" src=""><br>						</div>
+					</a>
+					<a href="/user//">
+						<div style="width:80px;padding-top: 10px;font-size: 12px;text-align: center">
+							<img style="border-radius: 50%;width: 40px;height: 40px;" src=""><br>						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+<div class="row">
+	<div class="tmc-home-section" style="color:black;font-size:14px;padding: 15px;width: 100%;background: linear-gradient(134deg, #e5efdd, #d4f4ec);">
+		<div class="flex" style="line-height: 40px;">
+			<div style="font-size:min(20px, 4vw);flex:1">Truyện Xem Nhiều Trong Tuần &gt;</div>
+			<a href="/?find=&minc=0&sort=viewweek&tag=" style="display: inline-block;color: gray;font-size:12px;">xem thêm...</a>
+		</div>
+		<div class="row book-grid">
+		
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qimao/1/1675264/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://cdn.wtzw.com/bookimg/public/images/cover/63dc/30173b7e45872511b18930240e476abf_600x800.jpg?f=webp&amp;q=60" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Vạn tộc đồ giám: Ngươi gọi đây là F cấp thiên phú?</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7486697608677690392/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/p2occ1ac3ec0a072a855c47b5b3f777ca96~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đoàn tàu cầu sinh, ta có thể thăng hoa hết thảy!</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7550222683309345854/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/p2o0b50c6f0572d2ac57c7e6e50a6605521~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Lựa chọn ban thưởng? Ta muốn hết!</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1027630529/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1027630529/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Nỉ non bài thơ </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7583949514948496409/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/p2oddd0452a9667e74ac4f3792eaf4b6000~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Một năm rút ra một dòng, mô phỏng  cũng có thể?</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qimao/1/142538/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://cdn.wtzw.com/bookimg/public/images/cover/9bf3/3f2dc0c09ac6b1bd3b96d1fea8615fb8_600x800.jpg?f=webp&amp;q=60" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Loạn thế kiêu hùng </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1046597676/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1046597676/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Từ môn phái võ lâm đến trường sinh tiên môn </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/6511590827532225544/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/9fba000088b3d24a975e~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Tuyệt thế Tà Tôn </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qimao/1/142631/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://cdn.wtzw.com/bookimg/public/images/cover/9bf3/96fdf97ce6115ea07b95e4fd8f40e1b0_600x800.jpg?f=webp&amp;q=60" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Cực phẩm phò mã </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qimao/1/2082639/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://cdn.wtzw.com/bookimg/public/images/cover/6926b9c33b882_600x800.jpg?f=webp&amp;q=60" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Độ âm người chi thủ cơ có quỷ </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1044653132/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1044653132/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Ngươi càng tin ta càng thật </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7486229218305510424/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/f7342596b4a0a42f6ac553fd54e67f74~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Vô hạn mô phỏng: Ta tại chư thiên làm sảng văn nam chính!</b>
+                </a>		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="tmc-home-section" style="color:black;font-size:14px;padding: 15px;width: 100%;background: linear-gradient(135deg, #def1e3, #d4f4ec);">
+		<div class="flex" style="line-height: 40px;">
+			<div style="font-size:min(20px, 5vw);flex:1">Truyện Hot Tuần &gt;</div>
+			<a href="/?find=&minc=0&sort=star&tag=" style="display: inline-block;color: gray;font-size:12px;float:right;">xem thêm...</a>
+		</div>
+		<div class="row book-grid">
+		
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7583949514948496409/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/p2oddd0452a9667e74ac4f3792eaf4b6000~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Một năm rút ra một dòng, mô phỏng  cũng có thể?</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7486697608677690392/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/p2occ1ac3ec0a072a855c47b5b3f777ca96~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đoàn tàu cầu sinh, ta có thể thăng hoa hết thảy!</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1046597676/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1046597676/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Từ môn phái võ lâm đến trường sinh tiên môn </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7607689045631568920/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/p2o4da12895ae1ba86fb50c95ff222230bd~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Sụp đổ sắt: Vô danh khách, nhưng mỗi ngày ngẫu nhiên mệnh đồ </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1047996370/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1047996370/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Người tại đấu phá viết nhật ký! Các nàng bức ta ăn bám </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1044988737/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1044988737/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đã nói thể nghiệm nhân sinh, tiên tử ngươi như thế nào thành sự thật </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7573960104676969496/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/p2o600bb4064d70bb4ecca41e8c668a82d4~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Cái này nhân vật phản diện người nào thích làm ai làm, ta kiểm tra công lên bờ </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7486229218305510424/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/f7342596b4a0a42f6ac553fd54e67f74~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Vô hạn mô phỏng: Ta tại chư thiên làm sảng văn nam chính!</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1047811034/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1047811034/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đấu La: Ta từ quỷ diệt mà đến!</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1045871575/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1045871575/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Đấu La: Ta  ếch con chuyên trộm Đường Tam cơ duyên </b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/qidian/1/1046959689/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://bookcover.yuewen.com/qdbimg/349573/1046959689/180" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Già thiên: Vừa thành Thiên Đế, Chat group cái quỷ gì?</b>
+                </a>
+                <a onclick="ui.swiftload(this)" class="col-lg-2 col-md-3 col-sm-3 col-4 cap" href="/truyen/fanqie/1/7550222683309345854/">
+                    <div class="bookthumb">
+                        <img loading="lazy" referrerpolicy="no-referrer" src="https://p6-novel.byteimg.com/novel-pic/p2o0b50c6f0572d2ac57c7e6e50a6605521~tplv-shrink:640:0.image" onerror="this.src='/nothumb.jpg'">
+                    </div>
+                    <b style="line-height:1.5;display:block;margin:8px 0"> Lựa chọn ban thưởng? Ta muốn hết!</b>
+                </a>		</div>
+	</div>
+</div>
+<div class="row" hidden>
+	<div class="tmc-home-section" style="color:black;font-size:14px;padding: 15px;width: 100%;background: white;">
+		<div style="font-size:20px;margin:0 0 20px 0;">Truyện Tranh Hot &gt;<a href="/?find=&minc=0&sort=star&type=comic" style="display: inline-block;color: gray;font-size:12px;float:right;margin-top: 10px;">xem thêm...</a></div>
+		<div class="row book-grid">
+				</div>
+	</div>
+</div>
+</div>
+<script>
+	function otherpeople(){
+			var xhttp = new XMLHttpRequest();
+			var data = "sajax=otherpeople";
+			//xhttp.open("POST", "/index.php?ngmar=otherpeople", true);
+			xhttp.open("POST", "/io/user/otherpeople", true);
+			xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					try {
+						g("onlinebox").innerHTML_temp=this.responseText;
+						var nonl = /none'>(\d+)<\/i>/.exec(this.responseText)[1];
+						g("onlinecount").innerHTML=nonl;
+						g("onlinebox").showContent && g("onlinebox").showContent();
+						
+					} catch(e) {
+						clearInterval(othppiv);
+					}
+				}
+			};
+            xhttp.send(data);
+	}
+	g("onlinebox").showContent = function(){
+		if(this.style.display == "block"){
+			this.innerHTML = this.innerHTML_temp;
+		}else{
+			if(this.innerHTML != ""){
+				this.innerHTML = "";
+			}
+		}
+	}
+	otherpeople();
+	var othppiv = setInterval(otherpeople,30000);
+	function showhideonl(isbtn){
+		if(["true","",null].indexOf(localStorage.getItem("hideonline")) >= 0){
+			g("showhideonl").innerHTML="[Hiện]";
+			g("onlinebox").style.display = 'none';
+		}else{
+			g("showhideonl").innerHTML="[Ẩn]";
+		}
+		if(isbtn){
+			if(g("onlinebox").style.display == 'none'){
+				g("onlinebox").style.display = 'block';
+				localStorage.setItem("hideonline", "false");
+				g("showhideonl").innerHTML="[Ẩn]";
+			}else{
+				g("showhideonl").innerHTML="[Hiện]";
+				g("onlinebox").style.display = 'none';
+				localStorage.setItem("hideonline", "true");
+			}
+			g("onlinebox").showContent();
+		}
+	}
+	showhideonl();
+	function newrandombook(isleft){
+		try {
+			var btn=event.target;
+			btn.disabled=true;
+		} catch(e) {
+		}
+		
+		var bsdiv = g("randombookbase");
+		bsdiv.style.transform ="translateX(0)";
+		bsdiv.style.transition="transform 0.4s";
+		bsdiv.parentElement.style.position="relative";
+		if(isleft==null){
+			ajax("sajax=homerandombook",function(down){
+				var newd = document.createElement("div");
+				newd.className="row book-grid";
+				newd.style.position = 'absolute';
+				newd.style.width="100%";
+				newd.style.left=bsdiv.parentElement.clientWidth;
+				newd.style.top="70px";
+				newd.style.transition="left 0.4s";
+				newd.innerHTML=down;
+				bsdiv.parentElement.appendChild(newd);
+				newd.clientWidth;
+				bsdiv.style.transform="translateX(-101%)";
+				newd.style.left="15";
+				setTimeout(function(){
+					bsdiv.remove();
+					btn.disabled=false;
+					newd.style.position = 'initial';
+					newd.style.left = '0';
+					newd.style.width="auto";
+					newd.setAttribute("id", "randombookbase");
+				}, 500);
+			});
+		}else if(isleft == true){
+			ajax("sajax=homerandombook",function(down){
+				var newd = document.createElement("div");
+				newd.className="row book-grid";
+				newd.style.position = 'absolute';
+				newd.style.width="100%";
+				newd.style.left=-bsdiv.parentElement.clientWidth;
+				newd.style.top="70px";
+				newd.style.transition="left 0.4s";
+				newd.innerHTML=down;
+				bsdiv.parentElement.appendChild(newd);
+				newd.clientWidth;
+				bsdiv.style.transform="translateX(101%)";
+				newd.style.left="15";
+				setTimeout(function(){
+					bsdiv.remove();
+					newd.style.position = 'initial';
+					newd.style.left = '0';
+					newd.style.width="auto";
+					newd.setAttribute("id", "randombookbase");
+				}, 500);
+			});
+		}
+		
+	}ui.swipe(g("randombookbase").parentElement,"right",function(){
+		var event = {};
+		console.log("www");
+		newrandombook(true);
+	}).setThreshold(120);
+	ui.swipe(g("randombookbase").parentElement,"left",newrandombook).setThreshold(170);
+	function useOldColor(){
+		var d = new Date();
+		d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = "useoldcolor=true;" + expires + ";path=/";
+		location.reload();
+	}
+</script>
+<!--
+	Vip free 0.0006859302520752	Top like 0.00079107284545898	Random   0.0010888576507568	Lasted   0.0011401176452637-->    </div>
+    </div>
+<div id="tm-credit-section" class="container-fluid bg-dark">
+<div class="container">
+    <div id="credit" class="row" style="font-size:12px;">
+		<center id="tm-credit-text" style="clear:both;width: 100%;color: white;padding: 24px;">
+			<a href="/">
+			<div style="display: inline-block;margin-right: -165px;width: 158px;border-radius: 6px;color: white;height: 56px;background: whitesmoke"></div>
+			<img alt="Logo sangtacviet" loading=lazy src="/favicon.png" style="width: 160px;margin-top: -48px"></a><br>
+			sangtacviet.com là trang web cung cấp dịch vụ dịch tự động dịch truyện chữ trung. <br>
+			<div style="margin-bottom: 6px;">
+				<a href="/manhtan.pdf">Hướng dẫn tân thủ</a> 
+				<a href="/@0">Bài viết</a> 
+				<a href="/~app-doc-truyen-phien-ban-thu-nghiem-101">App</a> 
+				<a href="/~extension-dich-thuat-tu-dong-tieng-trung-v150">Extension</a>
+				<a href="javascript:showLangSelect()">Chọn ngôn ngữ</a>
+			</div>
+			
+			<span style="border-radius: 6px;background: #eee;display: inline-block;padding: 6px;">
+			<!-- BEGIN: Powered by Supercounters.com -->
+				<script async onload="sc_online_t(1546820, ' Online', '170ddb');" defer type="text/javascript" src="/supercounters.php?v4" ssrc="//widget.supercounters.com/ssl/online_t.js"></script>
+				<script type="text/javascript"></script>
+				<br>
+				<noscript><a href="https://my.ipaddress.is/">What is my ip address</a></noscript>
+			<!-- END: Powered by Supercounters.com -->
+
+			</span><br>
+			<a hidden="" href="//www.dmca.com/Protection/Status.aspx?ID=86c08fad-8058-44e7-a411-4e384995c6d5" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca_protected_sml_120n.png?ID=86c08fad-8058-44e7-a411-4e384995c6d5"  alt="DMCA.com Protection Status" /></a>  <scripts src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </scripts>
+		</center>
+		<br>
+		
+    </div>
+    </div>
+ </div>
+    <div id="namewdf" style="visibility:hidden;height:auto;" onkeydown="event.stopPropagation();" class='namewd'>
+		<div id="toolbar">
+			
+			<button type="button" class='toolbar' onclick="saveNS()">Lưu lại</button>
+			<button type="button" class='toolbar' onclick="saveNS();excute();">Chạy</button>
+			<button type="button" class='toolbar' onclick="clearNS()">Xóa hết</button>
+			<button type="button" class='toolbar' onclick="getNSOnline()">Tải name</button>
+			<button type="button" class='toolbar' onclick="uploadNS()">Upload</button>
+			<button type="button" class='toolbar' style="float:right" onclick="hideNS()">Ẩn</button>
+			
+		</div>
+		<div id="toolbar2" style="display:none;">
+			<button type="button" class='toolbar' onclick="this.parentElement.style.display='none';g('toolbar').style.display='block';g('dlnametb').style.zIndex='-1';"><span class='glyphicon glyphicon-chevron-left'></span>Quay lại</button>
+			<button type="button" class='toolbar' style="float:right" onclick="hideNS()">Ẩn</button>
+		</div>
+		<hr style="margin:0;clear:both">
+		<div id="namewdc" style="position:relative">
+			<textarea id="namewd"  ></textarea>
+			<div id="dlnametb" style="z-index:-1;position:absolute;top:0;left:0;width:100%;height:100%;background-color:white;max-height:269px;overflow-y:auto;">
+				<table id="dlnametbcontent"></table>
+			</div>
+
+			<div id="upnamewd" style="z-index:-1;position:absolute;top:0;left:0;width:100%;height:100%;background-color:white;">
+				<br>
+				<center><input class="nip" id="uploaduser" placeholder="Nhập tên của bạn"><br>
+				<br>
+				<button class="btn btn-primary" type="button" id="sendnsbt" onclick="this.disabled=true;sendNS()">Gửi</button>&nbsp;<button class="btn btn-secondary" type="button" onclick="this.parentElement.parentElement.style.zIndex='-1'">Hủy</button><br></center>
+			</div>
+		</div>
+		
+		<div hidden style="width:100%;border-top:1px solid black">
+			<input id="fastseltext" onpaste="fastCreateN(this)" onkeyup="fastCreateN(this)" style="float:left;width:40%;height:24px;font-size:16px;" type="text"><span style="float:left;">&nbsp;=&nbsp;</span><input style="float:left;width:40%;height:24px;font-size:16px;" id="fastgentext" >
+			<button type="button" class="toolbar" style="float:right;margin: 0;padding: 0;" onclick="fastAddNS()">Thêm </button>
+			<div class='clear'></div>
+		</div>
+			<div style="border-top:1px solid gray;" class="row justify-content-md-left m-0">
+				<div class="col-3"><span onclick="excute()" class="blk-item2"><i class="fas fa-play" style="color:green;"></i><br>Chạy</span></div>
+				<div class="col-3"><span onclick="getNSOnline()" class="blk-item2"><i class="fas fa-cloud-download" style="color:green;"></i><br>Tải name được chia sẻ</span></div>
+				<div class="col-3"><span onclick="importName()" class="blk-item2"><i class="fas fa-file-import"></i><br>Nhập dữ liệu name</span></div>
+				<div class="col-3"><span onclick="openinsertvpmodal()" class="blk-item2"><i class="fas fa-file-alt"></i><br>Sử dụng file vp riêng</span></div>
+				<div class="col-3"><span onclick="exportName()" class="blk-item2"><i class="fas fa-file-export"></i><br>Xuất dữ liệu</span></div>
+				<div class="col-3"><span onclick="uploadNS()" class="blk-item2"><i class="fas fa-upload"></i><br>Chia sẻ gói name</span></div>
+				<div class="col-3"><span onclick="var wd=ui.win.createBox('Gói Name Đặc Biệt','namepack').show();" onclicks="$('#customnamebox').modal('toggle')" class="blk-item2"><i class="fas fa-download" style="color:green;"></i><br>Tải name đặc biệt</span></div>
+				<div class="col-3"><span onclick="analyzer.reset();" class="blk-item2"><i class="fas fa-trash-alt" style="color:red;"></i><br>Xóa bộ nhớ Analyzer</span></div>
+				<div class="col-3"><span onclick="ui.win.createBox('Công cụ','tool').show()" class="blk-item2"><i class="fas fa-wrench"></i><br>Công cụ</span></div>
+				<div class="col-3" hidden><span onclick="TFCoreTranslatePage()" class="blk-item2"><i class="fas fa-magic"></i><br>Transform</span></div>
+			</div>
+		</div>
+	
+    </div>
+    <div id="configBox" class="bg-light" style="position: fixed;bottom: 75px;right: 65px;border: 1px solid #cccbcb;display: none;">
+    	<div>
+    		<div id="stylediv" style="line-height:1.5;user-select: none;padding: 5px" onclick="event.stopPropagation();">
+			Màu nền: <input type="color" style="float: right;height: 20px;width:50px;" oninput="this.style.backgroundColor=this.value;changebg(this)">
+			<br>
+				<span class="cgcolor" style="background-color:#eae4d3" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#ffffff" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#000000" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#d0d0d0" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#a3e6a2" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#a7d4e8" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#d7ffff" onclick="changebg(this)">A</span><br>
+				<span class="cgcolor" style="background-color:#8a8a88" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#fbdada" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#6f3333" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#5cbd94" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#c492de" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#127743" onclick="changebg(this)">A</span>
+				<span class="cgcolor" style="background-color:#ececec" onclick="changebg(this)">A</span><br>
+				Màu chữ: <span style="float:right;padding-right:55px;height:20px;">
+					<span>Bóng:</span>
+					<input id="none-1e129e" type="checkbox" style="height: 20px;-webkit-appearance: checkbox;" onchange="changetextshadow(this.checked,1)">
+					<input id="none-35a49y" type="color" style="height: 20px;position:absolute;right:5px;width:50px;" oninput="changetextshadow(this.value,2)">
+					
+				</span><br>
+				<span class="cgcolor" style="color:#eae4d3" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#ffffff" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#000000" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#d0d0d0" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#a3e6a2" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#a7d4e8" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#d7ffff" onclick="changebgx(this)">A</span><br>
+				<span class="cgcolor" style="color:#8a8a88" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#fbdada" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#6f3333" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#5cbd94" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#c492de" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#127743" onclick="changebgx(this)">A</span>
+				<span class="cgcolor" style="color:#ececec" onclick="changebgx(this)">A</span><br>
+			<center>
+				<span style="padding:6px;border-radius:6px;" onclick="decreaseFontsize()"><i class="fas fa-minus"></i> </span><span style="margin-right: -20px;position: relative;"><img loading=lazy src="/asset/Aa.png" style="width: 18px;
+    height: 20px;"></span><input id="changefs" style="max-width:45px;padding: 3px;padding-left:20px;" onchange="changefontsize(this);" value="24"><span style="padding:6px;border-radius:6px;" onclick="increaseFontsize()"><i class="fas fa-plus"></i></span>
+				<span style="padding:6px;border-radius:6px;" onclick="decreaseLineheight()"><i class="fas fa-minus"></i> </span><span style="margin-right: -15px;position: relative"><img loading=lazy src="/asset/lh.png" style="    width: 12px;
+    height: 28px;"></span><input id="changefs2" style="max-width:45px;padding: 3px;padding-left: 15px;" onchange="changelineheight(this);" value="1.2"><span style="padding:6px;border-radius:6px;" onclick="increaseLineheight()"><i class="fas fa-plus"></i></span></center>
+				<select id="selfont" value="arial" style="border-radius: 0;background: white;width: 100%;">
+					<option value='helvetica'>Helvetica</option>
+					<option value='opensans'>Open Sans</option>
+					<option value='stvverdana'>Verdana</option>
+					<option value='roboto'>Roboto</option>
+					<option value='stvarial'>Arial</option>
+					<option value='stvtahoma'>Tahoma</option>
+					<option value='palatinolinotype'>Palatino linotype</option>
+					<option value='nunito'>Nunito</option>
+					<option value='sourceserifpro'>Source Serif Pro</option>
+					<option value='robotoslab'>Roboto Slab</option>
+
+				</select>
+				<center style="font-size: 22px">
+					<span  style="display: inline-block;border:1px solid gray;padding: 4px" onclick="decreasepadding()"><i class="fas fa-outdent"></i></span>
+					<span val="left" style="display: inline-block;border:1px solid gray;padding: 4px" onclick="changealign(this)"><i class="fas fa-align-left"></i></span>
+					<span val="center" style="display: inline-block;border:1px solid gray;padding: 4px" onclick="changealign(this)"><i class="fas fa-align-center"></i></span>
+					<span val="justify" style="display: inline-block;border:1px solid gray;padding: 4px" onclick="changealign(this)"><i class="fas fa-align-justify"></i></span>
+					<span val="right" style="display: inline-block;border:1px solid gray;padding: 4px" onclick="changealign(this)"><i class="fas fa-align-right"></i></span>
+					<span style="display: inline-block;border:1px solid gray;padding: 4px" onclick="increasepadding()"><i class="fas fa-indent"></i></span>
+				</center>
+				<script>
+				g("selfont").onchange=function(){
+					try{
+						g(contentcontainer).style.fontFamily = this.value;
+						localStorage.setItem("fontfamily", this.value);
+					}catch(e){}
+				}
+				function changetextshadow(v,i){
+					if(i==1){
+						try{
+							if(v){
+								var c = event.target.nextElementSibling.value;
+								if(c=="#000000"){
+									c="0 0 1px white";
+								}
+								else { c = "0 0 1px "+c; }
+								g(contentcontainer).style.textShadow = c;
+								localStorage.setItem("textlshadow", c);
+							}else{
+								g(contentcontainer).style.textShadow = "none";
+								localStorage.setItem("textlshadow", "none");
+							}
+						}catch(e){}
+					}else{
+						try{
+							var c  = "0 0 1px "+v;
+							g(contentcontainer).style.textShadow = c;
+							localStorage.setItem("textlshadow", c);
+							event.target.previousElementSibling.checked=true;
+						}catch(e){}
+					}
+				}
+				</script>
+				</center>
+			</div>
+    	</div>
+    	<div class="bg-dark" style="display: flex;">
+    		<button type="button" onclick="speaker.readBook()" style="background: none;border:none;color: white;font-size: 16px;padding: 6px;"><i class="fas fa-play"></i> Nghe sách</button>
+    		<button type="button" onclick="showNS()" style="background: none;border:none;color: white;font-size: 16px;padding: 6px;"><i class="fas fa-edit"></i> Name</button>
+    	</div>
+    </div>
+    <button type="button" id="btnshowns" aria-label="Nút mở cài đặt" class='toolbar showname' style="border-radius: 50%;height: 50px; width: 50px;background: #eaeaea80;bottom:20px;border:none;box-shadow: 0 0 3px gray;padding: 0" onclick="showConfigBox()"><i class="fa-cogs fas" style="font-size: 26px;color: #6564638a;"></i></button>
+    <div id="float-btn" style="width: 50px;position: fixed;right: 14px;bottom: 85px;">
+    	<button type="button" id="btnunitymode" style="border-radius: 50%;height: 50px; width: 50px;background: #eaeaea80;border:none;box-shadow: 0 0 3px gray;padding: 0;opacity: 1;display: none;" onclick="ui.unity()"><i class="fas fa-eye" style="font-size: 26px;color: #6564638a;"></i></button>
+    </div>
+     
+    <button type="button" id="btnnextchapter" class='toolbar showname' style="border-radius: 50%;height: 50px; width: 50px;opacity: 0;bottom:20px;border:none;box-shadow: 0 0 3px gray;padding: 0;right: 75px;display: none" onclick="g('navnexttop').click()"><i class="fas fa-chevron-right" style="font-size: 26px;color: #6564638a;"></i></button>
+    <button type="button" id="btnprevchapter" class='toolbar showname' style="border-radius: 50%;height: 50px; width: 50px;opacity: 0;bottom:20px;border:none;box-shadow: 0 0 3px gray;padding: 0;right: 140px;display: none" onclick="g('navprevtop').click()"><i class="fas fa-chevron-left" style="font-size: 26px;color: #6564638a;"></i></button>
+
+	<div >
+		<div >
+			
+			<div id="loginformdiv" style="display: none;">
+			</form>
+			<form id="loginform" name="login">
+				<p>Tài khoản (Chú ý phân biệt hoa thường):</p>
+				<p><input class="form-control" name="user" style="width:100%" value placeholder="Nhập tài khoản"></p>
+				<p>Mật khẩu:</p>
+				<p><input class="form-control" onkeyup="if(event.keyCode==13){loginstv()}" name="psw" type="password" style="width:100%" value placeholder="Nhập mật khẩu"></p>
+				<hr>
+				<p>Chưa có tài khoản? Nhập lại mật khẩu để đăng ký:</p>
+				<input class="form-control" name="repsw" type="password" style="width:100%" value placeholder="Nhập lại mật khẩu">
+				<p style="margin-top: 8px;">
+					Chú ý: Đặt mật khẩu đơn giản có thể bị kẻ xấu lấy mất tài khoản.					<a hidden href="https://m.me/sangtacviet?text=Tôi%20quên%20mật%20khẩu" target="_blank">Quên mật khẩu?</a>
+				</p>
+			</form>
+			<script>
+			
+				if(isMobile){ 
+					if(g("logindlgx"))
+					g("logindlgx").style.width=document.body.clientWidth + "px";
+				}
+				function openloginmodal(){
+					var md=createModal("Đăng nhập");
+					md.size("sm");
+					md.body().appendChild(g("loginform"));
+					md.button("Đăng ký","register()","btn-secondary");
+					md.button("Đăng nhập","loginstv()","btn-primary");
+					md.onhide=function(){
+						g("loginformdiv").appendChild(g("loginform"));
+					}
+					md.show();
+				}
+				function loginstv(u, p){
+					var username = u || document.forms["login"].user.value;
+					var psw = p || document.forms["login"].psw.value;
+					if(username.length<3){
+						if(window.TextEncoder){
+							var te = new TextEncoder();
+							var u8 = te.encode(username);
+							if(u8.length<3){
+								// real length
+								alert("Độ dài tài khoản tối thiểu 3 kí tự");
+								return;
+							}
+						}else{
+							return;
+						}
+					}
+					if(username.indexOf("'")>=0){alert("Không thể sử dụng kí tự \"'\"");
+											return;
+					}
+					if(psw.length<3){alert("Độ dài mật khẩu tối thiểu 3 kí tự");
+											return;
+					}
+					if(psw.indexOf("'")>=0){alert("Không thể sử dụng kí tự \"'\"");
+											return;
+					}
+					var params = "ajax=login&ngmar=lgin&username="+encodeURIComponent(username)+"&psw="+encodeURIComponent(psw);
+					var http = new XMLHttpRequest();
+					var url = '/index.php';
+					http.open('POST', url, true);
+					http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+					http.onreadystatechange = function() {
+					    if(http.readyState == 4 && http.status == 200) {
+						    if(http.responseText=="success"){
+								location.reload();
+						    }else if(http.responseText == "captcha"){
+								ui.captcha.open("login", "google", function(){
+									loginstv(username, psw);
+								});
+							}else alert(http.responseText);
+					    }
+					}
+					http.send(params);
+				}
+
+				function register(u, p, rp){
+					var username = u || document.forms["login"].user.value;
+					var psw = p || document.forms["login"].psw.value;
+					var repsw = rp || document.forms["login"].repsw.value;
+					if(username.length<3){alert("Độ dài tài khoản tối thiểu 3 kí tự");
+											return;
+					}
+					if(username.indexOf("'")>=0){alert("Không thể sử dụng kí tự \"'\"");
+											return;
+					}
+					if(psw.length<3){alert("Độ dài mật khẩu tối thiểu 3 kí tự");
+											return;
+					}
+					if(psw.indexOf("'")>=0){alert("Không thể sử dụng kí tự \"'\"");
+											return;
+					}
+					if(psw!=repsw){alert("Nhập lại mật khẩu không đúng");
+											return;
+					}
+					var params = "ajax=register&ngmar=regnick&username="+encodeURIComponent(username)+"&psw="+encodeURIComponent(psw)+"&repsw="+encodeURIComponent(repsw);
+					var http = new XMLHttpRequest();
+					var url = '/index.php';
+					http.open('POST', url, true);
+					http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+					http.onreadystatechange = function() {
+					    if(http.readyState == 4 && http.status == 200) {
+						    if(http.responseText == "success"){
+							   location.reload();
+							}else if(http.responseText == "captcha"){
+								ui.captcha.open("register", "sangtacviet", function(){
+									register(username, psw, repsw);
+								});
+							}
+						    else alert(http.responseText);
+					    }
+					}
+					http.send(params);
+				}
+			</script>
+			</div>
+		</div>
+	</div>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-145395004-1" onerror="this.src='/gtag.php'"></script>
+<scripts async defer src="/gtag.php?123" onerror="this.src='/gtag.php?456'"></scripts>
+<script>
+  	window.dataLayer = window.dataLayer || [];
+  	function gtag(){dataLayer.push(arguments);}
+  	gtag('js', new Date());
+  	gtag('config', 'UA-145395004-1');
+  
+  	q("span[tag]").forEach(function(e){
+	  	e.title=e.textContent;
+  	});
+  	try{
+  		if($("#mainbar").height()>150){
+	  		g("notifmarker").innerHTML="Thông báo";
+	  		g("menunavigator2").insertBefore(g("notifmarker"),g("menunavigator2").children[1]);
+	  	}
+  	}catch(e){}
+  	(function(){
+  		var _open=window.open;
+	  	window.open = function(){
+		  	var blockedDomain = ["vjnycjpjg.com","vgthxbor.com","ascynbdhkpyci.com","qmnemxade.com","rwhhcwku.com","oriwehdqf.com","wgkisvpild.com","gysloflobxsrti.com"
+		  	,"ilrdvouqmynwt.com","ruktosjegndci.com","gletsokr.com","uxvbofhyq.com"];
+		  	for(var i=0;i<blockedDomain.length;i++){
+		  		if(arguments[0].indexOf(blockedDomain[i])>=0){
+		  			return false;
+		  		}
+		  	}
+		  	console.log(arguments);
+		  	_open.apply(window,arguments);
+	  	}
+  	})()
+  	function setSiteLang(l){
+		var d = new Date();
+		d.setTime(d.getTime() + (365 * 24 * 60 * 60 * 1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = "lang=" + l + ";" + expires + ";path=/";
+	}
+	function showLangSelect(){
+		var s = ui.select("Chọn ngôn ngữ/Select language");
+		var ls = [{
+			l: "vi",
+			n: "Tiếng Việt"
+		},{
+			l: "en",
+			n: "English"
+		},{
+			l: "zh",
+			n: "中文"
+		},{
+			l: "ar",
+			n: "اَلْعَرَبِيَّةُ"
+		}];
+		ls.forEach(function(lg){
+			s.option(lg.l,lg.n);
+		});
+		s.proc=function(v){
+			setSiteLang(v);
+			setTimeout(function(){location.reload()}, 1000);
+			s.hide();
+		}
+		s.show();
+	}
+	
+</script>
+<script>document.cookie='_acx=CJ53-eYPyZPi7tyxnGdN9g==; path=/';</script>
+    </body>
+
+    

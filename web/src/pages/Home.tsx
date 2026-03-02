@@ -27,8 +27,18 @@ const SECRET_NHENTAI_SOURCE = {
     name: 'nhentai',
     url: '/api/nhentai',
     language: 'EN/JP',
-    icon: 'https://i.ibb.co/5hrScb4r/nh.png', // Fallback internal logo or similar
+    icon: 'https://i.ibb.co/5hrScb4r/nh.png',
 };
+
+const NOVEL_SOURCES = [
+    {
+        id: 'sangtacviet',
+        name: 'Sáng Tác Việt',
+        url: 'https://sangtacviet.app',
+        language: 'VI/CN',
+        icon: '',
+    },
+];
 
 const Home = () => {
     const [activeTab, setActiveTab] = useState<'manga' | 'novel' | 'movie'>('manga');
@@ -82,6 +92,33 @@ const Home = () => {
                             <Link
                                 key={source.id}
                                 to={`/source/${source.id}`}
+                                className="flex flex-col p-3 rounded-xl bg-[var(--color-surface)] hover:bg-[var(--color-surface-hover)] transition-colors shadow-md border border-transparent hover:border-[#424242]"
+                            >
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="w-10 h-10 rounded-full bg-[#333333] flex items-center justify-center shrink-0 overflow-hidden relative">
+                                        {source.icon ? (
+                                            <img src={getProxiedImageUrl(source.icon)} alt={`${source.name} icon`} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <Globe className="text-[var(--color-text-muted)]" size={20} />
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h2 className="text-sm font-medium text-[var(--color-text)] truncate">{source.name}</h2>
+                                        <p className="text-xs text-[var(--color-text-muted)]">{source.language}</p>
+                                    </div>
+                                </div>
+                                <div className="text-[10px] text-right text-[var(--color-primary)] font-medium mt-auto uppercase">
+                                    {t('home.latest')}
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                ) : activeTab === 'novel' ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                        {NOVEL_SOURCES.map((source) => (
+                            <Link
+                                key={source.id}
+                                to={`/novel-source/${source.id}`}
                                 className="flex flex-col p-3 rounded-xl bg-[var(--color-surface)] hover:bg-[var(--color-surface-hover)] transition-colors shadow-md border border-transparent hover:border-[#424242]"
                             >
                                 <div className="flex items-center gap-3 mb-2">

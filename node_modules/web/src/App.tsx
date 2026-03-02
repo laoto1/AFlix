@@ -11,6 +11,9 @@ import Home from './pages/Home';
 import SourceDetail from './pages/SourceDetail';
 import ComicDetail from './pages/ComicDetail';
 import Reader from './pages/Reader';
+import NovelSourceDetail from './pages/NovelSourceDetail';
+import NovelDetail from './pages/NovelDetail';
+import NovelReader from './pages/NovelReader';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import History from './pages/History';
@@ -80,6 +83,11 @@ const AppContent = () => {
         <Route path="/source/:sourceId" element={<ProtectedRoute><SourceDetail /></ProtectedRoute>} />
         <Route path="/comic/:sourceId/:slug" element={<ProtectedRoute><ComicDetail /></ProtectedRoute>} />
         <Route path="/read/:sourceId/:slug/:chapterId" element={<ProtectedRoute><Reader /></ProtectedRoute>} />
+
+        {/* Novel routes */}
+        <Route path="/novel-source/:sourceId" element={<ProtectedRoute><NovelSourceDetail /></ProtectedRoute>} />
+        <Route path="/novel/:sourceId/:host/:bookId" element={<ProtectedRoute><NovelDetail /></ProtectedRoute>} />
+        <Route path="/novel-read/:sourceId/:host/:bookId/:chapterId" element={<ProtectedRoute><NovelReader /></ProtectedRoute>} />
       </Routes>
     </>
   );

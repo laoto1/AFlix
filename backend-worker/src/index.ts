@@ -95,6 +95,31 @@ app.get(
 );
 
 app.get(
+    '/api/sangtacviet/*',
+    async (c) => {
+        try {
+            const reqUrl = new URL(c.req.url);
+            const proxyUrl = new URL(reqUrl.pathname + reqUrl.search, NETLIFY_API_BASE);
+            const res = await fetch(proxyUrl.toString(), {
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' }
+            });
+            const data = await res.text();
+            
+            return new Response(data, {
+                status: res.status,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'public, max-age=1800'
+                }
+            });
+        } catch(err: any) {
+            return c.json({ error: 'Proxy fetch failed', message: err.message }, 500 as any);
+        }
+    }
+);
+
+app.get(
     '/api/nhentai-tags/*',
     async (c) => {
         try {
