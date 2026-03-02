@@ -3,12 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, ChevronLeft, ChevronRight, Loader2, Settings, Minus, Plus } from 'lucide-react';
 import { fetchNovelChapterContent, fetchNovelChapters } from '../services/sangtacviet';
-import { useSettings } from '../contexts/SettingsContext';
 
 const NovelReader = () => {
     const { sourceId, host, bookId, chapterId } = useParams();
     const navigate = useNavigate();
-    const { t } = useSettings();
     const [fontSize, setFontSize] = useState(() => {
         return parseInt(localStorage.getItem('novel-font-size') || '18');
     });
