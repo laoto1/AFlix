@@ -1,6 +1,7 @@
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
+import { workerPool } from './workerPool';
 
 export interface DownloadProgress {
     loaded: number;
@@ -8,71 +9,37 @@ export interface DownloadProgress {
     percent: number;
 }
 
-class WorkerPool {
-    workers: string[];
-    currentIndex: number = 0;
-    deadWorkers: Set<string> = new Set();
-    
-    constructor() {
-        const workersStr = import.meta.env.VITE_CLOUDFLARE_WORKERS || '';
-        this.workers = workersStr.split(',').map((s: string) => s.trim()).filter(Boolean);
-    }
-    
-    getWorker(): string | null {
-        if (this.workers.length === 0) return null;
-        if (this.deadWorkers.size >= this.workers.length) {
-            // All workers dead, reset dead workers to try again
-            this.deadWorkers.clear();
+// ── Image Download Helper ──
+// Uses the shared workerPool for image proxy and handles failover
+async function fetchImageWithRetry(url: string, retries = 3): Promise<Response> {
+    let lastError: any;
+    for (let i = 0; i < retries; i++) {
+        const worker = workerPool.getWorker();
+        let fetchUrl = url;
+        if (worker) {
+            const baseUrl = worker.endsWith('/') ? worker.slice(0, -1) : worker;
+            fetchUrl = `${baseUrl}/api/proxy?url=${encodeURIComponent(url)}`;
         }
-        
-        let startIdx = this.currentIndex;
-        do {
-            const worker = this.workers[this.currentIndex];
-            this.currentIndex = (this.currentIndex + 1) % this.workers.length;
-            if (!this.deadWorkers.has(worker)) {
-                return worker;
+
+        try {
+            const response = await fetch(fetchUrl, { referrerPolicy: 'no-referrer' });
+            if (response.status === 429 || response.status >= 500) {
+                if (worker) workerPool.markDead(worker);
+                lastError = new Error(`Worker returned ${response.status}`);
+                continue;
             }
-        } while (this.currentIndex !== startIdx);
-        
-        return this.workers[0]; 
-    }
-    
-    markDead(worker: string) {
-        this.deadWorkers.add(worker);
-        console.warn(`Worker ${worker} marked as dead. Alive: ${this.workers.length - this.deadWorkers.size}/${this.workers.length}`);
-    }
-    
-    async fetchWithRetry(url: string, retries = 3): Promise<Response> {
-        let lastError: any;
-        for (let i = 0; i < retries; i++) {
-            const worker = this.getWorker();
-            let fetchUrl = url;
-            if (worker) {
-                const baseUrl = worker.endsWith('/') ? worker.slice(0, -1) : worker;
-                fetchUrl = `${baseUrl}/api/proxy?url=${encodeURIComponent(url)}`;
+            if (!response.ok) {
+                throw new Error(`Failed to fetch image: ${url} (Status: ${response.status})`);
             }
-            
-            try {
-                const response = await fetch(fetchUrl, { referrerPolicy: 'no-referrer' });
-                if (response.status === 429 || response.status >= 500) {
-                    if (worker) this.markDead(worker);
-                    lastError = new Error(`Worker returned ${response.status}`);
-                    continue;
-                }
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch image: ${url} (Status: ${response.status})`);
-                }
-                return response;
-            } catch (err: any) {
-                if (worker && fetchUrl !== url) this.markDead(worker);
-                lastError = err;
-            }
+            return response;
+        } catch (err: any) {
+            if (worker && fetchUrl !== url) workerPool.markDead(worker);
+            lastError = err;
         }
-        throw lastError || new Error(`Failed to fetch image after ${retries} retries: ${url}`);
     }
+    throw lastError || new Error(`Failed to fetch image after ${retries} retries: ${url}`);
 }
 
-const pool = new WorkerPool();
 
 /**
  * Downloads all images of a chapter and bundles them into a ZIP file.
@@ -121,7 +88,7 @@ export const downloadChapterAsZip = async (
         // We use Promise.all to fetch concurrently, but we could also do it sequentially
         // For performance, let's fetch in parallel but limit concurrency if needed, or just Promise.all
         const fetchImage = async (url: string, index: number) => {
-            const response = await pool.fetchWithRetry(url, Math.max(3, pool.workers.length));
+            const response = await fetchImageWithRetry(url, Math.max(3, workerPool.workers.length));
             const blob = await response.blob();
 
             // Format index with padding for correct order in zip (e.g., 001.jpg, 002.jpg)
@@ -229,7 +196,7 @@ export const downloadComicAsSingleZip = async (
             if (!folder) continue;
 
             const fetchImage = async (url: string, index: number) => {
-                const response = await pool.fetchWithRetry(url, Math.max(3, pool.workers.length));
+                const response = await fetchImageWithRetry(url, Math.max(3, workerPool.workers.length));
                 const blob = await response.blob();
 
                 const paddedIndex = String(index + 1).padStart(3, '0');
