@@ -139,6 +139,10 @@ const translations: Record<Language, Record<string, string>> = {
         'comic.continue_reading': 'Continue Reading',
         'comic.start_reading': 'Start Reading',
         'comic.latest_chapter': 'Latest Chapter',
+        'comic.author': 'Author',
+        'comic.status': 'Status',
+        'comic.status.ongoing': 'Ongoing',
+        'comic.status.completed': 'Completed',
         // Comic Detail Modals
         'comic.filter': 'Filter',
         'comic.sort': 'Sort',
@@ -300,6 +304,10 @@ const translations: Record<Language, Record<string, string>> = {
         'comic.continue_reading': 'Đọc tiếp',
         'comic.start_reading': 'Bắt đầu đọc',
         'comic.latest_chapter': 'Chương mới nhất',
+        'comic.author': 'Tác giả',
+        'comic.status': 'Trạng thái',
+        'comic.status.ongoing': 'Đang ra',
+        'comic.status.completed': 'Hoàn thành',
         // Comic Detail Modals
         'comic.filter': 'Bộ lọc',
         'comic.sort': 'Sắp xếp',
@@ -447,6 +455,10 @@ const translations: Record<Language, Record<string, string>> = {
         'chapters.pending': '等待中',
         'chapters.paused': '已暂停',
         'chapters.failed': '失败',
+        'comic.author': '作者',
+        'comic.status': '状态',
+        'comic.status.ongoing': '连载中',
+        'comic.status.completed': '已完结',
 
         // Home & Library
         'home.browse': '浏览源',
