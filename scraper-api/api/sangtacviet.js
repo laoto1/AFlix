@@ -58120,7 +58120,11 @@ async function fetchPageWithAcx(path) {
   const html3 = res.data;
   const acxMatch = html3.match(/_acx=([^;'"]+)/);
   const acx = acxMatch ? acxMatch[1] : "";
-  return { html: html3, acx };
+  const gacMatch = html3.match(/document\.cookie\s*=\s*["']_gac=([^;'"]+)/);
+  const gac = gacMatch ? gacMatch[1] : "";
+  const acMatch = html3.match(/document\.cookie\s*=\s*["']_ac=([^;'"]+)/);
+  const ac = acMatch ? acMatch[1] : "";
+  return { html: html3, acx, gac, ac };
 }
 async function postData(path, body) {
   const cookie = await ensureSession();
@@ -58328,15 +58332,20 @@ sangtacviet.get("/", async (req, res) => {
       if (!host || !bookid || !chapterId) {
         return res.status(400).json({ error: "Missing host, bookid, or chapterId" });
       }
-      const { acx } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/`);
-      const cookie = sessionCookies.join("; ") + (acx ? `; _acx=${acx}` : "");
-      const url2 = `${DOMAIN}/index.php?bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1`;
-      const chRes = await axios_default.post(url2, "sajax=readchapter", {
+      const { acx, gac, ac } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/`);
+      let cookie = sessionCookies.join("; ");
+      if (acx) cookie += `; _acx=${acx}`;
+      if (gac) cookie += `; _gac=${gac}`;
+      if (ac) cookie += `; _ac=${ac}`;
+      const exts = (host === "dich" || host === "sangtac") ? "&exts=1140%5E-16777216%5E-1383213" : "";
+      const url2 = `${DOMAIN}/index.php?bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1${exts}`;
+      const chRes = await axios_default.post(url2, "", {
         headers: {
           "User-Agent": UA,
           "Cookie": cookie,
           "Referer": `${DOMAIN}/truyen/${host}/1/${bookid}/${chapterId}/`,
-          "Content-Type": "application/x-www-form-urlencoded"
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Length": "0"
         },
         timeout: 15e3,
         responseType: "text"

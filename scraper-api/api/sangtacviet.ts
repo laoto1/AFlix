@@ -38,8 +38,8 @@ async function ensureSession(): Promise<string> {
     return sessionCookies.join('; ');
 }
 
-// Fetch a page and extract the _acx cookie from inline script
-async function fetchPageWithAcx(path: string): Promise<{ html: string; acx: string }> {
+// Fetch a page and extract inline cookies (_acx, _gac, _ac) from script tags
+async function fetchPageWithAcx(path: string): Promise<{ html: string; acx: string; gac: string; ac: string }> {
     const cookie = await ensureSession();
     const url = path.startsWith('http') ? path : `${DOMAIN}${path}`;
     const res = await axios.get(url, {
@@ -49,12 +49,18 @@ async function fetchPageWithAcx(path: string): Promise<{ html: string; acx: stri
     });
     updateCookies(res.headers);
 
-    // Extract _acx cookie from inline script: document.cookie='_acx=...; path=/'
     const html = res.data;
+    // Extract _acx cookie from inline script: document.cookie='_acx=...; path=/'
     const acxMatch = html.match(/_acx=([^;'"]+)/);
     const acx = acxMatch ? acxMatch[1] : '';
+    // Extract _gac cookie set inline: document.cookie="_gac=...; path=/"
+    const gacMatch = html.match(/document\.cookie\s*=\s*["']_gac=([^;'"]+)/);
+    const gac = gacMatch ? gacMatch[1] : '';
+    // Extract _ac cookie set inline: document.cookie="_ac=...; path=/"
+    const acMatch = html.match(/document\.cookie\s*=\s*["']_ac=([^;'"]+)/);
+    const ac = acMatch ? acMatch[1] : '';
 
-    return { html, acx };
+    return { html, acx, gac, ac };
 }
 
 async function postData(path: string, body: string): Promise<string> {
@@ -276,15 +282,21 @@ sangtacviet.get('/', async (req: any, res: any) => {
                 return res.status(400).json({ error: 'Missing host, bookid, or chapterId' });
             }
 
-            const { acx } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/`);
-            const cookie = sessionCookies.join('; ') + (acx ? `; _acx=${acx}` : '');
+            const { acx, gac, ac } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/`);
+            let cookie = sessionCookies.join('; ');
+            if (acx) cookie += `; _acx=${acx}`;
+            if (gac) cookie += `; _gac=${gac}`;
+            if (ac) cookie += `; _ac=${ac}`;
 
-            const url = `${DOMAIN}/index.php?bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1`;
-            const chRes = await axios.post(url, 'sajax=readchapter', {
+            // For dich/sangtac hosts, exts param is required (width^fontcolor^bgcolor)
+            const exts = (host === 'dich' || host === 'sangtac') ? '&exts=1140%5E-16777216%5E-1383213' : '';
+            const url = `${DOMAIN}/index.php?bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1${exts}`;
+            const chRes = await axios.post(url, '', {
                 headers: {
                     'User-Agent': UA, 'Cookie': cookie,
                     'Referer': `${DOMAIN}/truyen/${host}/1/${bookid}/${chapterId}/`,
                     'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': '0',
                 },
                 timeout: 15000,
                 responseType: 'text',
