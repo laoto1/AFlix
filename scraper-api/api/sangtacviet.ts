@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 // ── SangTacViet Scraper API ──
-const DOMAIN = 'http://14.225.254.182';
+const DOMAIN = 'http://14.225.254.182.nip.io';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 
 // Session cookie management

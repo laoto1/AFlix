@@ -1,0 +1,65 @@
+Method: POST
+URL
+https://www.google-analytics.com/g/collect?v=2&tid=G-MNX3PR1HR4&gtm=45je6320v875280174za20g&_p=1772571901589&gcd=13l3l3l3l1l1&npa=0&dma=0&cid=189580581.1772571846&ul=en-us&sr=1920x1080&frm=0&pscdl=noapi&_eu=AAAIAAQ&_s=1&tag_exp=103116026~103200004~104527906~104528500~104684208~104684211~115938465~115938469~116024733~117484252~117827222&sid=1772571846&sct=1&seg=1&dl=http%3A%2F%2F14.225.254.182%2Ftruyen%2Fdich%2F1%2F43165%2F1%2F&dr=http%3A%2F%2F14.225.254.182%2Ftruyen%2Fdich%2F1%2F43165%2F&dt=Ch%C6%B0%C6%A1ng%201%3A%20Tr%E1%BB%9F%20th%C3%A0nh%20m%E1%BB%99t%20ng%C3%B4i%20sao%C2%A0%20-%20Tr%E1%BB%9F%20th%C3%A0nh%20m%E1%BB%99t%20ng%C3%B4i%20sao%20-%20S%C3%A1ng%20T%C3%A1c%20Vi%E1%BB%87t%20-%20sangtacviet.com&en=page_view&tfd=6253
+Headers
+Accept:
+*/*
+Accept-Encoding:
+gzip, deflate, br, zstd
+Accept-Language:
+en-US,en;q=0.9
+Cache-Control:
+no-cache
+Connection:
+keep-alive
+Content-Length:
+0
+Host:
+www.google-analytics.com
+Origin:
+http://14.225.254.182
+Pragma:
+no-cache
+Priority:
+u=6
+Referer:
+http://14.225.254.182/
+Sec-Fetch-Dest:
+empty
+Sec-Fetch-Mode:
+no-cors
+Sec-Fetch-Site:
+cross-site
+User-Agent:
+Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0
+204
+Status: 204 No Content
+Headers
+Access-Control-Allow-Credentials:
+true
+Access-Control-Allow-Origin:
+http://14.225.254.182
+Alt-Svc:
+h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+Cache-Control:
+no-cache, no-store, must-revalidate
+Content-Length:
+0
+Content-Security-Policy-Report-Only:
+script-src 'none'; form-action 'none'; frame-src 'none'; report-uri https://csp.withgoogle.com/csp/scaffolding/ascnsrsggc:113:0
+Content-Type:
+text/plain
+Cross-Origin-Opener-Policy-Report-Only:
+same-origin; report-to=ascnsrsggc:113:0
+Cross-Origin-Resource-Policy:
+cross-origin
+Date:
+Tue, 03 Mar 2026 21:05:08 GMT
+Expires:
+Fri, 01 Jan 1990 00:00:00 GMT
+Pragma:
+no-cache
+Report-To:
+{"group":"ascnsrsggc:113:0","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/scaffolding/ascnsrsggc:113:0"}],}
+Server:
+Golfe2

@@ -58077,8 +58077,91 @@ var import_whatwg_mimetype = __toESM(require_mime_type(), 1);
 
 // api/sangtacviet.ts
 var express = require("express");
-var DOMAIN = "http://14.225.254.182";
+var { chromium: pwChromium } = require("playwright");
+// ── SangTacViet Scraper API ──
+const DOMAIN = "http://14.225.254.182.nip.io";
 var UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+// Playwright browser singleton for chapter scraping
+var _pwBrowser = null;
+async function getPwBrowser() {
+  if (_pwBrowser && _pwBrowser.isConnected()) return _pwBrowser;
+  _pwBrowser = await pwChromium.launch({
+    headless: false,
+    args: ['--disable-blink-features=AutomationControlled', '--no-sandbox']
+  });
+  return _pwBrowser;
+}
+
+async function fetchChapterViaPlaywright(host, bookid, chapterId) {
+  const browser = await getPwBrowser();
+  const context = await browser.newContext({
+    userAgent: UA,
+    viewport: { width: 1280, height: 800 },
+    extraHTTPHeaders: { 'Accept-Language': 'en-US,en;q=0.9,vi;q=0.8' },
+    ignoreHTTPSErrors: true
+  });
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+  });
+  const page = await context.newPage();
+
+  // Block ad domains for speed
+  await page.route('**/*', async (route) => {
+    const url = route.request().url();
+    if (url.includes('renamereptiliantrance') || url.includes('o6z2a2kq8f')) {
+      await route.abort().catch(() => { });
+    } else {
+      await route.continue().catch(() => { });
+    }
+  });
+
+  // Intercept the readchapter XHR response
+  let chapterData = null;
+  const xhrPromise = new Promise((resolve) => {
+    let timeout = setTimeout(() => resolve(null), 25000);
+    page.on('response', async (response) => {
+      if (response.url().includes('sajax=readchapter')) {
+        try {
+          const text = await response.text();
+          let jsonStr = text;
+          const jsonStart = text.indexOf('{"');
+          if (jsonStart > 0) jsonStr = text.substring(jsonStart);
+          const data = JSON.parse(jsonStr);
+          if (data.code === "0" || data.code === 0) {
+            chapterData = data;
+            clearTimeout(timeout);
+            resolve(data);
+          }
+        } catch (e) { }
+      }
+    });
+  });
+
+  try {
+    await page.goto(`https://sangtacviet.vip/truyen/${host}/1/${bookid}/${chapterId}/`, {
+      waitUntil: 'load',
+      timeout: 20000
+    });
+    await page.waitForTimeout(3000);
+
+    // Manually trigger the XHR send (page script opens it but ghz error halts send)
+    await page.evaluate(() => {
+      if (typeof chapterfetcher !== 'undefined' && chapterfetcher.readyState === 1) {
+        chapterfetcher.send('');
+      }
+    });
+
+    // Wait for the successful response (gotox handles Code 7 retry automatically)
+    await Promise.race([xhrPromise, page.waitForTimeout(20000)]);
+  } catch (e) {
+    console.log('Playwright chapter fetch error:', e.message);
+  } finally {
+    await context.close().catch(() => { });
+  }
+
+  return chapterData;
+}
 var sessionCookies = [];
 var sessionExpiry = 0;
 function updateCookies(headers) {
@@ -58098,7 +58181,7 @@ async function ensureSession() {
   }
   try {
     const res = await axios_default.get(DOMAIN, {
-      headers: { "User-Agent": UA },
+      headers: { "Host": "sangtacviet.vip", "User-Agent": UA },
       maxRedirects: 5,
       validateStatus: () => true
     });
@@ -58112,25 +58195,27 @@ async function fetchPageWithAcx(path) {
   const cookie = await ensureSession();
   const url2 = path.startsWith("http") ? path : `${DOMAIN}${path}`;
   const res = await axios_default.get(url2, {
-    headers: { "User-Agent": UA, "Cookie": cookie, "Referer": DOMAIN },
+    headers: { "Host": "sangtacviet.vip", "User-Agent": UA, "Cookie": cookie, "Referer": DOMAIN },
     timeout: 15e3,
     responseType: "text"
   });
   updateCookies(res.headers);
-  const html3 = res.data;
-  const acxMatch = html3.match(/_acx=([^;'"]+)/);
+  const html = res.data;
+  console.log("FETCH PAGE WITH ACX - HTML HEAD:", html.substring(0, 1500));
+  const acxMatch = html.match(/_acx=([^;'"]+)/);
   const acx = acxMatch ? acxMatch[1] : "";
-  const gacMatch = html3.match(/document\.cookie\s*=\s*["']_gac=([^;'"]+)/);
+  const gacMatch = html.match(/document\.cookie\s*=\s*["']_gac=([^;'"]+)/);
   const gac = gacMatch ? gacMatch[1] : "";
-  const acMatch = html3.match(/document\.cookie\s*=\s*["']_ac=([^;'"]+)/);
+  const acMatch = html.match(/document\.cookie\s*=\s*["']_ac=([^;'"]+)/);
   const ac = acMatch ? acMatch[1] : "";
-  return { html: html3, acx, gac, ac };
+  return { html, acx, gac, ac };
 }
 async function postData(path, body) {
   const cookie = await ensureSession();
   const url2 = path.startsWith("http") ? path : `${DOMAIN}${path}`;
   const res = await axios_default.post(url2, body, {
     headers: {
+      "Host": "sangtacviet.vip",
       "User-Agent": UA,
       "Cookie": cookie,
       "Referer": DOMAIN,
@@ -58300,7 +58385,7 @@ sangtacviet.get("/", async (req, res) => {
       const cookie = sessionCookies.join("; ") + (acx ? `; _acx=${acx}` : "");
       const url2 = `${DOMAIN}/index.php?ngmar=chapterlist&h=${host}&bookid=${bookid}&sajax=getchapterlist`;
       const chRes = await axios_default.get(url2, {
-        headers: { "User-Agent": UA, "Cookie": cookie, "Referer": `${DOMAIN}/truyen/${host}/1/${bookid}/` },
+        headers: { "Host": "sangtacviet.vip", "User-Agent": UA, "Cookie": cookie, "Referer": `${DOMAIN}/truyen/${host}/1/${bookid}/` },
         timeout: 15e3,
         responseType: "text"
       });
@@ -58332,47 +58417,68 @@ sangtacviet.get("/", async (req, res) => {
       if (!host || !bookid || !chapterId) {
         return res.status(400).json({ error: "Missing host, bookid, or chapterId" });
       }
-      const { acx, gac, ac } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/`);
-      let cookie = sessionCookies.join("; ");
-      if (acx) cookie += `; _acx=${acx}`;
-      if (gac) cookie += `; _gac=${gac}`;
-      if (ac) cookie += `; _ac=${ac}`;
-      const exts = (host === "dich" || host === "sangtac") ? "&exts=1140%5E-16777216%5E-1383213" : "";
-      const url2 = `${DOMAIN}/index.php?bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1${exts}`;
-      const chRes = await axios_default.post(url2, "", {
-        headers: {
-          "User-Agent": UA,
-          "Cookie": cookie,
-          "Referer": `${DOMAIN}/truyen/${host}/1/${bookid}/${chapterId}/`,
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Content-Length": "0"
-        },
-        timeout: 15e3,
-        responseType: "text"
-      });
-      let content = "", chapterName = `Ch\u01B0\u01A1ng ${chapterId}`, bookName = "";
-      const data2 = chRes.data;
+      let content = "", chapterName = `Ch\u01B0\u01A0ng ${chapterId}`, bookName = "";
+
+      // Try Playwright approach first (goes through real Cloudflare)
       try {
-        if (data2 && data2.trim()) {
-          let jsonStr = data2;
-          const jsonStart = data2.indexOf('{"');
-          if (jsonStart > 0) jsonStr = data2.substring(jsonStart);
-          const parsed = JSON.parse(jsonStr);
-          if (parsed.code === "0" || parsed.code === 0 || parsed.data || parsed.content) {
-            content = parsed.data || parsed.content || parsed.c || "";
-            chapterName = parsed.chaptername || parsed.cn || chapterName;
-            bookName = parsed.bookname || parsed.bn || "";
-          }
+        console.log("SANGTACVIET: Fetching chapter via Playwright...", { host, bookid, chapterId });
+        const pwData = await fetchChapterViaPlaywright(host, bookid, chapterId);
+        if (pwData && (pwData.code === "0" || pwData.code === 0)) {
+          content = pwData.data || pwData.content || pwData.c || "";
+          chapterName = pwData.chaptername || pwData.cn || chapterName;
+          bookName = pwData.bookname || pwData.bn || "";
+          console.log("SANGTACVIET: Playwright success! Content length:", content.length);
+        } else {
+          console.log("SANGTACVIET: Playwright returned no data or error:", JSON.stringify(pwData)?.substring(0, 300));
         }
-      } catch (e) {
+      } catch (pwErr) {
+        console.log("SANGTACVIET: Playwright error:", pwErr.message);
+      }
+
+      // Fallback: try Axios if Playwright didn't get content
+      if (!content) {
         try {
-          const { html: html3 } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/${chapterId}/`);
-          const $2 = load(html3);
-          content = $2("#maincontent").html() || "";
-          chapterName = $2("title").text().trim() || chapterName;
-        } catch (e2) {
+          console.log("SANGTACVIET: Falling back to Axios...");
+          const { acx, gac, ac } = await fetchPageWithAcx(`/truyen/${host}/1/${bookid}/`);
+          let cookie = sessionCookies.join("; ");
+          if (acx) cookie += `; _acx=${acx}`;
+          if (gac) cookie += `; _gac=${gac}`;
+          if (ac) cookie += `; _ac=${ac}`;
+          const exts = (host === "dich" || host === "sangtac") ? "&exts=1140%5E-16777216%5E-1383213" : "";
+          const url = `${DOMAIN}/index.php?bookid=${bookid}&h=${host}&c=${chapterId}&ngmar=readc&sajax=readchapter&sty=1${exts}`;
+          const chRes = await axios_default.post(url, "", {
+            headers: {
+              "Host": "sangtacviet.vip",
+              "Content-Type": "application/x-www-form-urlencoded",
+              "User-Agent": UA,
+              "Cookie": `cookieenabled=true; _acx=${acx}; _gac=${gac}; _ac=${ac}; ${sessionCookies.join("; ")}`,
+              "Referer": `https://sangtacviet.vip/truyen/${host}/1/${bookid}/${chapterId}/`,
+              "Origin": "https://sangtacviet.vip",
+              "X-Requested-With": "XmlHttpRequest"
+            },
+            timeout: 10000
+          });
+          const data2 = chRes.data;
+          if (data2) {
+            let parsed;
+            if (typeof data2 === "object") parsed = data2;
+            else if (typeof data2 === "string" && data2.trim()) {
+              let jsonStr = data2;
+              const jsonStart = data2.indexOf('{"');
+              if (jsonStart > 0) jsonStr = data2.substring(jsonStart);
+              parsed = JSON.parse(jsonStr);
+            }
+            if (parsed && (parsed.code === "0" || parsed.code === 0 || parsed.data || parsed.content)) {
+              content = parsed.data || parsed.content || parsed.c || "";
+              chapterName = parsed.chaptername || parsed.cn || chapterName;
+              bookName = parsed.bookname || parsed.bn || "";
+            }
+          }
+        } catch (axiosErr) {
+          console.log("SANGTACVIET: Axios fallback error:", axiosErr.message);
         }
       }
+
       return res.json({
         status: "success",
         data: { item: { _id: chapterId, name: chapterName, book_name: bookName, content } }

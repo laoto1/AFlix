@@ -147,7 +147,7 @@ app.get(
 // --- Direct STV Proxy (for client-side chapter reading) ---
 // The sangtacviet readchapter endpoint requires browser-level session management
 // that cannot be replicated server-side. This proxy transparently forwards requests.
-const STV_ORIGIN = 'http://14.225.254.182';
+const STV_ORIGIN = 'http://14.225.254.182.nip.io';
 
 app.all(
     '/api/stv-proxy/*',
