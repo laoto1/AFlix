@@ -1,18 +1,21 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, ChevronLeft, ChevronRight, Loader2, Settings, Minus, Plus, ExternalLink } from 'lucide-react';
-import { fetchNovelChapters } from '../services/sangtacviet';
-
-const STV_BASE = 'http://14.225.254.182';
+import { ArrowLeft, ChevronLeft, ChevronRight, Loader2, Settings, Minus, Plus } from 'lucide-react';
+import { fetchNovelChapters, fetchNovelChapterContent } from '../services/sangtacviet';
 
 const NovelReader = () => {
     const { sourceId, host, bookId, chapterId } = useParams();
     const navigate = useNavigate();
     const [fontSize, setFontSize] = useState(() => parseInt(localStorage.getItem('novel-font-size') || '18'));
     const [showSettings, setShowSettings] = useState(false);
-    const [iframeLoaded, setIframeLoaded] = useState(false);
-    const iframeRef = useRef<HTMLIFrameElement>(null);
+
+    // Fetch chapter content via the server-side API (no mixed content issue)
+    const { data: chapterData, isLoading, isError } = useQuery({
+        queryKey: ['novel-chapter-content', sourceId, host, bookId, chapterId],
+        queryFn: () => fetchNovelChapterContent(host!, bookId!, chapterId!),
+        enabled: !!host && !!bookId && !!chapterId,
+    });
 
     // Fetch chapter list for prev/next navigation
     const { data: chaptersData } = useQuery({
@@ -27,64 +30,36 @@ const NovelReader = () => {
     const nextChapter = currentIdx >= 0 && currentIdx < chapters.length - 1 ? chapters[currentIdx + 1] : null;
     const currentChapter = currentIdx >= 0 ? chapters[currentIdx] : null;
 
+    const chapterContent = chapterData?.data?.item?.content || '';
+    const chapterName = chapterData?.data?.item?.name || currentChapter?.name || `Chương ${chapterId}`;
+
     // Save font size
     useEffect(() => {
         localStorage.setItem('novel-font-size', String(fontSize));
     }, [fontSize]);
 
-    // Reset iframe loaded state when chapter changes
+    // Scroll to top when chapter changes
     useEffect(() => {
-        setIframeLoaded(false);
+        window.scrollTo(0, 0);
     }, [chapterId]);
-
-    // Try to inject styles into iframe when loaded
-    useEffect(() => {
-        if (!iframeLoaded || !iframeRef.current) return;
-        try {
-            const iframeDoc = iframeRef.current.contentDocument || iframeRef.current.contentWindow?.document;
-            if (iframeDoc) {
-                const style = iframeDoc.createElement('style');
-                style.textContent = `
-                    /* Hide site header, footer, navigation */
-                    .topnav, .navbar, header, footer, .footer,
-                    #topbar, .topbar, .breadcrumb, #breadcum,
-                    .navbot, .navtop, .comment-area, #commentlist,
-                    .fb-comments, .share-buttons, .social-share,
-                    .sticky-top, .fixed-top, .book-info-top,
-                    [class*="nav-"], [id*="nav"], .ad, .ads,
-                    .sidebar, aside { display: none !important; }
-                    
-                    /* Style the content */
-                    body {
-                        background: #121212 !important;
-                        color: #e0e0e0 !important;
-                        font-size: ${fontSize}px !important;
-                        line-height: 1.8 !important;
-                        padding: 16px !important;
-                        margin: 0 !important;
-                    }
-                    #maincontent, .chapter-content, .reading-content {
-                        color: #e0e0e0 !important;
-                        max-width: 100% !important;
-                        padding: 0 !important;
-                    }
-                `;
-                iframeDoc.head.appendChild(style);
-            }
-        } catch (e) {
-            // Cross-origin - can't inject styles, iframe will show as-is
-        }
-    }, [iframeLoaded, fontSize]);
 
     const navigateChapter = useCallback((ch: any) => {
         if (ch) navigate(`/novel-read/${sourceId}/${host}/${bookId}/${ch._id}`, { replace: true });
     }, [navigate, sourceId, host, bookId]);
 
-    // Build the direct chapter URL
-    const chapterUrl = `${STV_BASE}/truyen/${host}/1/${bookId}/${chapterId}/`;
+    // Convert plain text content to HTML paragraphs
+    const renderContent = (text: string) => {
+        if (!text) return '';
+        return text
+            .split(/\n/)
+            .map(line => line.replace(/^\t+/, '').trim())
+            .filter(line => line.length > 0)
+            .map(line => `<p>${line}</p>`)
+            .join('');
+    };
 
     return (
-        <div className="flex flex-col h-screen bg-[var(--color-bg)]">
+        <div className="flex flex-col min-h-screen bg-[var(--color-bg)]">
             {/* Header */}
             <header className="sticky top-0 z-40 bg-[var(--color-bg)] border-b border-[var(--color-border)] shrink-0">
                 <div className="flex items-center h-12 px-3 gap-2">
@@ -92,17 +67,8 @@ const NovelReader = () => {
                         <ArrowLeft size={20} />
                     </button>
                     <h1 className="text-sm font-medium text-[var(--color-text)] truncate flex-1">
-                        {currentChapter?.name || `Chương ${chapterId}`}
+                        {chapterName}
                     </h1>
-                    <a
-                        href={chapterUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-full hover:bg-[var(--color-surface-hover)] text-[var(--color-text-muted)]"
-                        title="Mở trong tab mới"
-                    >
-                        <ExternalLink size={16} />
-                    </a>
                     <button
                         onClick={() => setShowSettings(!showSettings)}
                         className="p-2 rounded-full hover:bg-[var(--color-surface-hover)] text-[var(--color-text)]"
@@ -132,26 +98,47 @@ const NovelReader = () => {
                 )}
             </header>
 
-            {/* Iframe Content */}
-            <div className="flex-1 relative overflow-hidden">
-                {!iframeLoaded && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-[var(--color-bg)] z-10">
+            {/* Chapter Content */}
+            <div className="flex-1 px-4 py-6 max-w-3xl mx-auto w-full">
+                {isLoading && (
+                    <div className="flex flex-col items-center justify-center py-20">
                         <Loader2 className="animate-spin text-[var(--color-primary)] mb-4" size={32} />
                         <p className="text-sm text-[var(--color-text-muted)]">Đang tải nội dung chương...</p>
                     </div>
                 )}
-                <iframe
-                    ref={iframeRef}
-                    src={chapterUrl}
-                    className="w-full h-full border-0"
-                    onLoad={() => setIframeLoaded(true)}
-                    sandbox="allow-scripts allow-same-origin allow-popups"
-                    title={currentChapter?.name || 'Chapter Content'}
-                />
+
+                {isError && (
+                    <div className="flex flex-col items-center justify-center py-20">
+                        <p className="text-sm text-red-400 mb-2">Không thể tải nội dung chương.</p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="px-4 py-2 rounded-lg text-sm bg-[var(--color-primary)] text-white hover:opacity-90"
+                        >
+                            Thử lại
+                        </button>
+                    </div>
+                )}
+
+                {!isLoading && !isError && chapterContent && (
+                    <div
+                        className="novel-content text-[var(--color-text)]"
+                        style={{
+                            fontSize: `${fontSize}px`,
+                            lineHeight: '1.9',
+                        }}
+                        dangerouslySetInnerHTML={{ __html: renderContent(chapterContent) }}
+                    />
+                )}
+
+                {!isLoading && !isError && !chapterContent && (
+                    <div className="flex flex-col items-center justify-center py-20">
+                        <p className="text-sm text-[var(--color-text-muted)]">Không có nội dung cho chương này.</p>
+                    </div>
+                )}
             </div>
 
             {/* Bottom Navigation */}
-            <div className="bg-[var(--color-bg)] border-t border-[var(--color-border)] px-4 py-3 shrink-0">
+            <div className="bg-[var(--color-bg)] border-t border-[var(--color-border)] px-4 py-3 shrink-0 sticky bottom-0">
                 <div className="flex items-center justify-between max-w-3xl mx-auto">
                     <button
                         onClick={() => prevChapter && navigateChapter(prevChapter)}

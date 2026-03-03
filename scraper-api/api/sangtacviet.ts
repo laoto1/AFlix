@@ -299,8 +299,8 @@ sangtacviet.get('/', async (req: any, res: any) => {
                     const jsonStart = data.indexOf('{"');
                     if (jsonStart > 0) jsonStr = data.substring(jsonStart);
                     const parsed = JSON.parse(jsonStr);
-                    if (parsed.code === '0' || parsed.code === 0 || parsed.content) {
-                        content = parsed.content || parsed.c || '';
+                    if (parsed.code === '0' || parsed.code === 0 || parsed.data || parsed.content) {
+                        content = parsed.data || parsed.content || parsed.c || '';
                         chapterName = parsed.chaptername || parsed.cn || chapterName;
                         bookName = parsed.bookname || parsed.bn || '';
                     }

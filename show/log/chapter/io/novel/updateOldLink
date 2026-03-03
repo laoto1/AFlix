@@ -1,0 +1,50 @@
+Method: POST
+URL
+http://14.225.254.182/io/novel/updateOldLink
+Headers
+Accept:
+*/*
+Accept-Encoding:
+gzip, deflate
+Accept-Language:
+en-US,en;q=0.9
+Connection:
+keep-alive
+Content-Length:
+34
+Content-type:
+application/x-www-form-urlencoded
+Cookie:
+hideavatar=false; _acx=MH4ANDMH9Yx599ox8we2fA==; _ga_MNX3PR1HR4=GS2.1.s1772566243$o1$g1$t1772566248$j55$l0$h0; _ga=GA1.1.1323438064.1772566243; _gid=GA1.1.125545754.1772566243; lang=vi; PHPSESSID=kaa9he3um3ul7bn6mhe1o06q25; arouting=e; _gac=b9faed171d93d5dd8dcdffe32086c3ad6HqDmbXfJh5n0eN950+qkHDeoU+iYt+eZ6mi4DAmYk+xzfc4H8CiUtrFovOif9CuTGP60A==; _ac=5ea403b84c07c3e664b879faf4eacbe2
+Host:
+14.225.254.182
+Origin:
+http://14.225.254.182
+Referer:
+http://14.225.254.182/truyen/dich/1/43165/1/
+User-Agent:
+Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0
+
+Request Body:
+host=dich&bookid=43165&chapterid=1
+
+Status: 200 OK
+Headers
+Cache-Control:
+no-cache
+Connection:
+keep-alive
+Content-Length:
+3
+Date:
+Tue, 03 Mar 2026 19:32:18 GMT
+Server:
+nginx/1.18.0 (Ubuntu)
+X-Powered-By:
+ARR/3.0
+X-Powered-By:
+The NG Project 1.1
+
+Response Body:
+0
+-2
