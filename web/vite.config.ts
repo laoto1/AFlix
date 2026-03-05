@@ -8,4 +8,12 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      '/api/sangtacviet': {
+        target: 'http://localhost:9999',
+        changeOrigin: true,
+      },
+    },
+  },
 })

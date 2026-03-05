@@ -1,15 +1,8 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, ChevronLeft, ChevronRight, Settings, Minus, Plus } from 'lucide-react';
-import { fetchNovelChapters } from '../services/sangtacviet';
-
-// Get the first worker URL for iframe src (stv-proxy)
-function getStvProxyBase(): string {
-    const workersStr = import.meta.env.VITE_CLOUDFLARE_WORKERS || '';
-    const workers = workersStr.split(',').map((s: string) => s.trim()).filter(Boolean);
-    return workers.length > 0 ? workers[0] : '';
-}
+import { ArrowLeft, ChevronLeft, ChevronRight, Settings, Minus, Plus, Loader2 } from 'lucide-react';
+import { fetchNovelChapters, fetchNovelChapterContent } from '../services/sangtacviet';
 
 const NovelReader = () => {
     const { sourceId, host, bookId, chapterId } = useParams();
@@ -17,13 +10,14 @@ const NovelReader = () => {
     const [fontSize, setFontSize] = useState(() => parseInt(localStorage.getItem('novel-font-size') || '18'));
     const [showSettings, setShowSettings] = useState(false);
 
-    // Build the iframe URL through the stv-proxy (HTTPS, no mixed content)
-    const chapterUrl = useMemo(() => {
-        const proxyBase = getStvProxyBase();
-        if (!proxyBase || !host || !bookId || !chapterId) return '';
-        // Route through /api/stv-proxy which proxies to http://14.225.254.182
-        return `${proxyBase}/api/stv-proxy/truyen/${host}/1/${bookId}/${chapterId}/`;
-    }, [host, bookId, chapterId]);
+    // Fetch chapter content from scraper API
+    const { data: chapterContent, isLoading: isLoadingContent, error: contentError } = useQuery({
+        queryKey: ['novel-chapter-content', host, bookId, chapterId],
+        queryFn: () => fetchNovelChapterContent(host!, bookId!, chapterId!),
+        enabled: !!host && !!bookId && !!chapterId,
+        staleTime: 1000 * 60 * 30, // 30 minutes cache
+        retry: 2,
+    });
 
     // Fetch chapter list for prev/next navigation  
     const { data: chaptersData } = useQuery({
@@ -38,36 +32,16 @@ const NovelReader = () => {
     const nextChapter = currentIdx >= 0 && currentIdx < chapters.length - 1 ? chapters[currentIdx + 1] : null;
     const currentChapter = currentIdx >= 0 ? chapters[currentIdx] : null;
 
-    const chapterName = currentChapter?.name || `Chương ${chapterId}`;
+    // Use chapter name from content response first, then from chapter list
+    const item = chapterContent?.data?.item;
+    const chapterName = item?.name || currentChapter?.name || `Chương ${chapterId}`;
+    const bookName = item?.book_name || '';
+    const content = item?.content || '';
 
     // Save font size
     useEffect(() => {
         localStorage.setItem('novel-font-size', String(fontSize));
     }, [fontSize]);
-
-    // Apply font size to iframe content
-    useEffect(() => {
-        const iframe = document.getElementById('stv-reader-iframe') as HTMLIFrameElement;
-        if (!iframe) return;
-
-        const applyFontSize = () => {
-            try {
-                const doc = iframe.contentDocument || iframe.contentWindow?.document;
-                if (doc) {
-                    const mainContent = doc.getElementById('maincontent') || doc.querySelector('.contentbox');
-                    if (mainContent) {
-                        (mainContent as HTMLElement).style.fontSize = `${fontSize}px`;
-                    }
-                }
-            } catch (e) {
-                // Cross-origin - can't access iframe content
-            }
-        };
-
-        iframe.addEventListener('load', applyFontSize);
-        applyFontSize();
-        return () => iframe.removeEventListener('load', applyFontSize);
-    }, [fontSize, chapterUrl]);
 
     // Scroll to top when chapter changes
     useEffect(() => {
@@ -86,9 +60,14 @@ const NovelReader = () => {
                     <button onClick={() => navigate(-1)} className="p-2 rounded-full hover:bg-[var(--color-surface-hover)] text-[var(--color-text)]">
                         <ArrowLeft size={20} />
                     </button>
-                    <h1 className="text-sm font-medium text-[var(--color-text)] truncate flex-1">
-                        {chapterName}
-                    </h1>
+                    <div className="flex-1 min-w-0">
+                        <h1 className="text-sm font-medium text-[var(--color-text)] truncate">
+                            {chapterName}
+                        </h1>
+                        {bookName && (
+                            <p className="text-xs text-[var(--color-text-muted)] truncate">{bookName}</p>
+                        )}
+                    </div>
                     <button
                         onClick={() => setShowSettings(!showSettings)}
                         className="p-2 rounded-full hover:bg-[var(--color-surface-hover)] text-[var(--color-text)]"
@@ -118,20 +97,26 @@ const NovelReader = () => {
                 )}
             </header>
 
-            {/* Chapter Content via iframe through stv-proxy (HTTPS) */}
-            <div className="flex-1">
-                {chapterUrl ? (
-                    <iframe
-                        id="stv-reader-iframe"
-                        src={chapterUrl}
-                        className="w-full border-none"
-                        style={{ minHeight: 'calc(100vh - 120px)', height: '100%' }}
-                        title={chapterName}
-                        sandbox="allow-scripts allow-same-origin allow-forms"
+            {/* Chapter Content */}
+            <div className="flex-1 max-w-3xl mx-auto w-full px-4 py-6">
+                {isLoadingContent ? (
+                    <div className="flex flex-col items-center justify-center py-20">
+                        <Loader2 className="animate-spin text-[var(--color-primary)] mb-4" size={36} />
+                        <p className="text-sm text-[var(--color-text-muted)]">Đang tải nội dung chương...</p>
+                    </div>
+                ) : contentError ? (
+                    <div className="flex flex-col items-center justify-center py-20">
+                        <p className="text-sm text-red-500">Lỗi tải nội dung. Vui lòng thử lại.</p>
+                    </div>
+                ) : content ? (
+                    <div
+                        className="novel-content text-[var(--color-text)] leading-relaxed whitespace-pre-line"
+                        style={{ fontSize: `${fontSize}px`, lineHeight: '1.8' }}
+                        dangerouslySetInnerHTML={{ __html: content }}
                     />
                 ) : (
                     <div className="flex flex-col items-center justify-center py-20">
-                        <p className="text-sm text-[var(--color-text-muted)]">Không thể tải nội dung chương.</p>
+                        <p className="text-sm text-[var(--color-text-muted)]">Không có nội dung chương.</p>
                     </div>
                 )}
             </div>

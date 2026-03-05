@@ -1,0 +1,14 @@
+{
+    "name": "stv-chapter-scraper",
+    "version": "1.0.0",
+    "description": "SangTacViet chapter scraper with Playwright (Docker)",
+    "main": "server.js",
+    "scripts": {
+        "start": "xvfb-run --auto-servernum --server-args='-screen 0 1280x720x24' node server.js"
+    },
+    "dependencies": {
+        "express": "^4.19.2",
+        "cors": "^2.8.5",
+        "playwright": "^1.58.2"
+    }
+}

@@ -11,6 +11,7 @@ export interface Env {
     TELEGRAM_BOT_TOKEN: string;
     TELEGRAM_CHAT_ID: string;
     NETTRUYEN_DOMAINS: string;
+    STV_CHAPTER_API?: string;  // Railway Docker service URL for chapter scraping
 }
 
 const app = new Hono<{ Bindings: Env }>();
@@ -99,6 +100,27 @@ app.get(
     async (c) => {
         try {
             const reqUrl = new URL(c.req.url);
+            const action = reqUrl.searchParams.get('action');
+            const stvChapterApi = c.env?.STV_CHAPTER_API;
+
+            // Route chapter requests to Railway Docker service (Playwright)
+            if (action === 'chapter' && stvChapterApi) {
+                const proxyUrl = new URL(reqUrl.pathname + reqUrl.search, stvChapterApi);
+                const res = await fetch(proxyUrl.toString(), {
+                    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' }
+                });
+                const data = await res.text();
+                return new Response(data, {
+                    status: res.status,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Cache-Control': 'public, max-age=300'  // 5 min cache for chapters
+                    }
+                });
+            }
+
+            // All other STV requests go to Netlify
             const proxyUrl = new URL(reqUrl.pathname + reqUrl.search, NETLIFY_API_BASE);
             const res = await fetch(proxyUrl.toString(), {
                 headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' }
