@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import { fetchSearchComics, fetchComicsByCategory, getImageUrl, fetchCategories } from '../services/otruyen';
 import { fetchNhentaiSearch } from '../services/nhentai';
 import { fetchNettruyenSearch, fetchNettruyenCategories, fetchNettruyenComicsByCategory } from '../services/nettruyen';
+import { fetchNovelSearch as fetchMTCSearch, fetchNovelListing as fetchMTCListing, fetchMetruyenchuCategories } from '../services/metruyenchu';
 import axios from 'axios';
 import { useDebounce } from '../hooks/useDebounce';
 import { useSettings } from '../contexts/SettingsContext';
@@ -20,6 +21,7 @@ const Search = () => {
     const isNhentai = sourceId === 'nhentai';
     const isNettruyen = sourceId === 'nettruyen';
     const isKkphim = sourceId === 'kkphim';
+    const isMetruyenchu = sourceId === 'metruyenchu';
     const [searchParams, setSearchParams] = useSearchParams();
     const searchParamsGenre = searchParams.get('genre');
     const selectedGenres = searchParamsGenre ? searchParamsGenre.split(',') : [];
@@ -91,6 +93,14 @@ const Search = () => {
                 }
             }
 
+            if (isMetruyenchu) {
+                if (isTextSearch) {
+                    return fetchMTCSearch(debouncedQuery); // MTC search might not support pagination
+                } else if (isGenreSearch) {
+                    return fetchMTCListing(pageParam as number, undefined, selectedGenres[0]);
+                }
+            }
+
             // Fallback for Otruyen
             if (isTextSearch) {
                 return fetchSearchComics(debouncedQuery, pageParam as number);
@@ -101,6 +111,11 @@ const Search = () => {
             return Promise.reject("Invalid Search");
         },
         getNextPageParam: (lastPage) => {
+            if (isMetruyenchu) {
+                if (!lastPage?.data?.pagination) return undefined;
+                const { currentPage } = lastPage.data.pagination;
+                return currentPage < 50 ? currentPage + 1 : undefined; // MTC roughly 50 pages limit
+            }
             const pagination = lastPage.data?.pagination || lastPage.data?.params?.pagination;
             if (!pagination) return undefined;
             const { currentPage, totalItems, totalItemsPerPage, totalPages: apiTotalPages } = pagination;
@@ -163,6 +178,9 @@ const Search = () => {
             if (isNettruyen) {
                 return fetchNettruyenCategories();
             }
+            if (isMetruyenchu) {
+                return fetchMetruyenchuCategories();
+            }
             return fetchCategories();
         },
         enabled: showFilterModal,
@@ -174,10 +192,10 @@ const Search = () => {
     const categories = isNhentaiTags ? [] : (Array.isArray(categoriesData?.data?.items) ? categoriesData.data.items : []);
     const nhentaiCategoryGroups = isNhentaiTags ? categoriesData.data.items : null;
 
-    let items = (data?.pages.flatMap((page) => page.data.items) || []).filter(Boolean);
+    let items = (data?.pages.flatMap((page) => page.data?.items || page.data || []) || []).filter(Boolean);
 
     // Client-side filtering for multiple genres (Otruyen only)
-    if (selectedGenres.length > 0 && !isNhentai && !isNettruyen) {
+    if (selectedGenres.length > 0 && !isNhentai && !isNettruyen && !isMetruyenchu) {
         items = items.filter(item => {
             if (!item.category) return false;
             // Item must contain ALL selected genres
@@ -309,12 +327,12 @@ const Search = () => {
                                 <KKPhimCard key={`${item._id || item.slug}-${idx}`} movie={item} sourceId={sourceId || 'kkphim'} />
                             ) : (
                                 <div
-                                    key={`${item._id || item.slug}-${idx}`}
-                                    onClick={() => navigate(`/comic/${sourceId || 'otruyen'}/${item.slug}`)}
+                                    key={`${item._id || item.slug || item.id}-${idx}`}
+                                    onClick={() => isMetruyenchu ? navigate(`/novel/metruyenchu/metruyenchu/${item.id}`) : navigate(`/comic/${sourceId || 'otruyen'}/${item.slug}`)}
                                     className="relative aspect-[2/3] w-full rounded-md overflow-hidden bg-[#242424] cursor-pointer group hover:opacity-90 transition-opacity"
                                 >
                                     <img
-                                        src={(isNhentai || isNettruyen) ? item.thumb_url : getImageUrl(item.thumb_url)}
+                                        src={(isNhentai || isNettruyen || isMetruyenchu) ? item.thumb_url : getImageUrl(item.thumb_url)}
                                         alt={item.name}
                                         loading="lazy"
                                         referrerPolicy="no-referrer"
@@ -541,7 +559,7 @@ const Search = () => {
                                                             if (isSelected) {
                                                                 newGenres = newGenres.filter(g => g !== cat.slug);
                                                             } else {
-                                                                if (isNettruyen) {
+                                                                if (isNettruyen || isMetruyenchu) {
                                                                     newGenres = [cat.slug];
                                                                 } else {
                                                                     newGenres.push(cat.slug);
