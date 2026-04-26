@@ -41,6 +41,14 @@ const NovelReader = () => {
         retry: 2,
     });
 
+    // Fetch novel detail to get thumbnail for history
+    const { data: detailData } = useQuery({
+        queryKey: ['novel-detail', sourceId, host, bookId],
+        queryFn: () => sourceId === 'metruyenchu' ? MTCService.fetchNovelDetail(bookId!) : STVService.fetchNovelDetail(host!, bookId!),
+        enabled: !!host && !!bookId,
+        staleTime: 1000 * 60 * 30,
+    });
+
     // Fetch chapter list for prev/next navigation  
     const { data: chaptersData } = useQuery({
         queryKey: ['novel-chapters', sourceId, host, bookId],
@@ -60,6 +68,8 @@ const NovelReader = () => {
     const chapterName = item?.name || currentChapter?.name || `Chương ${chapterId}`;
     const bookName = item?.book_name || item?.bookName || '';
     const content = item?.content || '';
+    const novelDetailItem = sourceId === 'metruyenchu' ? detailData?.data : detailData?.data?.item;
+    const novelCover = item?.cover || novelDetailItem?.thumb_url || '';
 
     // Parse content into blocks for rendering and TTS sync
     const blocks = useMemo(() => {
@@ -114,21 +124,22 @@ const NovelReader = () => {
         if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
 
         observerTimeout.current = window.setTimeout(() => {
+            const isMTC = sourceId === 'metruyenchu';
             axios.post('/api/history', {
-                sourceId: sourceId === 'metruyenchu' ? 'metruyenchu' : 'sangtacviet',
-                comicSlug: bookId,
+                sourceId: isMTC ? 'metruyenchu' : 'sangtacviet',
+                comicSlug: isMTC ? bookId : `${host}|${bookId}`,
                 comicName: bookName,
                 chapterId: chapterId,
                 pageNumber: 1,
                 totalPages: 1,
-                thumbUrl: item?.cover || '' // Use novel cover if available
+                thumbUrl: novelCover
             }).catch(console.error);
         }, 1500);
 
         return () => {
             if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
         };
-    }, [bookName, sourceId, bookId, chapterId, content, item]);
+    }, [bookName, sourceId, bookId, chapterId, content, novelCover]);
 
     // Scroll to top when chapter changes
     useEffect(() => {

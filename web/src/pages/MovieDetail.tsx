@@ -29,13 +29,32 @@ export default function MovieDetail() {
         enabled: !!slug
     });
 
+    const { data: historyRes } = useQuery({
+        queryKey: ['history', slug],
+        queryFn: async () => {
+            const res = await axios.get(`/api/history?comicSlug=${slug}`);
+            return res.data;
+        },
+        enabled: !!slug,
+    });
+    const historyData = historyRes;
+
+    const continueWatchingInfo = historyData?.history?.[0];
+
     const handleWatchNow = () => {
         setIsWatching(true);
         if (!selectedEpisode && detailData?.data?.episodes?.length > 0) {
             const firstServer = detailData?.data?.episodes?.[0];
             if (firstServer?.server_data?.length > 0) {
                 setSelectedServer(0);
-                setSelectedEpisode(firstServer.server_data[0]);
+                
+                // If there is history, try to find the matching episode in the server data
+                let targetEp = firstServer.server_data[0];
+                if (continueWatchingInfo) {
+                    const match = firstServer.server_data.find((e: any) => e.slug === continueWatchingInfo.chapter_id || e.name === continueWatchingInfo.chapter_id);
+                    if (match) targetEp = match;
+                }
+                setSelectedEpisode(targetEp);
             }
         }
         setTimeout(() => {
@@ -165,7 +184,7 @@ export default function MovieDetail() {
                                         onClick={handleWatchNow}
                                         className="flex items-center justify-center gap-2 px-8 py-3 md:py-4 rounded-full bg-[var(--color-primary)] text-black text-lg font-bold hover:scale-105 transition shadow-lg shadow-[var(--color-primary)]/30"
                                     >
-                                        <Play size={24} fill="currentColor" /> {t('movie.watch_now')}
+                                        <Play size={24} fill="currentColor" /> {continueWatchingInfo ? `Xem tiếp ${continueWatchingInfo.chapter_id.replace(/^tap-/i, 'Tập ')}` : t('movie.watch_now')}
                                     </button>
                                     {movie.trailer_url && (
                                         <button 

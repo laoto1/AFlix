@@ -21,9 +21,17 @@ const fetchHistory = async (): Promise<HistoryItem[]> => {
 };
 
 const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
+    if (!dateString) return '';
+    let dateStr = dateString;
+    if (!dateStr.includes('Z') && !dateStr.includes('T')) {
+        dateStr = dateStr.replace(' ', 'T') + 'Z';
+    } else if (!dateStr.includes('Z')) {
+        dateStr = dateStr + 'Z';
+    }
+    const date = new Date(dateStr);
     const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    let diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    if (diffInSeconds < 0) diffInSeconds = 0;
 
     if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
     const diffInMinutes = Math.floor(diffInSeconds / 60);
@@ -34,6 +42,21 @@ const formatTimeAgo = (dateString: string) => {
     if (diffInDays < 7) return `${diffInDays}d ago`;
 
     return date.toLocaleDateString();
+};
+
+const formatChapterName = (chapterId: string, sourceId: string) => {
+    if (!chapterId) return '';
+    if (sourceId === 'sangtacviet' || sourceId === 'metruyenchu') {
+        const match = chapterId.match(/^(chuong-\d+)/i);
+        if (match) return match[1].replace(/chuong-/i, 'Chương ');
+        return chapterId.replace(/-[a-zA-Z0-9]+$/, ''); // Fallback to remove gibberish
+    }
+    if (sourceId === 'kkphim') {
+        const match = chapterId.match(/^(tap-\d+)/i);
+        if (match) return match[1].replace(/tap-/i, 'Tập ');
+        return chapterId;
+    }
+    return `Ch. ${chapterId}`;
 };
 
 const History = () => {
@@ -111,7 +134,16 @@ const History = () => {
                                     key={`${item.source_id}-${item.comic_slug}`}
                                     onClick={() => {
                                         if (activeTab === 'manga') navigate(`/comic/${item.source_id}/${item.comic_slug}`);
-                                        else if (activeTab === 'novel') navigate(`/novel/${item.source_id}/${item.comic_slug}`);
+                                        else if (activeTab === 'novel') {
+                                            if (item.source_id === 'metruyenchu') {
+                                                navigate(`/novel/metruyenchu/metruyenchu/${item.comic_slug}`);
+                                            } else {
+                                                const parts = item.comic_slug.split('|');
+                                                const host = parts.length > 1 ? parts[0] : 'truyenfull';
+                                                const bookId = parts.length > 1 ? parts[1] : item.comic_slug;
+                                                navigate(`/novel/${item.source_id}/${host}/${bookId}`);
+                                            }
+                                        }
                                         else if (activeTab === 'movie') navigate(`/movie/${item.source_id}/${item.comic_slug}`);
                                     }}
                                     className="flex items-center gap-4 bg-[var(--color-surface)] p-3 rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] transition-colors cursor-pointer shadow-sm"
@@ -125,7 +157,7 @@ const History = () => {
                                     </div>
                                     <div className="flex-col flex-1 min-w-0">
                                         <h3 className="font-semibold text-[var(--color-text)] text-[15px] line-clamp-2">{item.comic_name}</h3>
-                                        <div className="text-sm text-[var(--color-primary)] font-medium mt-1">Ch. {item.chapter_id}</div>
+                                        <div className="text-sm text-[var(--color-primary)] font-medium mt-1">{formatChapterName(item.chapter_id, item.source_id)}</div>
                                         <div className="text-xs text-[var(--color-text-muted)] mt-2 flex items-center gap-1">
                                             <Clock size={12} /> {formatTimeAgo(item.last_read_at)}
                                         </div>

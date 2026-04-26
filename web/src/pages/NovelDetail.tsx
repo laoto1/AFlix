@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ArrowLeft, BookOpen, Loader2, ChevronDown, ChevronUp, Globe } from 'lucide-react';
 import * as STVService from '../services/sangtacviet';
 import * as MTCService from '../services/metruyenchu';
@@ -28,6 +29,18 @@ const NovelDetail = () => {
         enabled: !!activeHost && !!activeBookId,
     });
 
+    // Fetch history to get resume reading point
+    const { data: historyRes } = useQuery({
+        queryKey: ['history', sourceId === 'metruyenchu' ? bookId : `${host}|${bookId}`],
+        queryFn: async () => {
+            const slug = sourceId === 'metruyenchu' ? bookId : `${host}|${bookId}`;
+            const res = await axios.get(`/api/history?comicSlug=${slug}`);
+            return res.data;
+        },
+        enabled: !!bookId,
+    });
+    const historyData = historyRes;
+
     const novel = sourceId === 'metruyenchu' ? detailData?.data : detailData?.data?.item;
     const chapters = sourceId === 'metruyenchu' ? (chaptersData?.data?.chapters || []) : (chaptersData?.data?.items || []);
     const availableHosts: any[] = novel?.available_hosts || [];
@@ -45,6 +58,8 @@ const NovelDetail = () => {
         setActiveHost(h.host);
         setActiveBookId(h.bookid);
     };
+
+    const continueReadingInfo = historyData?.history?.[0];
 
     if (detailLoading) {
         return (
@@ -133,11 +148,14 @@ const NovelDetail = () => {
                     {/* Start Reading Button */}
                     {chapters.length > 0 && (
                         <button
-                            onClick={() => navigate(`/novel-read/${sourceId}/${activeHost}/${activeBookId}/${chapters[0]._id || chapters[0].id}`)}
+                            onClick={() => {
+                                const targetChapter = continueReadingInfo ? continueReadingInfo.chapter_id : (chapters[0]._id || chapters[0].id);
+                                navigate(`/novel-read/${sourceId}/${activeHost}/${activeBookId}/${targetChapter}`);
+                            }}
                             className="w-full py-3 rounded-xl bg-[var(--color-primary)] text-white font-medium flex items-center justify-center gap-2 mb-4 hover:opacity-90 transition-opacity"
                         >
                             <BookOpen size={18} />
-                            Bắt đầu đọc
+                            {continueReadingInfo ? `Đọc tiếp ${continueReadingInfo.chapter_id.replace(/^chuong-/i, 'Chương ').replace(/-[a-zA-Z0-9]+$/, '')}` : 'Bắt đầu đọc'}
                         </button>
                     )}
 
