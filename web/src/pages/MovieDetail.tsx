@@ -91,16 +91,17 @@ export default function MovieDetail() {
         currentTimeRef.current = 0;
     };
 
-    // History tracking interval
+    // Intelligent History Tracking
     useEffect(() => {
         if (!selectedEpisode || !detailData?.data?.movie || !sourceId || !slug || !isWatching) return;
 
-        // Save immediately on episode change
         const saveHistory = () => {
+            if (currentTimeRef.current <= 0) return; // Don't save if haven't watched anything yet
             const movie = detailData.data.movie;
             const domain = 'https://phimimg.com';
             const posterUrl = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${domain}/${movie.thumb_url}`;
             
+            // Use axios, it will auto-attach token via interceptor
             axios.post('/api/history', {
                 sourceId,
                 comicSlug: slug,
@@ -112,10 +113,27 @@ export default function MovieDetail() {
             }).catch(console.error);
         };
         
+        // Save initially when episode loads
         saveHistory();
-        const interval = window.setInterval(saveHistory, 10000); // Save every 10s
 
-        return () => window.clearInterval(interval);
+        // Save when user switches tabs or minimizes
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'hidden') saveHistory();
+        };
+
+        // Save when user closes the tab
+        const handleBeforeUnload = () => {
+            saveHistory();
+        };
+
+        window.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            saveHistory(); // Save on unmount (navigation)
+            window.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, [selectedEpisode, detailData, sourceId, slug, isWatching]);
 
     if (isLoading) return (

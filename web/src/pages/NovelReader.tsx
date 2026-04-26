@@ -140,12 +140,22 @@ const NovelReader = () => {
         // Initial save
         const initialTimer = window.setTimeout(saveHistory, 1500);
         
-        // Periodic save every 10 seconds
-        const interval = window.setInterval(saveHistory, 10000);
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'hidden') saveHistory();
+        };
+
+        const handleBeforeUnload = () => {
+            saveHistory();
+        };
+
+        window.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
+            saveHistory(); // Save on unmount (navigation)
             window.clearTimeout(initialTimer);
-            window.clearInterval(interval);
+            window.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, [bookName, sourceId, bookId, chapterId, content, novelCover]);
 
