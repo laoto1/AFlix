@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, ChevronLeft, ChevronRight, Settings, Minus, Plus, Loader2, Headphones, Lock } from 'lucide-react';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import { TTSPanel } from '../components/TTSPanel';
 const NovelReader = () => {
     const { sourceId, host, bookId, chapterId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const queryClient = useQueryClient();
     const [fontSize, setFontSize] = useState(() => parseInt(localStorage.getItem('novel-font-size') || '18'));
     const [lineHeight, setLineHeight] = useState(() => parseFloat(localStorage.getItem('novel-line-height') || '1.5'));
@@ -69,7 +70,7 @@ const NovelReader = () => {
     const bookName = item?.book_name || item?.bookName || '';
     const content = item?.content || '';
     const novelDetailItem = sourceId === 'metruyenchu' ? detailData?.data : detailData?.data?.item;
-    const novelCover = item?.cover || novelDetailItem?.thumb_url || '';
+    const novelCover = location.state?.thumbUrl || item?.cover || novelDetailItem?.thumb_url || '';
 
     // Parse content into blocks for rendering and TTS sync
     const blocks = useMemo(() => {
