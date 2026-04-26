@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, ChevronLeft, ChevronRight, Settings, Minus, Plus, Loader2, Headphones, Lock } from 'lucide-react';
+import axios from 'axios';
 import * as STVService from '../services/sangtacviet';
 import * as MTCService from '../services/metruyenchu';
 import { TTSPanel } from '../components/TTSPanel';
@@ -103,6 +104,31 @@ const NovelReader = () => {
         setTheme('default');
         setAutoScrollSpeed(1);
     };
+
+    // History tracking debounce
+    const observerTimeout = useRef<number | null>(null);
+
+    useEffect(() => {
+        if (!bookName || !sourceId || !bookId || !chapterId || !content) return;
+
+        if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
+
+        observerTimeout.current = window.setTimeout(() => {
+            axios.post('/api/history', {
+                sourceId: sourceId === 'metruyenchu' ? 'metruyenchu' : 'sangtacviet',
+                comicSlug: bookId,
+                comicName: bookName,
+                chapterId: chapterId,
+                pageNumber: 1,
+                totalPages: 1,
+                thumbUrl: item?.cover || '' // Use novel cover if available
+            }).catch(console.error);
+        }, 1500);
+
+        return () => {
+            if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
+        };
+    }, [bookName, sourceId, bookId, chapterId, content, item]);
 
     // Scroll to top when chapter changes
     useEffect(() => {

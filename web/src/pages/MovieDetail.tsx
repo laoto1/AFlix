@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Play, Info, Calendar, Clock, Star, Layers, Activity } from 'lucide-react';
+import axios from 'axios';
 import * as KKPhimService from '../services/kkphim';
 import { getProxiedImageUrl } from '../utils/imageProxy';
 import { NetflixPlayer } from '../components/NetflixPlayer';
@@ -57,6 +58,35 @@ export default function MovieDetail() {
             }
         }
     };
+
+    // History tracking debounce
+    const observerTimeout = useRef<number | null>(null);
+
+    useEffect(() => {
+        if (!selectedEpisode || !detailData?.data?.movie || !sourceId || !slug || !isWatching) return;
+
+        if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
+
+        observerTimeout.current = window.setTimeout(() => {
+            const movie = detailData.data.movie;
+            const domain = 'https://phimimg.com';
+            const posterUrl = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${domain}/${movie.thumb_url}`;
+            
+            axios.post('/api/history', {
+                sourceId,
+                comicSlug: slug,
+                comicName: movie.name,
+                chapterId: selectedEpisode.slug || selectedEpisode.name,
+                pageNumber: 1,
+                totalPages: 1,
+                thumbUrl: posterUrl
+            }).catch(console.error);
+        }, 3000); // Wait 3 seconds of watching before saving history
+
+        return () => {
+            if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
+        };
+    }, [selectedEpisode, detailData, sourceId, slug, isWatching]);
 
     if (isLoading) return (
         <div className="min-h-screen flex items-center justify-center bg-[#121212]">
