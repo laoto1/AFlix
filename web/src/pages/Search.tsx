@@ -321,7 +321,7 @@ const Search = () => {
                 ) : items.length === 0 ? (
                     <div className="text-center p-10 text-[var(--color-text-muted)]">{t('search.no_results', { query: debouncedQuery })}</div>
                 ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-2 xs:gap-3 md:gap-4">
                         {items.map((item, idx) => (
                             isKkphim ? (
                                 <KKPhimCard key={`${item._id || item.slug}-${idx}`} movie={item} sourceId={sourceId || 'kkphim'} />
