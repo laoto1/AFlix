@@ -1,7 +1,14 @@
-04:54:01.340	Initializing build environment...
-04:54:03.970	Success: Finished initializing build environment
-04:54:05.717	Cloning repository...
-04:54:01.340	Initializing build environment...
-04:54:03.970	Success: Finished initializing build environment
-04:54:05.717	Cloning repository...
-04:54:17.476	Failed: error occurred while updating repository submodules
+XHR
+GET
+https://backend-worker.laoto.workers.dev/api/bookmarks
+[HTTP/3 401  134ms]
+
+XHR
+GET
+https://backend-worker.mialui1112.workers.dev/api/bookmarks
+[HTTP/2 401  185ms]
+
+XHR
+GET
+https://backend-worker.luanhock22.workers.dev/api/bookmarks
+[HTTP/3 401  50ms]
