@@ -17,6 +17,8 @@ export default function MovieDetail() {
     const [selectedEpisode, setSelectedEpisode] = useState<any>(null);
     const [isWatching, setIsWatching] = useState(false);
     const [showTrailer, setShowTrailer] = useState(false);
+    const [initialTime, setInitialTime] = useState<number>(0);
+    const currentTimeRef = useRef<number>(0);
     
     const playerRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +54,10 @@ export default function MovieDetail() {
                 let targetEp = firstServer.server_data[0];
                 if (continueWatchingInfo) {
                     const match = firstServer.server_data.find((e: any) => e.slug === continueWatchingInfo.chapter_id || e.name === continueWatchingInfo.chapter_id);
-                    if (match) targetEp = match;
+                    if (match) {
+                        targetEp = match;
+                        setInitialTime(continueWatchingInfo.page_number || 0);
+                    }
                 }
                 setSelectedEpisode(targetEp);
             }
@@ -72,21 +77,26 @@ export default function MovieDetail() {
             );
             if (match) {
                 setSelectedEpisode(match);
+                setInitialTime(0);
             } else {
                 setSelectedEpisode(currentEpisodes[serverIdx].server_data[0]);
+                setInitialTime(0);
             }
         }
     };
 
-    // History tracking debounce
-    const observerTimeout = useRef<number | null>(null);
+    const handleSelectEpisode = (ep: any) => {
+        setSelectedEpisode(ep);
+        setInitialTime(0);
+        currentTimeRef.current = 0;
+    };
 
+    // History tracking interval
     useEffect(() => {
         if (!selectedEpisode || !detailData?.data?.movie || !sourceId || !slug || !isWatching) return;
 
-        if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
-
-        observerTimeout.current = window.setTimeout(() => {
+        // Save immediately on episode change
+        const saveHistory = () => {
             const movie = detailData.data.movie;
             const domain = 'https://phimimg.com';
             const posterUrl = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${domain}/${movie.thumb_url}`;
@@ -96,15 +106,16 @@ export default function MovieDetail() {
                 comicSlug: slug,
                 comicName: movie.name,
                 chapterId: selectedEpisode.slug || selectedEpisode.name,
-                pageNumber: 1,
+                pageNumber: Math.floor(currentTimeRef.current),
                 totalPages: 1,
                 thumbUrl: posterUrl
             }).catch(console.error);
-        }, 3000); // Wait 3 seconds of watching before saving history
-
-        return () => {
-            if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
         };
+        
+        saveHistory();
+        const interval = window.setInterval(saveHistory, 10000); // Save every 10s
+
+        return () => window.clearInterval(interval);
     }, [selectedEpisode, detailData, sourceId, slug, isWatching]);
 
     if (isLoading) return (
@@ -250,7 +261,7 @@ export default function MovieDetail() {
                                 onNext={() => {
                                     const currentIdx = episodes[selectedServer].server_data.findIndex((e: any) => e.slug === selectedEpisode.slug);
                                     if (currentIdx < episodes[selectedServer].server_data.length - 1) {
-                                        setSelectedEpisode(episodes[selectedServer].server_data[currentIdx + 1]);
+                                        handleSelectEpisode(episodes[selectedServer].server_data[currentIdx + 1]);
                                     }
                                 }}
                                 episodesList={episodes}
@@ -258,13 +269,15 @@ export default function MovieDetail() {
                                 onSelectServer={handleSelectServer}
                                 episodes={episodes[selectedServer]?.server_data}
                                 currentEpisodeSlug={selectedEpisode.slug}
-                                onSelectEpisode={(ep) => setSelectedEpisode(ep)}
+                                onSelectEpisode={handleSelectEpisode}
                                 imdbId={movie.imdb?.id || movie.tmdb?.id || ''}
                                 tmdbId={movie.tmdb?.id || ''}
                                 tmdbType={movie.tmdb?.type || 'movie'}
                                 season={movie.origin_name?.match(/Season (\d+)/i) ? parseInt(movie.origin_name.match(/Season (\d+)/i)[1], 10) : movie.name?.match(/Phần (\d+)/i) ? parseInt(movie.name.match(/Phần (\d+)/i)[1], 10) : 1}
                                 episodeNumber={selectedEpisode.name.match(/\d+/) ? parseInt(selectedEpisode.name.match(/\d+/)[0], 10) : 1}
                                 movieOverview={movie.content}
+                                initialTime={initialTime}
+                                onTimeUpdate={(time) => { currentTimeRef.current = time; }}
                             />
                         )}
                     </div>

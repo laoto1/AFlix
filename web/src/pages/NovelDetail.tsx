@@ -151,7 +151,10 @@ const NovelDetail = () => {
                             onClick={() => {
                                 const targetChapter = continueReadingInfo ? continueReadingInfo.chapter_id : (chapters[0]._id || chapters[0].id);
                                 navigate(`/novel-read/${sourceId}/${activeHost}/${activeBookId}/${targetChapter}`, {
-                                    state: { thumbUrl: novel.thumb_url }
+                                    state: { 
+                                        thumbUrl: novel.thumb_url,
+                                        initialScroll: continueReadingInfo?.chapter_id === targetChapter ? continueReadingInfo?.page_number : 0
+                                    }
                                 });
                             }}
                             className="w-full py-3 rounded-xl bg-[var(--color-primary)] text-white font-medium flex items-center justify-center gap-2 mb-4 hover:opacity-90 transition-opacity"

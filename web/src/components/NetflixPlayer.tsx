@@ -30,6 +30,8 @@ interface NetflixPlayerProps {
     season?: number;
     episodeNumber?: number;
     movieOverview?: string;
+    initialTime?: number;
+    onTimeUpdate?: (time: number) => void;
 }
 
 const formatTime = (timeInSeconds: number) => {
@@ -45,7 +47,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
  
     src, poster, title, episodeName, onBack, onNext, hasNext,
     episodes, episodesList, selectedServer, onSelectServer, currentEpisodeSlug, onSelectEpisode,
-    imdbId, tmdbId, tmdbType, season, episodeNumber, movieOverview
+    imdbId, tmdbId, tmdbType, season, episodeNumber, movieOverview, initialTime, onTimeUpdate
 }) => {
     const { t } = useSettings();
     const containerRef = useRef<HTMLDivElement>(null);
@@ -201,6 +203,9 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
                 if (lastTimeRef.current > 0) {
                     video.currentTime = lastTimeRef.current;
+                } else if (initialTime && initialTime > 0) {
+                    video.currentTime = initialTime;
+                    lastTimeRef.current = initialTime;
                 }
                 video.play().catch(() => console.log('Auto-play prevented'));
             });
@@ -209,6 +214,9 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
             video.addEventListener('loadedmetadata', () => {
                 if (lastTimeRef.current > 0) {
                     video.currentTime = lastTimeRef.current;
+                } else if (initialTime && initialTime > 0) {
+                    video.currentTime = initialTime;
+                    lastTimeRef.current = initialTime;
                 }
                 video.play().catch(() => console.log('Auto-play prevented'));
             }, { once: true });
@@ -302,7 +310,13 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         const video = videoRef.current;
         if (!video) return;
 
-        const handleTimeUpdate = () => setCurrentTime(video.currentTime);
+        const handleTimeUpdate = () => {
+            setCurrentTime(video.currentTime);
+            if (onTimeUpdate && Math.abs(video.currentTime - lastTimeRef.current) > 1) {
+                onTimeUpdate(video.currentTime);
+                lastTimeRef.current = video.currentTime;
+            }
+        };
         const handleDurationChange = () => setDuration(video.duration);
         const handlePlay = () => setIsPlaying(true);
         const handlePause = () => setIsPlaying(false);

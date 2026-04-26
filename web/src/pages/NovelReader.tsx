@@ -116,38 +116,55 @@ const NovelReader = () => {
         setAutoScrollSpeed(1);
     };
 
-    // History tracking debounce
-    const observerTimeout = useRef<number | null>(null);
-
+    // History tracking periodic save with scroll position
     useEffect(() => {
         if (!bookName || !sourceId || !bookId || !chapterId || !content) return;
 
-        if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
-
-        observerTimeout.current = window.setTimeout(() => {
+        const saveHistory = () => {
+            const scrollY = window.scrollY || document.documentElement.scrollTop;
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            const percentage = Math.floor((scrollY / maxScroll) * 10000);
+            
             const isMTC = sourceId === 'metruyenchu';
             axios.post('/api/history', {
                 sourceId: isMTC ? 'metruyenchu' : 'sangtacviet',
                 comicSlug: isMTC ? bookId : `${host}|${bookId}`,
                 comicName: bookName,
                 chapterId: chapterId,
-                pageNumber: 1,
-                totalPages: 1,
+                pageNumber: percentage,
+                totalPages: 10000,
                 thumbUrl: novelCover
             }).catch(console.error);
-        }, 1500);
+        };
+
+        // Initial save
+        const initialTimer = window.setTimeout(saveHistory, 1500);
+        
+        // Periodic save every 10 seconds
+        const interval = window.setInterval(saveHistory, 10000);
 
         return () => {
-            if (observerTimeout.current) window.clearTimeout(observerTimeout.current);
+            window.clearTimeout(initialTimer);
+            window.clearInterval(interval);
         };
     }, [bookName, sourceId, bookId, chapterId, content, novelCover]);
 
-    // Scroll to top when chapter changes
+    // Scroll to initial position or top when chapter changes
     useEffect(() => {
-        window.scrollTo(0, 0);
+        const initialScroll = location.state?.initialScroll;
+        if (initialScroll > 0) {
+            // Need a slight delay to ensure content is fully rendered before scrolling
+            const timer = setTimeout(() => {
+                const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+                window.scrollTo({ top: (initialScroll / 10000) * maxScroll, behavior: 'instant' });
+            }, 300);
+            return () => clearTimeout(timer);
+        } else {
+            window.scrollTo(0, 0);
+        }
         // Pause auto-scrolling when navigating to a new chapter
         setIsAutoScrolling(false);
-    }, [chapterId]);
+    }, [chapterId, location.state?.initialScroll, content]);
 
     // Disable native auto-scrolling when TTS is active or playing to avoid conflict
     useEffect(() => {
