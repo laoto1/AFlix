@@ -370,8 +370,27 @@ const Search = () => {
                                             </h3>
                                         </div>
                                     ) : (
-                                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2 pt-6">
-                                            <h3 className="text-[var(--color-text)] text-xs font-medium line-clamp-2 relative z-20">
+                                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#121212] via-[#121212]/80 to-transparent p-2 pt-12 flex flex-col justify-end">
+                                            {item.category && item.category.length > 0 && (
+                                                <div className="mb-1 flex flex-wrap gap-1">
+                                                    {item.category.slice(0, 2).map((cat: any, i: number) => (
+                                                        <span 
+                                                            key={`${cat.slug || cat}-${i}`} 
+                                                            className="px-1.5 py-0.5 rounded bg-[var(--color-primary)]/20 text-[var(--color-primary)] text-[8px] md:text-[10px] font-medium whitespace-nowrap z-10"
+                                                        >
+                                                            {cat.name || cat}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            <div className="mb-1 flex items-center gap-1.5 flex-wrap">
+                                                {item.chaptersLatest && item.chaptersLatest.length > 0 && (
+                                                    <div className="w-max px-1.5 py-0.5 rounded bg-black/50 backdrop-blur-sm border border-white/10 text-[9px] md:text-[11px] text-[#8C8CFF] font-medium font-mono">
+                                                        Chương {item.chaptersLatest[0].chapter_name || item.chaptersLatest[0].filename}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <h3 className="text-[var(--color-text)] text-xs md:text-sm font-medium line-clamp-2 drop-shadow-md relative z-20">
                                                 {item.name}
                                             </h3>
                                         </div>
