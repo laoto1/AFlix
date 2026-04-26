@@ -10,8 +10,8 @@ JWT_SECRET = "mialui310"
 IMGBB_API_KEY = "18aab9dd47441e44d6590705859b5259"
 TELEGRAM_BOT_TOKEN = "8676944221:AAERrouk4AaOE7mS_ySbfy2MPDbmu4NfywM"
 TELEGRAM_CHAT_ID = "-1003784815655"
-NETTRUYEN_DOMAINS = "nettruyenar.com,nettruyenviet1.com,nettruyen4s.com,nettruyen.org.uk,nettruyen.africa,nettruyen.work"
-
+NETTRUYEN_DOMAINS = "nettruyen18.com,nettruyenar.com,nettruyen.africa"
+STV_CHAPTER_API = "https://mialui-stv-bot.hf.space"
 # You'll need to use `wrangler secret put TIDB_PASSWORD` for secrets, but for testing we can define vars:
 TIDB_HOST = "gateway01.ap-southeast-1.prod.aws.tidbcloud.com"
 TIDB_PORT = "4000"

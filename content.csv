@@ -1,3 +1,0 @@
-#TYPE System.Management.Automation.PSCustomObject
-"status","data"
-"success","@{item=}"
