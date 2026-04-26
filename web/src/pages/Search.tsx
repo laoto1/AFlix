@@ -112,7 +112,7 @@ const Search = () => {
         },
         getNextPageParam: (lastPage) => {
             if (isMetruyenchu) {
-                if (!lastPage?.data?.pagination) return undefined;
+                if (!lastPage?.data?.pagination || !lastPage?.data?.items || lastPage.data.items.length === 0) return undefined;
                 const { currentPage } = lastPage.data.pagination;
                 return currentPage < 50 ? currentPage + 1 : undefined; // MTC roughly 50 pages limit
             }
@@ -338,11 +338,44 @@ const Search = () => {
                                         referrerPolicy="no-referrer"
                                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                     />
-                                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2 pt-6">
-                                        <h3 className="text-[var(--color-text)] text-xs font-medium line-clamp-2 relative z-20">
-                                            {item.name}
-                                        </h3>
-                                    </div>
+                                    {isMetruyenchu ? (
+                                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#121212] via-[#121212]/80 to-transparent p-2 pt-12 flex flex-col justify-end">
+                                            {item.categories && item.categories.length > 0 && (
+                                                <div className="mb-1 flex flex-wrap gap-1">
+                                                    {item.categories.slice(0, 2).map((cat: string, i: number) => (
+                                                        <span 
+                                                            key={`${cat}-${i}`} 
+                                                            className="px-1.5 py-0.5 rounded bg-[var(--color-primary)]/20 text-[var(--color-primary)] text-[8px] md:text-[10px] font-medium whitespace-nowrap z-10"
+                                                        >
+                                                            {cat}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            <div className="mb-1 flex items-center gap-1.5 flex-wrap">
+                                                {item.chapters_count && (
+                                                    <div className="w-max px-1.5 py-0.5 rounded bg-black/50 backdrop-blur-sm border border-white/10 text-[9px] md:text-[11px] text-[#8C8CFF] font-medium font-mono">
+                                                        {item.chapters_count} chương
+                                                    </div>
+                                                )}
+                                                {item.view_count && (
+                                                    <div className="w-max px-1.5 py-0.5 rounded bg-black/50 backdrop-blur-sm border border-white/10 text-[9px] md:text-[11px] text-gray-300 font-medium font-mono flex items-center gap-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                                        {item.view_count}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <h3 className="text-[var(--color-text)] text-xs md:text-sm font-medium line-clamp-2 drop-shadow-md relative z-20">
+                                                {item.name}
+                                            </h3>
+                                        </div>
+                                    ) : (
+                                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2 pt-6">
+                                            <h3 className="text-[var(--color-text)] text-xs font-medium line-clamp-2 relative z-20">
+                                                {item.name}
+                                            </h3>
+                                        </div>
+                                    )}
                                 </div>
                             )
                         ))}
