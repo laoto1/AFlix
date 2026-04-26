@@ -16,7 +16,7 @@ bookmarks.use('*', async (c, next) => {
         return c.json({ error: 'Unauthorized' }, 401);
     }
     const token = authHeader.split(' ')[1];
-    const JWT_SECRET = c.env.JWT_SECRET || 'fallback_secret_key';
+    const JWT_SECRET = c.env.JWT_SECRET || 'fallback_secret';
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET) as any;
