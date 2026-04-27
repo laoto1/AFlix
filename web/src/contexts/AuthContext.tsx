@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 interface User {
     id: number;
@@ -36,8 +37,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return null;
     });
 
+    const logout = () => {
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        delete axios.defaults.headers.common['Authorization'];
+    };
+
     useEffect(() => {
-        // State is initialized synchronously, no need to re-set here.
+        const interceptor = axios.interceptors.response.use(
+            (response) => response,
+            (error) => {
+                if (error.response && error.response.status === 401) {
+                    toast.error('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.');
+                    logout();
+                    window.location.href = '/#/login'; // Force redirect to login
+                }
+                return Promise.reject(error);
+            }
+        );
+
+        return () => {
+            axios.interceptors.response.eject(interceptor);
+        };
     }, []);
 
     const login = (newToken: string, newUser: User) => {
@@ -48,13 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     };
 
-    const logout = () => {
-        setToken(null);
-        setUser(null);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        delete axios.defaults.headers.common['Authorization'];
-    };
+
 
     return (
         <AuthContext.Provider value={{ user, token, login, logout }}>
