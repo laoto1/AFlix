@@ -4,5 +4,8 @@
   "version": "1.0.0",
   "workspaces": [
     "web"
-  ]
+  ],
+  "dependencies": {
+    "crypto-js": "^4.2.0"
+  }
 }
