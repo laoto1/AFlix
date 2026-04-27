@@ -50,6 +50,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             (response) => response,
             (error) => {
                 if (error.response && error.response.status === 401) {
+                    const originalRequest = error.config;
+                    if (originalRequest.url && (originalRequest.url.includes('/login') || originalRequest.url.includes('/register'))) {
+                        return Promise.reject(error);
+                    }
                     toast.error('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.');
                     logout();
                     window.location.href = '/#/login'; // Force redirect to login
