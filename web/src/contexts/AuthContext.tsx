@@ -51,7 +51,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             (error) => {
                 if (error.response && error.response.status === 401) {
                     const originalRequest = error.config;
-                    if (originalRequest.url && (originalRequest.url.includes('/login') || originalRequest.url.includes('/register'))) {
+                    // Check if request is to /api/auth or we are already on login/register page
+                    if (
+                        (originalRequest.url && originalRequest.url.includes('/api/auth')) ||
+                        window.location.hash.includes('/login') ||
+                        window.location.hash.includes('/register')
+                    ) {
                         return Promise.reject(error);
                     }
                     toast.error('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.');
