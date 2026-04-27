@@ -33,8 +33,8 @@ export const fetchHome = async () => {
 };
 
 export const fetchList = async (slug: string, page: number = 1) => {
-    // If slug is unknown, fallback to recent
-    const type = slug === 'recent' || slug === 'myfavs' || slug === 'phim-moi-cap-nhat' ? slug.replace('phim-moi-cap-nhat', 'recent') : 'recent';
+    // Use the slug directly if it's not phim-moi-cap-nhat
+    const type = slug === 'phim-moi-cap-nhat' ? 'recent' : slug;
     
     const res = await fetch(`${BASE}/sevenVideos?page=${page}&type=${type}`, {
         method: 'POST',
@@ -56,7 +56,11 @@ export const fetchList = async (slug: string, page: number = 1) => {
         thumb_url: item.thumbNails?.[0] || item.thumbnails?.[0] || '',
         poster_url: item.thumbNails?.[0] || item.thumbnails?.[0] || '',
         year: new Date(item.createdTime).getFullYear() || new Date().getFullYear(),
-        modified: { time: new Date(item.createdTime).toISOString() }
+        modified: { time: new Date(item.createdTime).toISOString() },
+        view: item.views || 0,
+        update_time: item.tags_en ? item.tags_en.split('|')[0].trim() : (item.time || ''),
+        duration: item.durationStr || '',
+        episode_current: item.durationStr || 'Full'
     }));
 
     // Guess pagination since api just returns an array
@@ -174,7 +178,11 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
 
 export const SORT_FIELDS = [
     { name: 'Mới nhất', value: 'recent' },
-    { name: 'Yêu thích', value: 'myfavs' }
+    { name: 'Yêu thích', value: 'myfavs' },
+    { name: 'Khuyên dùng', value: 'recommend' },
+    { name: 'Top tháng', value: 'month' },
+    { name: 'Top tuần', value: 'week' },
+    { name: 'Top ngày', value: 'today' },
 ];
 
 export const YEARS = [];

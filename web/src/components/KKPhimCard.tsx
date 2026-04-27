@@ -105,6 +105,20 @@ export const KKPhimCard: React.FC<KKPhimCardProps> = ({ movie: initialMovie, sou
                             {Number(movie.tmdb?.vote_average || movie.imdb?.vote_average).toFixed(1)}
                         </div>
                     ) : null}
+                    
+                    {movie.view !== undefined && (
+                        <div className="w-max px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md border border-white/20 text-[10px] md:text-[11px] text-white font-medium shadow-sm flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            {movie.view > 1000 ? (movie.view/1000).toFixed(1) + 'k' : movie.view}
+                        </div>
+                    )}
+                    
+                    {movie.update_time && (
+                        <div className="w-max px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md border border-white/20 text-[9px] md:text-[10px] text-white/90 shadow-sm flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            {movie.update_time}
+                        </div>
+                    )}
                 </div>
 
                 {/* Title */}
