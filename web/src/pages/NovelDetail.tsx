@@ -160,7 +160,7 @@ const NovelDetail = () => {
                             className="w-full py-3 rounded-xl bg-[var(--color-primary)] text-white font-medium flex items-center justify-center gap-2 mb-4 hover:opacity-90 transition-opacity"
                         >
                             <BookOpen size={18} />
-                            {continueReadingInfo ? `Đọc tiếp ${continueReadingInfo.chapter_id.replace(/^chuong-/i, 'Chương ').replace(/-[a-zA-Z0-9]+$/, '')}` : 'Bắt đầu đọc'}
+                            {continueReadingInfo ? `Đọc tiếp ${chapters.find((c: any) => (c._id || c.id) === continueReadingInfo.chapter_id)?.name || continueReadingInfo.chapter_id.replace(/^chuong-/i, 'Chương ').replace(/-[a-zA-Z0-9]+$/, '')}` : 'Bắt đầu đọc'}
                         </button>
                     )}
 
