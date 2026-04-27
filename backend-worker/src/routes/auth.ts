@@ -54,14 +54,14 @@ auth.post('/', async (c) => {
             const existing = await db.execute('SELECT * FROM users WHERE username = ? OR email = ?', [username, username]);
             const rows = (existing as any) || [];
             if (rows.length === 0) {
-                return c.json({ error: `Debug-1: Account (${username}) not found on DB`, rows: existing }, 401);
+                return c.json({ error: 'Tài khoản không tồn tại' }, 401);
             }
             
             const user = rows[0];
 
             const isMatch = await bcrypt.compare(password, user.password_hash);
             if (!isMatch) {
-                return c.json({ error: 'Debug-2: Password hash verification failed', db_hash: user.password_hash }, 401);
+                return c.json({ error: 'Mật khẩu không đúng' }, 401);
             }
 
             const token = jwt.sign({ userId: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
