@@ -57,7 +57,7 @@ const MovieSourceDetail = () => {
         queryKey: ['movie-list', sourceId, activeTab, sortField, category, country, year],
         queryFn: ({ pageParam = 1 }) => {
             if (sourceId === 'thepy') {
-                return ThePYService.fetchList(activeTab, pageParam as number);
+                return ThePYService.fetchList(activeTab, pageParam as number, { sort_field: sortField });
             }
             return KKPhimService.fetchList(activeTab, pageParam as number, {
                 sort_field: sortField,
@@ -153,6 +153,25 @@ const MovieSourceDetail = () => {
                         </select>
                     </div>
                 )}
+                
+                {sourceId === 'thepy' && (
+                    <div className="flex overflow-x-auto no-scrollbar gap-2 px-4 pb-3 border-t border-[var(--color-border)] pt-3 bg-[var(--color-surface)]">
+                        {ThePYService.SORT_FIELDS.map(c => (
+                            <button
+                                key={c.value}
+                                onClick={() => updateFilter('sort_field', c.value)}
+                                className={`shrink-0 px-3 py-1 rounded-full text-[11px] font-medium transition-colors border ${sortField === c.value || (!sortField && c.value === 'recent')
+                                    ? 'bg-[var(--color-primary)] text-black border-[var(--color-primary)]'
+                                    : 'bg-[var(--color-bg)] text-[var(--color-text)] border-[var(--color-border)] hover:bg-[var(--color-surface-hover)]'
+                                }`}
+                            >
+                                {c.name}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
+
             </header>
 
             <div className="flex-1 overflow-y-auto p-4">
