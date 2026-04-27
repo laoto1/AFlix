@@ -58,13 +58,21 @@ const INITIAL_MOVIE_SOURCES = [
     },
 ];
 
+const SECRET_THEPY_SOURCE = {
+    id: 'thepy',
+    name: 'thePY',
+    url: 'https://theporny.com',
+    language: 'VI',
+    icon: 'https://theporny.com/favicon.ico',
+};
+
 const Home = () => {
     const [activeTab, setActiveTab] = useState<'manga' | 'novel' | 'movie'>('manga');
     const { t } = useSettings();
     const { unreadCount } = useNotifications();
     const [sources, setSources] = useState(INITIAL_SOURCES);
     const [novelSources, setNovelSources] = useState(INITIAL_NOVEL_SOURCES);
-    const [movieSources] = useState(INITIAL_MOVIE_SOURCES);
+    const [movieSources, setMovieSources] = useState(INITIAL_MOVIE_SOURCES);
 
     // Check for unlock
     useState(() => {
@@ -75,6 +83,9 @@ const Home = () => {
             }
             if (!novelSources.find(s => s.id === 'sangtacviet')) {
                 setNovelSources([...INITIAL_NOVEL_SOURCES, SECRET_STV_SOURCE]);
+            }
+            if (!movieSources.find(s => s.id === 'thepy')) {
+                setMovieSources([...INITIAL_MOVIE_SOURCES, SECRET_THEPY_SOURCE]);
             }
         }
     });

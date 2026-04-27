@@ -13,6 +13,7 @@ import { useSettings } from '../contexts/SettingsContext';
 import { useScrollRestoration } from '../hooks/useScrollRestoration';
 import { KKPhimCard } from '../components/KKPhimCard';
 import { fetchList as fetchKKPhimList, fetchSearch as fetchKKPhimSearch, CATEGORIES as KKPHIM_CATEGORIES, COUNTRIES as KKPHIM_COUNTRIES, TYPES as KKPHIM_TYPES, SORT_FIELDS as KKPHIM_SORT_FIELDS, YEARS as KKPHIM_YEARS } from '../services/kkphim';
+import * as ThePYService from '../services/thepy';
 
 const Search = () => {
     const { sourceId } = useParams();
@@ -21,6 +22,7 @@ const Search = () => {
     const isNhentai = sourceId === 'nhentai';
     const isNettruyen = sourceId === 'nettruyen';
     const isKkphim = sourceId === 'kkphim';
+    const isThepy = sourceId === 'thepy';
     const isMetruyenchu = sourceId === 'metruyenchu';
     const [searchParams, setSearchParams] = useSearchParams();
     const searchParamsGenre = searchParams.get('genre');
@@ -56,6 +58,8 @@ const Search = () => {
         ? `${debouncedQuery} ${selectedGenres.join(' ')}`.trim()
         : isKkphim 
         ? `${debouncedQuery}-${kkphimCategory}-${kkphimCountry}-${kkphimYear}-${kkphimSortField}-${kkphimType}`
+        : isThepy
+        ? debouncedQuery
         : `${debouncedQuery}-${selectedGenres.join(',')}`;
 
     const {
@@ -84,6 +88,9 @@ const Search = () => {
                 } else {
                     return fetchKKPhimList('advanced-search', pageParam as number, filters);
                 }
+            }
+            if (isThepy) {
+                if (debouncedQuery) return ThePYService.fetchSearch(debouncedQuery, pageParam as number);
             }
             if (isNettruyen) {
                 if (isTextSearch) {

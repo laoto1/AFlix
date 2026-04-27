@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Play, Info, Calendar, Clock, Star, Layers, Activity } from 'lucide-react';
 import axios from 'axios';
 import * as KKPhimService from '../services/kkphim';
+import * as ThePYService from '../services/thepy';
 import { getProxiedImageUrl } from '../utils/imageProxy';
 import { NetflixPlayer } from '../components/NetflixPlayer';
 import { useSettings } from '../contexts/SettingsContext';
@@ -25,6 +26,7 @@ export default function MovieDetail() {
     const { data: detailData, isLoading, error } = useQuery({
         queryKey: ['movie-detail', sourceId, slug],
         queryFn: () => {
+            if (sourceId === 'thepy') return ThePYService.fetchDetail(slug!);
             if (sourceId === 'kkphim') return KKPhimService.fetchDetail(slug!);
             throw new Error('Unsupported source');
         },

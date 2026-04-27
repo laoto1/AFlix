@@ -5,6 +5,7 @@ import { ArrowLeft, Search, Loader2 } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { useSettings } from '../contexts/SettingsContext';
 import * as KKPhimService from '../services/kkphim';
+import * as ThePYService from '../services/thepy';
 import { KKPhimCard } from '../components/KKPhimCard';
 
 const MovieSourceDetail = () => {
@@ -38,7 +39,10 @@ const MovieSourceDetail = () => {
 
     const { data: homeData, isLoading: isHomeLoading } = useQuery({
         queryKey: ['movie-home', sourceId],
-        queryFn: () => KKPhimService.fetchHome(),
+        queryFn: () => {
+            if (sourceId === 'thepy') return ThePYService.fetchHome();
+            return KKPhimService.fetchHome();
+        },
     });
 
     const categories = homeData?.data?.categories || [];
@@ -52,6 +56,9 @@ const MovieSourceDetail = () => {
     } = useInfiniteQuery({
         queryKey: ['movie-list', sourceId, activeTab, sortField, category, country, year],
         queryFn: ({ pageParam = 1 }) => {
+            if (sourceId === 'thepy') {
+                return ThePYService.fetchList(activeTab, pageParam as number);
+            }
             return KKPhimService.fetchList(activeTab, pageParam as number, {
                 sort_field: sortField,
                 category,
@@ -85,7 +92,7 @@ const MovieSourceDetail = () => {
                         <ArrowLeft size={24} />
                     </button>
                     <h1 className="text-lg font-medium text-[var(--color-text)] flex-1 truncate">
-                        PhimKK
+                        {sourceId === 'thepy' ? 'thePY' : 'PhimKK'}
                     </h1>
                     <button onClick={() => navigate(`/search/${sourceId}`)} className="p-2 -mr-2 rounded-full hover:bg-[var(--color-surface-hover)] transition-colors text-[var(--color-text)]">
                         <Search size={24} />
@@ -111,7 +118,7 @@ const MovieSourceDetail = () => {
                 )}
 
                 {/* Filters */}
-                {activeTab !== 'phim-moi-cap-nhat' && (
+                {activeTab !== 'phim-moi-cap-nhat' && sourceId !== 'thepy' && (
                     <div className="flex flex-wrap gap-2 px-4 pb-3 border-t border-[var(--color-border)] pt-3 bg-[var(--color-surface)]">
                         <select 
                             className="bg-[var(--color-bg)] text-[var(--color-text)] text-xs border border-[var(--color-border)] rounded px-2 py-1 outline-none"
