@@ -32,9 +32,9 @@ export const fetchHome = async () => {
     };
 };
 
-export const fetchList = async (slug: string, page: number = 1) => {
+export const fetchList = async (slug: string, page: number = 1, filters: Record<string, string> = {}) => {
     // Use the slug directly if it's not phim-moi-cap-nhat
-    const type = slug === 'phim-moi-cap-nhat' ? 'recent' : slug;
+    const type = filters.sort_field || (slug === 'phim-moi-cap-nhat' ? 'recent' : slug);
     
     const res = await fetch(`${BASE}/sevenVideos?page=${page}&type=${type}`, {
         method: 'POST',
