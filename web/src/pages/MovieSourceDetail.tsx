@@ -154,13 +154,13 @@ const MovieSourceDetail = () => {
                     </div>
                 )}
                 
-                {sourceId === 'thepy' && (
+                {sourceId === 'thepy' && (activeTab === 'recent' || activeTab === 'phim-moi-cap-nhat' || activeTab === 'filters') && (
                     <div className="flex overflow-x-auto no-scrollbar gap-2 px-4 pb-3 border-t border-[var(--color-border)] pt-3 bg-[var(--color-surface)]">
-                        {ThePYService.SORT_FIELDS.map(c => (
+                        {(activeTab === 'filters' ? ThePYService.FILTER_FIELDS : ThePYService.SORT_FIELDS).map(c => (
                             <button
                                 key={c.value}
                                 onClick={() => updateFilter('sort_field', c.value)}
-                                className={`shrink-0 px-3 py-1 rounded-full text-[11px] font-medium transition-colors border ${sortField === c.value || (!sortField && c.value === 'recent')
+                                className={`shrink-0 px-3 py-1 rounded-full text-[11px] font-medium transition-colors border ${sortField === c.value || (!sortField && activeTab === 'filters' && c.value === ThePYService.FILTER_FIELDS[0]?.value)
                                     ? 'bg-[var(--color-primary)] text-black border-[var(--color-primary)]'
                                     : 'bg-[var(--color-bg)] text-[var(--color-text)] border-[var(--color-border)] hover:bg-[var(--color-surface-hover)]'
                                 }`}

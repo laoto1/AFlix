@@ -125,6 +125,11 @@ export const KKPhimCard: React.FC<KKPhimCardProps> = ({ movie: initialMovie, sou
                 <h3 className="text-[var(--color-text)] text-xs md:text-sm font-medium line-clamp-2 drop-shadow-md">
                     {movie.name}
                 </h3>
+                {movie.author && (
+                    <div className="text-[10px] text-[var(--color-text-muted)] line-clamp-1 mt-0.5">
+                        👤 {movie.author}
+                    </div>
+                )}
             </div>
         </Link>
     );

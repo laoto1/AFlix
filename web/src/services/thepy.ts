@@ -21,7 +21,8 @@ const decryptPayload = (data: any) => {
 
 export const CATEGORIES = [
     { name: 'Cập nhật', slug: 'recent' },
-    { name: 'Yêu thích', slug: 'myfavs' }
+    { name: 'Yêu thích', slug: 'myfavs' },
+    { name: 'Bộ lọc', slug: 'filters' }
 ];
 
 export const fetchHome = async () => {
@@ -34,7 +35,9 @@ export const fetchHome = async () => {
 
 export const fetchList = async (slug: string, page: number = 1, filters: Record<string, string> = {}) => {
     // Use the slug directly if it's not phim-moi-cap-nhat
-    const type = filters.sort_field || (slug === 'phim-moi-cap-nhat' ? 'recent' : slug);
+    let type = slug === 'phim-moi-cap-nhat' ? 'recent' : slug;
+    if (slug === 'filters') type = FILTER_FIELDS[0]?.value || 'c0';
+    if (filters.sort_field) type = filters.sort_field;
 
     const res = await fetch(`${BASE}/sevenVideos?page=${page}&type=${type}`, {
         method: 'POST',
@@ -60,7 +63,8 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
         view: item.views || 0,
         update_time: item.tags_en ? item.tags_en.split('|')[0].trim() : (item.time || ''),
         duration: item.durationStr || '',
-        episode_current: item.durationStr || 'Full'
+        episode_current: item.durationStr || 'Full',
+        author: item.user || item.user_en || ''
     }));
 
     // Guess pagination since api just returns an array
@@ -177,7 +181,13 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
 };
 
 export const SORT_FIELDS = [
-    { name: 'Mới nhất', value: 'recent' },
+    { name: 'Khuyên dùng', value: 'recommend' },
+    { name: 'Top tháng', value: 'month' },
+    { name: 'Top tuần', value: 'week' },
+    { name: 'Top ngày', value: 'today' },
+];
+
+export const FILTER_FIELDS = [
     { name: 'Porn', value: 'c0' },
     { name: 'JAV', value: 'japan' },
     { name: 'Taiwan SWAG', value: 'swag' },
