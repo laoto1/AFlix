@@ -160,7 +160,7 @@ const MovieSourceDetail = () => {
                             <button
                                 key={c.value}
                                 onClick={() => updateFilter('sort_field', c.value)}
-                                className={`shrink-0 px-3 py-1 rounded-full text-[11px] font-medium transition-colors border ${sortField === c.value || (!sortField && activeTab === 'filters' && c.value === ThePYService.FILTER_FIELDS[0]?.value)
+                                className={`shrink-0 px-3 py-1 rounded-full text-[11px] font-medium transition-colors border ${sortField === c.value || (!sortField && activeTab === 'filters' && c.value === ThePYService.FILTER_FIELDS[0]?.value) || (!sortField && (activeTab === 'recent' || activeTab === 'phim-moi-cap-nhat') && c.value === 'all')
                                     ? 'bg-[var(--color-primary)] text-black border-[var(--color-primary)]'
                                     : 'bg-[var(--color-bg)] text-[var(--color-text)] border-[var(--color-border)] hover:bg-[var(--color-surface-hover)]'
                                 }`}

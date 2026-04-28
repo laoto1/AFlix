@@ -20,10 +20,26 @@ const decryptPayload = (data: any) => {
 };
 
 export const CATEGORIES = [
-    { name: 'Cập nhật', slug: 'recent' },
+    { name: 'Mới nhất', slug: 'recent' },
     { name: 'Yêu thích', slug: 'myfavs' },
     { name: 'Bộ lọc', slug: 'filters' }
 ];
+
+const mapItem = (item: any) => ({
+    _id: item._id,
+    name: item.title,
+    slug: item.id,
+    origin_name: item.title_en,
+    thumb_url: item.thumbNails?.[0] || item.thumbnails?.[0] || '',
+    poster_url: item.thumbNails?.[0] || item.thumbnails?.[0] || '',
+    year: new Date(item.createdTime || Date.now()).getFullYear(),
+    modified: { time: new Date(item.createdTime || Date.now()).toISOString() },
+    view: item.views || 0,
+    update_time: item.tags_en ? item.tags_en.split('|')[0].trim() : (item.time || ''),
+    duration: item.durationStr || '',
+    episode_current: item.durationStr || 'Full',
+    author: item.user || item.user_en || ''
+});
 
 export const fetchHome = async () => {
     return {
@@ -36,8 +52,36 @@ export const fetchHome = async () => {
 export const fetchList = async (slug: string, page: number = 1, filters: Record<string, string> = {}) => {
     // Use the slug directly if it's not phim-moi-cap-nhat
     let type = slug === 'phim-moi-cap-nhat' ? 'recent' : slug;
+    if (type === 'recent') {
+        const category = filters.sort_field || 'all';
+        const res = await fetch(`${BASE}/searchSevenVideos?page=${page}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(encryptPayload({ keywords: "1", category, time: "all", views: "all", duration: "all" }))
+        }).then(r => r.json()).catch(() => null);
+
+        const decrypted = res ? decryptPayload(res) : null;
+        let rawItems = [];
+        if (decrypted && Array.isArray(decrypted)) rawItems = decrypted;
+        else if (decrypted?.videos && Array.isArray(decrypted.videos)) rawItems = decrypted.videos;
+
+        const items = rawItems.map(mapItem);
+        return {
+            data: {
+                items,
+                pagination: {
+                    totalItems: 1000,
+                    totalItemsPerPage: 24,
+                    currentPage: page,
+                    totalPages: items.length === 24 ? page + 1 : page
+                },
+                APP_DOMAIN_CDN_IMAGE: ''
+            }
+        };
+    }
+
     if (slug === 'filters') type = FILTER_FIELDS[0]?.value || 'c0';
-    if (filters.sort_field) type = filters.sort_field;
+    if (filters.sort_field && slug === 'filters') type = filters.sort_field;
 
     const res = await fetch(`${BASE}/sevenVideos?page=${page}&type=${type}`, {
         method: 'POST',
@@ -51,21 +95,7 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
         return { data: { items: [], pagination: { totalItems: 0, totalItemsPerPage: 24, currentPage: page, totalPages: 1 }, APP_DOMAIN_CDN_IMAGE: '' } };
     }
 
-    const items = decrypted.map((item: any) => ({
-        _id: item._id,
-        name: item.title,
-        slug: item.id,
-        origin_name: item.title_en,
-        thumb_url: item.thumbNails?.[0] || item.thumbnails?.[0] || '',
-        poster_url: item.thumbNails?.[0] || item.thumbnails?.[0] || '',
-        year: new Date(item.createdTime).getFullYear() || new Date().getFullYear(),
-        modified: { time: new Date(item.createdTime).toISOString() },
-        view: item.views || 0,
-        update_time: item.tags_en ? item.tags_en.split('|')[0].trim() : (item.time || ''),
-        duration: item.durationStr || '',
-        episode_current: item.durationStr || 'Full',
-        author: item.user || item.user_en || ''
-    }));
+    const items = decrypted.map(mapItem);
 
     // Guess pagination since api just returns an array
     const hasNext = items.length === 24;
@@ -155,16 +185,7 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
     if (decrypted && Array.isArray(decrypted)) rawItems = decrypted;
     else if (decrypted?.videos && Array.isArray(decrypted.videos)) rawItems = decrypted.videos;
 
-    const items = rawItems.map((item: any) => ({
-        _id: item._id,
-        name: item.title,
-        slug: item.id,
-        origin_name: item.title_en,
-        thumb_url: item.thumbNails?.[0] || item.thumbnails?.[0] || '',
-        poster_url: item.thumbNails?.[0] || item.thumbnails?.[0] || '',
-        year: new Date(item.createdTime || Date.now()).getFullYear(),
-        modified: { time: new Date(item.createdTime || Date.now()).toISOString() }
-    }));
+    const items = rawItems.map(mapItem);
 
     return {
         data: {
@@ -181,10 +202,11 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
 };
 
 export const SORT_FIELDS = [
-    { name: 'Khuyên dùng', value: 'recommend' },
-    { name: 'Top tháng', value: 'month' },
-    { name: 'Top tuần', value: 'week' },
-    { name: 'Top ngày', value: 'today' },
+    { name: 'Tất cả', value: 'all' },
+    { name: 'China', value: '91' },
+    { name: 'Taiwan', value: 'taiwan' },
+    { name: 'Japan', value: 'japan' },
+    { name: 'Europe', value: 'eu' }
 ];
 
 export const FILTER_FIELDS = [
