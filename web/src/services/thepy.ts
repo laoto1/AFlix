@@ -54,10 +54,11 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
     let type = slug === 'phim-moi-cap-nhat' ? 'recent' : slug;
     if (type === 'recent') {
         const category = filters.sort_field || 'all';
-        const res = await fetch(`${BASE}/searchSevenVideos?page=${page}`, {
+        const urlParams = `keywords=1&category=${category}&time=all&views=all&duration=all&page=${page}`;
+        const res = await fetch(`${BASE}/sevenVideos?${urlParams}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(encryptPayload({ keywords: "1", category, time: "all", views: "all", duration: "all" }))
+            body: JSON.stringify(encryptPayload({}))
         }).then(r => r.json()).catch(() => null);
 
         const decrypted = res ? decryptPayload(res) : null;
