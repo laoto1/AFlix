@@ -3,8 +3,8 @@ import CryptoJS from 'crypto-js';
 const BASE = 'https://v2.cdn199.com';
 const AES_KEY = 'xxx';
 
-const encryptPayload = (data: any) => ({ 
-    r: CryptoJS.AES.encrypt(JSON.stringify(data), AES_KEY).toString() 
+const encryptPayload = (data: any) => ({
+    r: CryptoJS.AES.encrypt(JSON.stringify(data), AES_KEY).toString()
 });
 
 const decryptPayload = (data: any) => {
@@ -20,7 +20,7 @@ const decryptPayload = (data: any) => {
 };
 
 export const CATEGORIES = [
-    { name: 'Mới nhất', slug: 'recent' },
+    { name: 'Cập nhật', slug: 'recent' },
     { name: 'Yêu thích', slug: 'myfavs' }
 ];
 
@@ -35,7 +35,7 @@ export const fetchHome = async () => {
 export const fetchList = async (slug: string, page: number = 1, filters: Record<string, string> = {}) => {
     // Use the slug directly if it's not phim-moi-cap-nhat
     const type = filters.sort_field || (slug === 'phim-moi-cap-nhat' ? 'recent' : slug);
-    
+
     const res = await fetch(`${BASE}/sevenVideos?page=${page}&type=${type}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -43,7 +43,7 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
     }).then(r => r.json());
 
     const decrypted = decryptPayload(res);
-    
+
     if (!Array.isArray(decrypted)) {
         return { data: { items: [], pagination: { totalItems: 0, totalItemsPerPage: 24, currentPage: page, totalPages: 1 }, APP_DOMAIN_CDN_IMAGE: '' } };
     }
@@ -65,7 +65,7 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
 
     // Guess pagination since api just returns an array
     const hasNext = items.length === 24;
-    
+
     return {
         data: {
             items,
@@ -88,7 +88,7 @@ export const fetchDetail = async (slug: string) => {
     }).then(r => r.json());
 
     const item = decryptPayload(res);
-    
+
     if (!item) return { data: null };
 
     // Transform to KKPhim expected format
@@ -178,11 +178,12 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
 
 export const SORT_FIELDS = [
     { name: 'Mới nhất', value: 'recent' },
-    { name: 'Yêu thích', value: 'myfavs' },
-    { name: 'Khuyên dùng', value: 'recommend' },
-    { name: 'Top tháng', value: 'month' },
-    { name: 'Top tuần', value: 'week' },
-    { name: 'Top ngày', value: 'today' },
+    { name: 'Porn', value: 'c0' },
+    { name: 'JAV', value: 'japan' },
+    { name: 'Taiwan SWAG', value: 'swag' },
+    { name: 'China BDSM', value: 'gcsm' },
+    { name: 'HongKong Doll', value: 'c3' },
+    { name: 'Banana Fever', value: 'banana' }
 ];
 
 export const YEARS = [];
