@@ -53,9 +53,10 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
     // Use the slug directly if it's not phim-moi-cap-nhat
     let type = slug === 'phim-moi-cap-nhat' ? 'recent' : slug;
     if (type === 'recent') {
-        const category = filters.sort_field || 'all';
-        const urlParams = `keywords=1&category=${category}&time=all&views=all&duration=all&page=${page}`;
-        const res = await fetch(`${BASE}/sevenVideos?${urlParams}`, {
+        const category = filters.sort_field || 'recent';
+        // 91 and taiwan are invalid slugs for sevenVideos, but let's pass them anyway. 
+        // japan works perfectly with sevenVideos.
+        const res = await fetch(`${BASE}/sevenVideos?page=${page}&type=${category}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(encryptPayload({}))
@@ -76,7 +77,7 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
                     currentPage: page,
                     totalPages: items.length === 24 ? page + 1 : page
                 },
-                APP_DOMAIN_CDN_IMAGE: ''
+                APP_DOMAIN_CDN_IMAGE: 'https://cp.helloye.com'
             }
         };
     }
@@ -110,7 +111,7 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
                 currentPage: page,
                 totalPages: hasNext ? page + 1 : page
             },
-            APP_DOMAIN_CDN_IMAGE: ''
+            APP_DOMAIN_CDN_IMAGE: 'https://cp.helloye.com'
         }
     };
 };
@@ -203,7 +204,7 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
 };
 
 export const SORT_FIELDS = [
-    { name: 'Tất cả', value: 'all' },
+    { name: 'Tất cả', value: 'recent' },
     { name: 'China', value: '91' },
     { name: 'Taiwan', value: 'taiwan' },
     { name: 'Japan', value: 'japan' },
