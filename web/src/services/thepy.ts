@@ -53,13 +53,11 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
     // Use the slug directly if it's not phim-moi-cap-nhat
     let type = slug === 'phim-moi-cap-nhat' ? 'recent' : slug;
     if (type === 'recent') {
-        const category = filters.sort_field || 'recent';
-        // 91 and taiwan are invalid slugs for sevenVideos, but let's pass them anyway. 
-        // japan works perfectly with sevenVideos.
-        const res = await fetch(`${BASE}/sevenVideos?page=${page}&type=${category}`, {
+        const category = filters.sort_field || 'all';
+        const res = await fetch(`${BASE}/searchSevenVideos?page=${page}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(encryptPayload({}))
+            body: JSON.stringify(encryptPayload({ keywords: "1", category, time: "all", views: "all", duration: "all" }))
         }).then(r => r.json()).catch(() => null);
 
         const decrypted = res ? decryptPayload(res) : null;
@@ -204,7 +202,7 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
 };
 
 export const SORT_FIELDS = [
-    { name: 'Tất cả', value: 'recent' },
+    { name: 'Tất cả', value: 'all' },
     { name: 'China', value: '91' },
     { name: 'Taiwan', value: 'taiwan' },
     { name: 'Japan', value: 'japan' },
