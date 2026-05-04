@@ -523,16 +523,34 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         handleMouseMove();
     };
 
-    const toggleFullscreen = () => {
+    const toggleFullscreen = async () => {
         if (!containerRef.current) return;
         
         setFullscreenAnim(true);
         setTimeout(() => setFullscreenAnim(false), 500);
 
-        if (!document.fullscreenElement) {
-            containerRef.current.requestFullscreen().catch(err => console.log(err));
+        if (!document.fullscreenElement && !(document as any).webkitFullscreenElement) {
+            try {
+                if (containerRef.current.requestFullscreen) {
+                    await containerRef.current.requestFullscreen();
+                    if (window.screen && window.screen.orientation && (window.screen.orientation as any).lock) {
+                        await (window.screen.orientation as any).lock('landscape').catch(()=>console.log('orientation lock failed'));
+                    }
+                } else if ((videoRef.current as any).webkitEnterFullscreen) {
+                    (videoRef.current as any).webkitEnterFullscreen();
+                }
+            } catch (err) {
+                console.log(err);
+            }
         } else {
-            document.exitFullscreen();
+            if (window.screen && window.screen.orientation && (window.screen.orientation as any).unlock) {
+                (window.screen.orientation as any).unlock();
+            }
+            if (document.exitFullscreen) {
+                document.exitFullscreen().catch(() => {});
+            } else if ((document as any).webkitExitFullscreen) {
+                (document as any).webkitExitFullscreen();
+            }
         }
     };
 
@@ -637,6 +655,18 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
             toggleFullscreen();
         }
     };
+
+    // Scroll to active episode when opening the menu
+    useEffect(() => {
+        if (showEpisodes && currentEpisodeSlug) {
+            setTimeout(() => {
+                const el = document.getElementById(`ep-${currentEpisodeSlug}`);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        }
+    }, [showEpisodes, currentEpisodeSlug]);
 
     return (
         <div 
@@ -861,10 +891,10 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                                     onPointerDown={handleSpeedPointerDown}
                                     onPointerUp={handleSpeedPointerUp}
                                     onPointerLeave={handleSpeedPointerLeave}
-                                    className={`relative z-50 flex flex-col sm:flex-row items-center gap-1 sm:gap-2 transition-all active:scale-95 select-none ${showSpeedMenu ? 'text-[#E50914]' : 'hover:text-gray-300 hover:-translate-y-1'}`}
+                                    className={`relative z-50 flex flex-col sm:flex-row items-center justify-center p-2 sm:p-0 gap-1 sm:gap-2 transition-all active:scale-95 select-none ${showSpeedMenu ? 'text-[#E50914]' : 'hover:text-gray-300 hover:-translate-y-1'}`}
                                 >
-                                    <Gauge size={20} />
-                                    <span>{t('player.speed')} ({playbackSpeed}x)</span>
+                                    <Gauge size={24} />
+                                    <span className="hidden sm:inline">{t('player.speed')} ({playbackSpeed}x)</span>
                                 </button>
                                 
                                 {/* Speed Menu Popup */}
@@ -889,10 +919,10 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                                 )}
                                 <button 
                                     onClick={() => setShowSubtitleMenu(!showSubtitleMenu)}
-                                    className={`relative z-50 flex flex-col sm:flex-row items-center gap-1 sm:gap-2 transition-all active:scale-95 select-none ${showSubtitleMenu || activeSubtitleIndex >= 0 ? 'text-[#E50914]' : 'hover:text-gray-300 hover:-translate-y-1'}`}
+                                    className={`relative z-50 flex flex-col sm:flex-row items-center justify-center p-2 sm:p-0 gap-1 sm:gap-2 transition-all active:scale-95 select-none ${showSubtitleMenu || activeSubtitleIndex >= 0 ? 'text-[#E50914]' : 'hover:text-gray-300 hover:-translate-y-1'}`}
                                 >
-                                    <Subtitles size={20} />
-                                    <span>{t('player.subtitles')}</span>
+                                    <Subtitles size={24} />
+                                    <span className="hidden sm:inline">{t('player.subtitles')}</span>
                                 </button>
                                 
                                 {/* Subtitle Menu Popup */}
@@ -938,17 +968,17 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                             {episodes && episodes.length > 0 && (
                                 <button 
                                     onClick={() => setShowEpisodes(!showEpisodes)} 
-                                    className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-2 transition-all active:scale-95 hover:-translate-y-1 ${showEpisodes ? 'text-[#E50914]' : 'hover:text-gray-300'}`}
+                                    className={`flex flex-col sm:flex-row items-center justify-center p-2 sm:p-0 gap-1 sm:gap-2 transition-all active:scale-95 hover:-translate-y-1 ${showEpisodes ? 'text-[#E50914]' : 'hover:text-gray-300'}`}
                                 >
-                                    <ListVideo size={20} />
-                                    <span>{t('player.episodes')}</span>
+                                    <ListVideo size={24} />
+                                    <span className="hidden sm:inline">{t('player.episodes')}</span>
                                 </button>
                             )}
 
                             {hasNext && onNext && (
-                                <button onClick={() => { setIsTransitioning(true); onNext(); }} className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 hover:text-gray-300 hover:-translate-y-1 transition-all active:scale-95 text-white">
-                                    <SkipForward size={20} fill="currentColor" />
-                                    <span>{t('player.next_episode')}</span>
+                                <button onClick={() => { setIsTransitioning(true); onNext(); }} className="flex flex-col sm:flex-row items-center justify-center p-2 sm:p-0 gap-1 sm:gap-2 hover:text-gray-300 hover:-translate-y-1 transition-all active:scale-95 text-white">
+                                    <SkipForward size={24} fill="currentColor" />
+                                    <span className="hidden sm:inline">{t('player.next_episode')}</span>
                                 </button>
                             )}
 
@@ -1014,22 +1044,23 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                     <div className="flex-1 overflow-y-auto scrollbar-hide p-4 sm:p-6 space-y-4 sm:space-y-6 scroll-smooth">
                         {episodes?.map((ep, index) => {
                             return (
-                                <EpisodeRow 
-                                    key={ep.slug}
-                                    ep={ep}
-                                    index={index}
-                                    title={title}
-                                    poster={poster}
-                                    currentEpisodeSlug={currentEpisodeSlug}
-                                    onSelectEpisode={(ep: any) => {
-                                        setIsTransitioning(true);
-                                        onSelectEpisode?.(ep);
-                                    }}
-                                    setShowEpisodes={setShowEpisodes}
-                                    showEpisodes={showEpisodes}
-                                    tmdbEpisodeData={tmdbSeasonData?.find(e => e.episode_number === (ep.name.match(/\d+/) ? parseInt(ep.name.match(/\d+/)[0], 10) : index + 1))}
-                                    movieOverview={movieOverview}
-                                />
+                                <div key={ep.slug} id={`ep-${ep.slug}`}>
+                                    <EpisodeRow 
+                                        ep={ep}
+                                        index={index}
+                                        title={title}
+                                        poster={poster}
+                                        currentEpisodeSlug={currentEpisodeSlug}
+                                        onSelectEpisode={(ep: any) => {
+                                            setIsTransitioning(true);
+                                            onSelectEpisode?.(ep);
+                                        }}
+                                        setShowEpisodes={setShowEpisodes}
+                                        showEpisodes={showEpisodes}
+                                        tmdbEpisodeData={tmdbSeasonData?.find(e => e.episode_number === (ep.name.match(/\d+/) ? parseInt(ep.name.match(/\d+/)[0], 10) : index + 1))}
+                                        movieOverview={movieOverview}
+                                    />
+                                </div>
                             );
                         })}
                     </div>
