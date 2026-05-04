@@ -259,6 +259,13 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         setIsTransitioning(true);
         const t = setTimeout(() => setIsTransitioning(false), 500);
 
+        // Enforce orientation lock if we are already in fullscreen
+        if (document.fullscreenElement || (document as any).webkitFullscreenElement) {
+            if (window.screen && window.screen.orientation && (window.screen.orientation as any).lock) {
+                (window.screen.orientation as any).lock('landscape').catch(()=>console.log('orientation re-lock failed'));
+            }
+        }
+
         const video = videoRef.current;
         setIsBuffering(true);
 
@@ -827,7 +834,11 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                 </div>
 
                 {/* Bottom Controls */}
-                <div className="absolute bottom-0 left-0 right-0 px-4 sm:px-8 pb-4 sm:pb-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-auto">
+                <div 
+                    className="absolute bottom-0 left-0 right-0 px-4 sm:px-8 pb-4 sm:pb-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-auto"
+                    onPointerDown={(e) => e.stopPropagation()} 
+                    onClick={(e) => e.stopPropagation()}
+                >
                     {/* Progress Bar */}
                     <div className="relative flex items-center gap-4 mb-4 group/progress cursor-pointer">
                         {hoverTime !== null && (
@@ -847,6 +858,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                             onChange={handleProgressChange}
                             onMouseMove={handleProgressMouseMove}
                             onMouseLeave={handleProgressMouseLeave}
+                            onTouchStart={(e) => e.stopPropagation()}
                             className="w-full h-1 sm:h-1.5 bg-gray-600 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-[#E50914] [&::-webkit-slider-thumb]:rounded-full hover:[&::-webkit-slider-thumb]:scale-125 transition-all"
                             style={{
                                 background: `linear-gradient(to right, #E50914 ${(currentTime / (duration || 1)) * 100}%, rgba(255,255,255,0.3) ${(currentTime / (duration || 1)) * 100}%)`
@@ -987,7 +999,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                                 {theaterMode && <div className="absolute inset-0 bg-[#E50914] blur-md opacity-50 rounded-full animate-pulse"></div>}
                             </button>
 
-                            <button onClick={toggleFullscreen} className="hidden sm:flex hover:text-gray-300 transition-transform hover:scale-110 active:scale-95 ml-2">
+                            <button onClick={toggleFullscreen} className="flex hover:text-gray-300 transition-transform hover:scale-110 active:scale-95 ml-2 p-2 sm:p-0">
                                 {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
                             </button>
                         </div>
