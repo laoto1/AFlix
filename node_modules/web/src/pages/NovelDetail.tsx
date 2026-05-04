@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { ArrowLeft, BookOpen, Loader2, ChevronDown, ChevronUp, Globe } from 'lucide-react';
+import { ArrowLeft, BookOpen, Loader2, ChevronDown, ChevronUp, Globe, Share2 } from 'lucide-react';
 import * as STVService from '../services/sangtacviet';
 import * as MTCService from '../services/metruyenchu';
 import { getProxiedImageUrl } from '../utils/imageProxy';
@@ -13,6 +13,7 @@ const NovelDetail = () => {
     const [sortAsc, setSortAsc] = useState(true);
     const [activeHost, setActiveHost] = useState(host || '');
     const [activeBookId, setActiveBookId] = useState(bookId || '');
+    const [isCopied, setIsCopied] = useState(false);
 
 
     // Fetch novel detail
@@ -59,6 +60,14 @@ const NovelDetail = () => {
         setActiveBookId(h.bookid);
     };
 
+    const handleShare = () => {
+        const shareUrl = `https://share.laoto.workers.dev/novel/${sourceId}/${activeHost}/${activeBookId}`;
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        });
+    };
+
     const continueReadingInfo = historyData?.history?.[0];
 
     if (detailLoading) {
@@ -78,6 +87,13 @@ const NovelDetail = () => {
                         <ArrowLeft size={20} />
                     </button>
                     <h1 className="text-lg font-medium text-[var(--color-text)] truncate flex-1">{novel?.name || 'Chi tiết'}</h1>
+                    <button
+                        onClick={handleShare}
+                        className={`p-2 rounded-full transition-colors ${isCopied ? 'text-green-500 bg-green-500/10' : 'text-[var(--color-text)] hover:bg-[var(--color-surface-hover)]'}`}
+                        title="Chia sẻ"
+                    >
+                        <Share2 size={20} />
+                    </button>
                 </div>
             </header>
 

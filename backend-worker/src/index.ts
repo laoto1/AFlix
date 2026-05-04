@@ -633,6 +633,34 @@ app.route('/api/chunking', chunkingRouter);
 app.route('/api/unlock', unlockRouter);
 app.route('/api/proxy', proxyRouter);
 
+const createHtmlResponse = (c: any, title: string, description: string, posterUrl: string, redirectPath: string) => {
+    const html = `<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>${title}</title>
+    <meta name="description" content="${description}">
+    <meta property="og:title" content="${title}">
+    <meta property="og:description" content="${description}">
+    <meta property="og:image" content="${posterUrl}">
+    <meta property="og:url" content="${c.req.url}">
+    <meta property="og:type" content="video.movie">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="${title}">
+    <meta name="twitter:description" content="${description}">
+    <meta name="twitter:image" content="${posterUrl}">
+</head>
+<body>
+    <p>Đang chuyển hướng...</p>
+    <script>
+        window.location.replace('https://aflix.laoto.workers.dev/#' + '${redirectPath}');
+    </script>
+</body>
+</html>`;
+    return c.html(html);
+};
+
 // --- SEO / OG Tags Interceptor for Discord/Facebook ---
 app.get(
     '/movie/:sourceId/:slug',
@@ -670,35 +698,108 @@ app.get(
             movieName = epName ? `Đang xem ${epName} - Phim ${slug.replace(/-/g, ' ')}` : `Phim ${slug.replace(/-/g, ' ')}`;
         }
         
-        const html = `<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>${movieName}</title>
-    <meta name="description" content="${description}">
-    <meta property="og:title" content="${movieName}">
-    <meta property="og:description" content="${description}">
-    <meta property="og:image" content="${posterUrl}">
-    <meta property="og:url" content="${c.req.url}">
-    <meta property="og:type" content="video.movie">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="${movieName}">
-    <meta name="twitter:description" content="${description}">
-    <meta name="twitter:image" content="${posterUrl}">
-</head>
-<body>
-    <p>Đang chuyển hướng đến phim...</p>
-    <script>
-        // Redirect normal users to the actual frontend
-        var search = window.location.search || '';
-        if (!search && '${ep}') search = '?ep=${ep}';
-        window.location.replace('https://aflix.laoto.workers.dev/#/movie/${sourceId}/${slug}' + search);
-    </script>
-</body>
-</html>`;
-        return c.html(html);
+        let search = '';
+        if (ep) search = `?ep=${ep}`;
+        const redirectPath = `/movie/${sourceId}/${slug}${search}`;
+        return createHtmlResponse(c, movieName, description, posterUrl, redirectPath);
 });
+
+app.get(
+    '/comic/:sourceId/:slug',
+    cache({
+        cacheName: 'flix-seo-cache',
+        cacheControl: 'max-age=86400',
+    }),
+    async (c) => {
+        const sourceId = c.req.param('sourceId');
+        const slug = c.req.param('slug');
+        let title = 'FLIX - Đọc Truyện';
+        let description = 'Đọc truyện tranh trực tuyến miễn phí với chất lượng cao.';
+        let posterUrl = 'https://phimimg.com/uploads/movies/default.jpg';
+
+        try {
+            if (sourceId === 'nettruyen' || sourceId === 'nhentai') {
+                const reqUrl = `http://localhost/api/${sourceId}?action=detail&slug=${slug}`;
+                const req = new Request(reqUrl);
+                const res = await app.request(req, {}, c.env);
+                if (res.ok) {
+                    const json = await res.json() as any;
+                    const item = json.data?.item;
+                    if (item) {
+                        title = `${item.name} - Đọc Truyện`;
+                        description = item.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || description;
+                        posterUrl = item.thumb_url || posterUrl;
+                    }
+                }
+            } else if (sourceId === 'otruyen') {
+                const res = await fetch(`https://otruyenapi.com/v1/api/truyen-tranh/${slug}`);
+                if (res.ok) {
+                    const json = await res.json() as any;
+                    const item = json.data?.item;
+                    if (item) {
+                        title = `${item.name} - Đọc Truyện`;
+                        description = item.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || description;
+                        posterUrl = `https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`;
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('OG Comic Error', e);
+        }
+
+        const redirectPath = `/comic/${sourceId}/${slug}`;
+        return createHtmlResponse(c, title, description, posterUrl, redirectPath);
+    }
+);
+
+app.get(
+    '/novel/:sourceId/:host/:bookId',
+    cache({
+        cacheName: 'flix-seo-cache',
+        cacheControl: 'max-age=86400',
+    }),
+    async (c) => {
+        const sourceId = c.req.param('sourceId');
+        const host = c.req.param('host');
+        const bookId = c.req.param('bookId');
+        let title = 'FLIX - Đọc Tiểu Thuyết';
+        let description = 'Đọc tiểu thuyết trực tuyến miễn phí.';
+        let posterUrl = 'https://phimimg.com/uploads/movies/default.jpg';
+
+        try {
+            if (sourceId === 'metruyenchu') {
+                const reqUrl = `http://localhost/api/metruyenchu?action=detail&bookid=${bookId}`;
+                const req = new Request(reqUrl);
+                const res = await app.request(req, {}, c.env);
+                if (res.ok) {
+                    const json = await res.json() as any;
+                    const item = json.data;
+                    if (item) {
+                        title = `${item.name} - Đọc Tiểu Thuyết`;
+                        description = item.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || description;
+                        posterUrl = item.thumb_url || posterUrl;
+                    }
+                }
+            } else if (sourceId === 'sangtacviet') {
+                const res = await fetch(`https://share.laoto1.workers.dev/api/stv-proxy?action=detail&host=${host}&bookid=${bookId}`);
+                if (res.ok) {
+                    const json = await res.json() as any;
+                    const item = json.data;
+                    if (item) {
+                        title = `${item.name} - Đọc Tiểu Thuyết`;
+                        description = item.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || description;
+                        posterUrl = item.thumb_url || posterUrl;
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('OG Novel Error', e);
+        }
+
+        const redirectPath = `/novel/${sourceId}/${host}/${bookId}`;
+        return createHtmlResponse(c, title, description, posterUrl, redirectPath);
+    }
+);
 
 // --- STV Fallback Catch-All ---
 // When the iframe loads STV HTML via /api/stv-proxy/, the <base> tag makes relative URLs

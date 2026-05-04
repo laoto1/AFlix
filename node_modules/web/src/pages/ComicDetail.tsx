@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Play, Bookmark, Loader2, ArrowLeft, ListPlus, DownloadCloud } from 'lucide-react';
+import { Play, Bookmark, Loader2, ArrowLeft, ListPlus, DownloadCloud, Share2 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { fetchComicDetails, getImageUrl } from '../services/otruyen';
@@ -42,6 +42,7 @@ const ComicDetail = () => {
     const { t } = useSettings();
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isCopied, setIsCopied] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -246,6 +247,14 @@ const ComicDetail = () => {
         }
     };
 
+    const handleShare = () => {
+        const shareUrl = `https://share.laoto.workers.dev/comic/${sourceId}/${slug}`;
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        });
+    };
+
     // Memoize the highest chapter read (mathematical comparison, not chronological)
     // MUST be above early returns to obey Rules of Hooks
     const continueReadingInfo = React.useMemo(() => {
@@ -351,6 +360,17 @@ const ComicDetail = () => {
                                 aria-label="Toggle Bookmark"
                             >
                                 <Bookmark size={20} fill={isBookmarked ? 'currentColor' : 'none'} />
+                            </button>
+                            <button
+                                onClick={handleShare}
+                                className={`p-2 rounded-full border transition-colors flex items-center justify-center w-10 h-10 shrink-0 ${isCopied
+                                    ? 'bg-green-500/20 border-green-500 text-green-500'
+                                    : 'bg-[var(--color-surface)] border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
+                                    }`}
+                                aria-label="Share"
+                                title="Chia sẻ"
+                            >
+                                <Share2 size={20} />
                             </button>
                         </div>
                     </div>
