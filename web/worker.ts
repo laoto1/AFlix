@@ -17,20 +17,20 @@ class OGRewriter {
 
 export default {
     async fetch(request: Request, env: any, ctx: any): Promise<Response> {
-        const url = new URL(request.url);
-        
-        // Fetch the static asset (Cloudflare Workers Assets handles SPA fallback)
-        const response = await env.ASSETS.fetch(request);
-        
-        // Only rewrite HTML for /movie/ routes
-        if (!url.pathname.startsWith('/movie/')) {
-            return response;
-        }
-
-        const clonedResponse = new Response(response.body, response);
-        const pathSegments = url.pathname.split('/').filter(Boolean);
-        
         try {
+            const url = new URL(request.url);
+            
+            // Fetch the static asset (Cloudflare Workers Assets handles SPA fallback)
+            const response = await env.ASSETS.fetch(request);
+            
+            // Only rewrite HTML for /movie/ routes
+            if (!url.pathname.startsWith('/movie/')) {
+                return response;
+            }
+
+            const clonedResponse = new Response(response.body, response);
+            const pathSegments = url.pathname.split('/').filter(Boolean);
+            
             if (pathSegments.length >= 3 && pathSegments[0] === 'movie') {
                 const sourceId = pathSegments[1];
                 const slug = pathSegments[2];
@@ -73,10 +73,10 @@ export default {
                         .transform(clonedResponse);
                 }
             }
-        } catch (e) {
-            console.error('Error rewriting HTML:', e);
+            
+            return clonedResponse;
+        } catch (e: any) {
+            return new Response(`Worker Error: ${e.message}\n${e.stack}`, { status: 500 });
         }
-        
-        return clonedResponse;
     }
 }
