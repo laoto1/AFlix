@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Play, Info, Calendar, Clock, Star, Layers, Activity } from 'lucide-react';
+import { ArrowLeft, Play, Info, Calendar, Clock, Star, Layers, Activity, Share2, Check } from 'lucide-react';
 import axios from 'axios';
 import * as KKPhimService from '../services/kkphim';
 import * as ThePYService from '../services/thepy';
@@ -13,6 +13,7 @@ export default function MovieDetail() {
     const { t } = useSettings();
     const { sourceId, slug } = useParams();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     
     const [selectedServer, setSelectedServer] = useState<number>(0);
     const [selectedEpisode, setSelectedEpisode] = useState<any>(null);
@@ -22,6 +23,7 @@ export default function MovieDetail() {
     const currentTimeRef = useRef<number>(0);
     
     const playerRef = useRef<HTMLDivElement>(null);
+    const [isCopied, setIsCopied] = useState(false);
 
     const { data: detailData, isLoading, error } = useQuery({
         queryKey: ['movie-detail', sourceId, slug],
@@ -54,7 +56,12 @@ export default function MovieDetail() {
                 
                 // If there is history, try to find the matching episode in the server data
                 let targetEp = firstServer.server_data[0];
-                if (continueWatchingInfo) {
+                const epQuery = searchParams.get('ep');
+                
+                if (epQuery) {
+                    const match = firstServer.server_data.find((e: any) => e.slug === epQuery || e.name === epQuery);
+                    if (match) targetEp = match;
+                } else if (continueWatchingInfo) {
                     const match = firstServer.server_data.find((e: any) => e.slug === continueWatchingInfo.chapter_id || e.name === continueWatchingInfo.chapter_id);
                     if (match) {
                         targetEp = match;
@@ -62,6 +69,9 @@ export default function MovieDetail() {
                     }
                 }
                 setSelectedEpisode(targetEp);
+                if (!epQuery) {
+                    setSearchParams({ ep: targetEp.slug }, { replace: true });
+                }
             }
         }
         setTimeout(() => {
@@ -80,9 +90,11 @@ export default function MovieDetail() {
             if (match) {
                 setSelectedEpisode(match);
                 setInitialTime(0);
+                setSearchParams({ ep: match.slug }, { replace: true });
             } else {
                 setSelectedEpisode(currentEpisodes[serverIdx].server_data[0]);
                 setInitialTime(0);
+                setSearchParams({ ep: currentEpisodes[serverIdx].server_data[0].slug }, { replace: true });
             }
         }
     };
@@ -91,7 +103,37 @@ export default function MovieDetail() {
         setSelectedEpisode(ep);
         setInitialTime(0);
         currentTimeRef.current = 0;
+        setSearchParams({ ep: ep.slug }, { replace: true });
     };
+
+    const handleShare = () => {
+        const epSlug = selectedEpisode?.slug || searchParams.get('ep');
+        const shareUrl = `https://backend-worker.laoto.workers.dev/movie/${sourceId}/${slug}${epSlug ? `?ep=${epSlug}` : ''}`;
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        });
+    };
+
+    // Sync episode from URL on initial load or URL change
+    useEffect(() => {
+        if (!detailData?.data?.episodes || detailData.data.episodes.length === 0) return;
+        
+        const epQuery = searchParams.get('ep');
+        if (epQuery) {
+            setIsWatching(true);
+            const firstServer = detailData.data.episodes[0];
+            if (firstServer?.server_data) {
+                const match = firstServer.server_data.find((e: any) => e.slug === epQuery || e.name === epQuery);
+                if (match && (!selectedEpisode || selectedEpisode.slug !== match.slug)) {
+                    setSelectedEpisode(match);
+                    setTimeout(() => {
+                        playerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            }
+        }
+    }, [detailData, searchParams.get('ep')]);
 
     // Intelligent History Tracking
     useEffect(() => {
@@ -137,6 +179,57 @@ export default function MovieDetail() {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, [selectedEpisode, detailData, sourceId, slug, isWatching]);
+
+    // SEO & OpenGraph Update
+    useEffect(() => {
+        if (!detailData?.data?.movie) return;
+
+        const movie = detailData.data.movie;
+        const domain = 'https://phimimg.com';
+        const posterUrl = movie.poster_url?.startsWith('http') ? movie.poster_url : `${domain}/${movie.poster_url}`;
+        const finalPosterUrl = getProxiedImageUrl(posterUrl);
+        
+        const url = window.location.href;
+        let pageTitle = movie.name;
+        if (movie.origin_name && movie.origin_name !== movie.name) {
+            pageTitle += ` (${movie.origin_name})`;
+        }
+        if (isWatching && selectedEpisode) {
+            pageTitle = `Đang xem ${selectedEpisode.name} - ${pageTitle}`;
+        }
+        
+        let description = movie.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || '';
+        if (description.length === 200) description += '...';
+
+        document.title = pageTitle;
+
+        const setMeta = (name: string, content: string, property = false) => {
+            const attr = property ? 'property' : 'name';
+            let meta = document.head.querySelector(`meta[${attr}="${name}"]`);
+            if (!meta) {
+                meta = document.createElement('meta');
+                meta.setAttribute(attr, name);
+                document.head.appendChild(meta);
+            }
+            meta.setAttribute('content', content);
+        };
+
+        setMeta('description', description);
+        setMeta('og:title', pageTitle, true);
+        setMeta('og:description', description, true);
+        setMeta('og:image', finalPosterUrl, true);
+        setMeta('og:url', url, true);
+        setMeta('og:type', 'video.movie', true);
+        
+        setMeta('twitter:card', 'summary_large_image');
+        setMeta('twitter:title', pageTitle);
+        setMeta('twitter:description', description);
+        setMeta('twitter:image', finalPosterUrl);
+
+        return () => {
+            document.title = 'FLIX';
+        };
+    }, [detailData, isWatching, selectedEpisode]);
 
     if (isLoading) return (
         <div className="min-h-screen flex items-center justify-center bg-[#121212]">
@@ -225,6 +318,23 @@ export default function MovieDetail() {
                                             <Play size={24} /> {t('movie.watch_trailer')}
                                         </button>
                                     )}
+                                    <button 
+                                        onClick={handleShare}
+                                        className="flex items-center justify-center gap-2 px-6 py-3 md:py-4 rounded-full bg-white/10 backdrop-blur-md text-white text-lg font-bold hover:bg-white/20 transition shadow-lg border border-white/10"
+                                    >
+                                        {isCopied ? <Check size={24} className="text-green-400" /> : <Share2 size={24} />} {isCopied ? 'Đã Copy' : 'Chia sẻ'}
+                                    </button>
+                                </div>
+                            )}
+                            
+                            {isWatching && (
+                                <div className="flex mb-6">
+                                    <button 
+                                        onClick={handleShare}
+                                        className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-white/10 backdrop-blur-md text-white font-bold hover:bg-white/20 transition border border-white/10"
+                                    >
+                                        {isCopied ? <Check size={20} className="text-green-400" /> : <Share2 size={20} />} {isCopied ? 'Đã Copy Link Chia Sẻ' : 'Copy Link Discord'}
+                                    </button>
                                 </div>
                             )}
                             
@@ -334,7 +444,7 @@ export default function MovieDetail() {
                                         <button
                                             key={ep.slug}
                                             onClick={() => {
-                                                setSelectedEpisode(ep);
+                                                handleSelectEpisode(ep);
                                                 playerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                             }}
                                             className={`relative p-3 rounded-xl flex flex-col items-center justify-center gap-1 transition-all overflow-hidden group ${

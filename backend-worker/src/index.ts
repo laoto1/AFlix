@@ -633,6 +633,67 @@ app.route('/api/chunking', chunkingRouter);
 app.route('/api/unlock', unlockRouter);
 app.route('/api/proxy', proxyRouter);
 
+// --- SEO / OG Tags Interceptor for Discord/Facebook ---
+app.get('/movie/:sourceId/:slug', async (c) => {
+    const sourceId = c.req.param('sourceId');
+    const slug = c.req.param('slug');
+    const ep = c.req.query('ep');
+    let movieName = 'FLIX - Xem Phim';
+    let description = 'Xem phim trực tuyến miễn phí với chất lượng cao.';
+    let posterUrl = 'https://phimimg.com/uploads/movies/default.jpg';
+        
+        if (sourceId === 'kkphim') {
+            try {
+                const res = await fetch(`https://phimapi.com/phim/${slug}`).then(r => r.json() as any);
+                if (res?.movie) {
+                    movieName = res.movie.name;
+                    if (res.movie.origin_name && res.movie.origin_name !== res.movie.name) {
+                        movieName += ` (${res.movie.origin_name})`;
+                    }
+                    if (ep) {
+                        const epName = ep.replace(/-/g, ' ').replace(/^tap/i, 'Tập');
+                        movieName = `Đang xem ${epName} - ${movieName}`;
+                    }
+                    description = res.movie.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || description;
+                    posterUrl = res.movie.poster_url || res.movie.thumb_url;
+                    if (posterUrl && !posterUrl.startsWith('http')) posterUrl = `https://phimimg.com/${posterUrl}`;
+                }
+            } catch (e) {}
+        } else if (sourceId === 'thepy') {
+            let epName = ep ? ep.replace(/-/g, ' ').replace(/^tap/i, 'Tập') : '';
+            movieName = epName ? `Đang xem ${epName} - Phim ${slug.replace(/-/g, ' ')}` : `Phim ${slug.replace(/-/g, ' ')}`;
+        }
+        
+        const html = `<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>${movieName}</title>
+    <meta name="description" content="${description}">
+    <meta property="og:title" content="${movieName}">
+    <meta property="og:description" content="${description}">
+    <meta property="og:image" content="${posterUrl}">
+    <meta property="og:url" content="${c.req.url}">
+    <meta property="og:type" content="video.movie">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${movieName}">
+    <meta name="twitter:description" content="${description}">
+    <meta name="twitter:image" content="${posterUrl}">
+</head>
+<body>
+    <p>Đang chuyển hướng đến phim...</p>
+    <script>
+        // Redirect normal users to the actual frontend
+        var search = window.location.search || '';
+        if (!search && '${ep}') search = '?ep=${ep}';
+        window.location.replace('https://aflix.laoto.workers.dev/#/movie/${sourceId}/${slug}' + search);
+    </script>
+</body>
+</html>`;
+        return c.html(html);
+});
+
 // --- STV Fallback Catch-All ---
 // When the iframe loads STV HTML via /api/stv-proxy/, the <base> tag makes relative URLs
 // resolve to /api/stv-proxy/. But dynamically constructed JS URLs (XHR, script injection)
