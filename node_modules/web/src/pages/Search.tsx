@@ -42,6 +42,18 @@ const Search = () => {
         searchParams.delete('genre');
         setSearchParams(searchParams, { replace: true });
     };
+
+    const thepyCategory = searchParams.get('thepy_category') || '';
+    const thepyTime = searchParams.get('thepy_time') || '';
+    const thepyViews = searchParams.get('thepy_views') || '';
+    const thepyLength = searchParams.get('thepy_length') || '';
+
+    const updateThepyFilter = (key: string, value: string) => {
+        if (value) searchParams.set(key, value);
+        else searchParams.delete(key);
+        searchParams.delete('genre');
+        setSearchParams(searchParams, { replace: true });
+    };
     const [nhentaiTagQuery, setNhentaiTagQuery] = useState('');
 
     // User text input query
@@ -51,7 +63,8 @@ const Search = () => {
     const isTextSearch = debouncedQuery.length > 2;
     const isGenreSearch = selectedGenres.length > 0 && !isTextSearch;
     const isKkphimSearch = isKkphim && (kkphimCategory || kkphimCountry || kkphimYear || kkphimSortField || kkphimType);
-    const isSearchEnabled = Boolean(isTextSearch || isGenreSearch || isKkphimSearch);
+    const isThepySearch = isThepy && (thepyCategory || thepyTime || thepyViews || thepyLength);
+    const isSearchEnabled = Boolean(isTextSearch || isGenreSearch || isKkphimSearch || isThepySearch);
 
     // queryKey param should bundle both to trigger refetches correctly
     const queryKeyParam = isNhentai
@@ -59,7 +72,7 @@ const Search = () => {
         : isKkphim 
         ? `${debouncedQuery}-${kkphimCategory}-${kkphimCountry}-${kkphimYear}-${kkphimSortField}-${kkphimType}`
         : isThepy
-        ? debouncedQuery
+        ? `${debouncedQuery}-${thepyCategory}-${thepyTime}-${thepyViews}-${thepyLength}`
         : `${debouncedQuery}-${selectedGenres.join(',')}`;
 
     const {
@@ -90,7 +103,17 @@ const Search = () => {
                 }
             }
             if (isThepy) {
-                if (debouncedQuery) return ThePYService.fetchSearch(debouncedQuery, pageParam as number);
+                if (debouncedQuery) {
+                    return ThePYService.fetchSearch(debouncedQuery, pageParam as number);
+                } else {
+                    const filters = {
+                        category: thepyCategory,
+                        time: thepyTime,
+                        views: thepyViews,
+                        length: thepyLength
+                    };
+                    return ThePYService.fetchList('recent', pageParam as number, filters);
+                }
             }
             if (isNettruyen) {
                 if (isTextSearch) {
@@ -243,7 +266,7 @@ const Search = () => {
 
             {/* Results Area */}
             <div className="p-2">
-                {(selectedGenres.length > 0 || isKkphimSearch) && (
+                {(selectedGenres.length > 0 || isKkphimSearch || isThepySearch) && (
                     <div className="mb-4 flex items-center gap-2 px-2 flex-wrap">
                         <span className="text-sm text-[var(--color-text-muted)]">{t('search.genres')}:</span>
                         {selectedGenres.map(genre => {
@@ -308,6 +331,35 @@ const Search = () => {
                                     <div className="flex items-center gap-1 bg-[var(--color-surface-hover)] text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
                                         {kkphimYear}
                                         <button onClick={() => updateKKPhimFilter('year', '')} className="ml-1 hover:text-[var(--color-text)] transition-colors"><X size={14} /></button>
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        {isThepy && (
+                            <>
+                                {thepyCategory && (
+                                    <div className="flex items-center gap-1 bg-[var(--color-surface-hover)] text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
+                                        {ThePYService.SORT_FIELDS.find(c => c.value === thepyCategory)?.name || thepyCategory}
+                                        <button onClick={() => updateThepyFilter('thepy_category', '')} className="ml-1 hover:text-[var(--color-text)] transition-colors"><X size={14} /></button>
+                                    </div>
+                                )}
+                                {thepyTime && (
+                                    <div className="flex items-center gap-1 bg-[var(--color-surface-hover)] text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
+                                        {ThePYService.FILTER_TIME.find(c => c.value === thepyTime)?.name || thepyTime}
+                                        <button onClick={() => updateThepyFilter('thepy_time', '')} className="ml-1 hover:text-[var(--color-text)] transition-colors"><X size={14} /></button>
+                                    </div>
+                                )}
+                                {thepyViews && (
+                                    <div className="flex items-center gap-1 bg-[var(--color-surface-hover)] text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
+                                        {ThePYService.FILTER_VIEWS.find(c => c.value === thepyViews)?.name || thepyViews}
+                                        <button onClick={() => updateThepyFilter('thepy_views', '')} className="ml-1 hover:text-[var(--color-text)] transition-colors"><X size={14} /></button>
+                                    </div>
+                                )}
+                                {thepyLength && (
+                                    <div className="flex items-center gap-1 bg-[var(--color-surface-hover)] text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
+                                        {ThePYService.FILTER_DURATION.find(c => c.value === thepyLength)?.name || thepyLength}
+                                        <button onClick={() => updateThepyFilter('thepy_length', '')} className="ml-1 hover:text-[var(--color-text)] transition-colors"><X size={14} /></button>
                                     </div>
                                 )}
                             </>
@@ -601,8 +653,84 @@ const Search = () => {
                                             </div>
                                         </div>
                                     )}
+
+                                    {isThepy && (
+                                        <div className="flex flex-col gap-6">
+                                            <div>
+                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">Category</h3>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {ThePYService.SORT_FIELDS.map(cat => (
+                                                        <button
+                                                            key={cat.value}
+                                                            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${thepyCategory === cat.value || (!thepyCategory && cat.value === 'all')
+                                                                ? 'bg-[var(--color-primary)]/20 text-[var(--color-primary)] border-[var(--color-primary)]'
+                                                                : 'bg-[var(--color-surface-hover)] text-[var(--color-text)] border-transparent hover:border-[#9e9e9e]'
+                                                                }`}
+                                                            onClick={() => updateThepyFilter('thepy_category', cat.value === 'all' ? '' : cat.value)}
+                                                        >
+                                                            {cat.name}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">Time</h3>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {ThePYService.FILTER_TIME.map(time => (
+                                                        <button
+                                                            key={time.value}
+                                                            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${thepyTime === time.value || (!thepyTime && time.value === 'all')
+                                                                ? 'bg-[var(--color-primary)]/20 text-[var(--color-primary)] border-[var(--color-primary)]'
+                                                                : 'bg-[var(--color-surface-hover)] text-[var(--color-text)] border-transparent hover:border-[#9e9e9e]'
+                                                                }`}
+                                                            onClick={() => updateThepyFilter('thepy_time', time.value === 'all' ? '' : time.value)}
+                                                        >
+                                                            {time.name}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">Views</h3>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {ThePYService.FILTER_VIEWS.map(view => (
+                                                        <button
+                                                            key={view.value}
+                                                            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${thepyViews === view.value || (!thepyViews && view.value === 'all')
+                                                                ? 'bg-[var(--color-primary)]/20 text-[var(--color-primary)] border-[var(--color-primary)]'
+                                                                : 'bg-[var(--color-surface-hover)] text-[var(--color-text)] border-transparent hover:border-[#9e9e9e]'
+                                                                }`}
+                                                            onClick={() => updateThepyFilter('thepy_views', view.value === 'all' ? '' : view.value)}
+                                                        >
+                                                            {view.name}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">Length</h3>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {ThePYService.FILTER_DURATION.map(dur => (
+                                                        <button
+                                                            key={dur.value}
+                                                            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${thepyLength === dur.value || (!thepyLength && dur.value === 'all')
+                                                                ? 'bg-[var(--color-primary)]/20 text-[var(--color-primary)] border-[var(--color-primary)]'
+                                                                : 'bg-[var(--color-surface-hover)] text-[var(--color-text)] border-transparent hover:border-[#9e9e9e]'
+                                                                }`}
+                                                            onClick={() => updateThepyFilter('thepy_length', dur.value === 'all' ? '' : dur.value)}
+                                                        >
+                                                            {dur.name}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                     
-                                    {!isNhentaiTags && !isKkphim && (
+                                    {!isNhentaiTags && !isKkphim && !isThepy && (
                                         <div className="flex flex-wrap gap-2">
                                             {categories.map((cat: any) => {
                                                 const isSelected = selectedGenres.includes(cat.slug);

@@ -53,7 +53,11 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
     // Use the slug directly if it's not phim-moi-cap-nhat
     let type = slug === 'phim-moi-cap-nhat' ? 'recent' : slug;
     if (type === 'recent') {
-        const category = filters.sort_field || 'all';
+        const category = filters.category || filters.sort_field || 'all';
+        const time = filters.time || 'all';
+        const views = filters.views || 'all';
+        const length = filters.length || 'all';
+
         const res = await fetch(`${BASE}/searchSevenVideos`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -61,9 +65,9 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
                 page,
                 keywords: "1",
                 filterCategory: category,
-                filterTimeInDays: "all",
-                filterViews: "all",
-                filterDurationInMins: "all"
+                filterTimeInDays: time,
+                filterViews: views,
+                filterDurationInMins: length
             })
         }).then(r => r.json()).catch(() => null);
 
@@ -209,11 +213,38 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
 };
 
 export const SORT_FIELDS = [
-    { name: 'Tất cả', value: 'all' },
+    { name: 'All', value: 'all' },
     { name: 'China', value: '91' },
     { name: 'Taiwan', value: 'taiwan' },
     { name: 'Japan', value: 'japan' },
-    { name: 'Europe', value: 'eu' }
+    { name: 'Europe/America', value: 'eu' }
+];
+
+export const FILTER_TIME = [
+    { name: 'All', value: 'all' },
+    { name: '1 Week', value: '7' },
+    { name: '2 Weeks', value: '14' },
+    { name: '1 Month', value: '30' },
+    { name: '3 Months', value: '90' },
+    { name: '6 Months', value: '180' },
+    { name: '1 Year', value: '365' }
+];
+
+export const FILTER_VIEWS = [
+    { name: 'All', value: 'all' },
+    { name: '> 1000', value: '1000' },
+    { name: '> 5000', value: '5000' },
+    { name: '> 10k', value: '10000' },
+    { name: '> 50k', value: '50000' },
+    { name: '> 100k', value: '100000' }
+];
+
+export const FILTER_DURATION = [
+    { name: 'All', value: 'all' },
+    { name: '> 5 mins', value: '5' },
+    { name: '> 10 mins', value: '10' },
+    { name: '> 30 mins', value: '30' },
+    { name: '> 60 mins', value: '60' }
 ];
 
 export const FILTER_FIELDS = [
@@ -222,7 +253,21 @@ export const FILTER_FIELDS = [
     { name: 'Taiwan SWAG', value: 'swag' },
     { name: 'China BDSM', value: 'gcsm' },
     { name: 'HongKong Doll', value: 'c3' },
-    { name: 'Banana Fever', value: 'banana' }
+    { name: 'Banana Fever', value: 'banana' },
+    { name: 'Torture', value: 'torture_all' },
+    { name: 'Piss', value: 'pissvids' },
+    { name: 'Madou', value: 'c1' },
+    { name: '91 Studio', value: 'c2' },
+    { name: 'LoveLive', value: 'c4' },
+    { name: 'Sugar Vlog', value: 'c5' },
+    { name: 'TianMei', value: 'c6' },
+    { name: 'Peach', value: 'c7' },
+    { name: 'Royal china', value: 'c8' },
+    { name: 'Star', value: 'c9' },
+    { name: 'JD Films', value: 'ca' },
+    { name: 'Adult Headlines', value: 'cc' },
+    { name: 'Crow', value: 'cd' },
+    { name: 'Happy', value: 'cl' }
 ];
 
 export const YEARS = [];
