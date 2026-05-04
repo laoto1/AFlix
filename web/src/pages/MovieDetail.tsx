@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Play, X, Star, Calendar, Clock, Layers, Maximize, PlayCircle, Loader2, Volume2, VolumeX, List, Server, Share2, Check, Bookmark } from 'lucide-react';
+import { ArrowLeft, Play, Star, Calendar, Clock, Layers, Share2, Check, Bookmark, Info, Activity } from 'lucide-react';
 import axios from 'axios';
 import * as KKPhimService from '../services/kkphim';
 import * as ThePYService from '../services/thepy';
@@ -19,7 +19,6 @@ export default function MovieDetail() {
     const [selectedEpisode, setSelectedEpisode] = useState<any>(null);
     const [isWatching, setIsWatching] = useState(false);
     const [showTrailer, setShowTrailer] = useState(false);
-    const [isMuted, setIsMuted] = useState(false);
     const [isCopied, setIsCopied] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [initialTime, setInitialTime] = useState<number>(0);

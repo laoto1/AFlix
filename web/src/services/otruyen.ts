@@ -40,14 +40,23 @@ otruyenAxios.interceptors.request.use(config => {
     return config;
 });
 
+const filterValidComics = (data: OtruyenResponse): OtruyenResponse => {
+    if (data?.data?.items) {
+        data.data.items = data.data.items.filter(item => 
+            item.chaptersLatest && item.chaptersLatest.length > 0
+        );
+    }
+    return data;
+};
+
 export const fetchLatestComics = async (page: number = 1): Promise<OtruyenResponse> => {
     const { data } = await otruyenAxios.get(`${OTRUYEN_API_BASE}/danh-sach/truyen-moi?page=${page}`);
-    return data;
+    return filterValidComics(data);
 };
 
 export const fetchCompletedComics = async (page: number = 1): Promise<OtruyenResponse> => {
     const { data } = await otruyenAxios.get(`${OTRUYEN_API_BASE}/danh-sach/hoan-thanh?page=${page}`);
-    return data;
+    return filterValidComics(data);
 };
 
 export const fetchComicDetails = async (slug: string) => {
@@ -62,12 +71,12 @@ export const fetchChapter = async (chapterApiUrl: string) => {
 
 export const fetchSearchComics = async (keyword: string, page: number = 1): Promise<OtruyenResponse> => {
     const { data } = await otruyenAxios.get(`${OTRUYEN_API_BASE}/tim-kiem?keyword=${encodeURIComponent(keyword)}&page=${page}`);
-    return data;
+    return filterValidComics(data);
 };
 
 export const fetchComicsByCategory = async (categorySlug: string, page: number = 1): Promise<OtruyenResponse> => {
     const { data } = await otruyenAxios.get(`${OTRUYEN_API_BASE}/the-loai/${categorySlug}?page=${page}`);
-    return data;
+    return filterValidComics(data);
 };
 
 export const fetchCategories = async () => {
