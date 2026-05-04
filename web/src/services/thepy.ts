@@ -213,38 +213,38 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
 };
 
 export const SORT_FIELDS = [
-    { name: 'All', value: 'all' },
-    { name: 'China', value: '91' },
-    { name: 'Taiwan', value: 'taiwan' },
-    { name: 'Japan', value: 'japan' },
-    { name: 'Europe/America', value: 'eu' }
+    { name: 'All', value: 'all', translateKey: 'filter.all' },
+    { name: 'China', value: '91', translateKey: 'thepy.category.china' },
+    { name: 'Taiwan', value: 'taiwan', translateKey: 'thepy.category.taiwan' },
+    { name: 'Japan', value: 'japan', translateKey: 'thepy.category.japan' },
+    { name: 'Europe/America', value: 'eu', translateKey: 'thepy.category.eu' }
 ];
 
 export const FILTER_TIME = [
-    { name: 'All', value: 'all' },
-    { name: '1 Week', value: '7' },
-    { name: '2 Weeks', value: '14' },
-    { name: '1 Month', value: '30' },
-    { name: '3 Months', value: '90' },
-    { name: '6 Months', value: '180' },
-    { name: '1 Year', value: '365' }
+    { name: 'All', value: 'all', translateKey: 'filter.all' },
+    { name: '1 Week', value: '7', translateKey: 'filter.time.1w' },
+    { name: '2 Weeks', value: '14', translateKey: 'filter.time.2w' },
+    { name: '1 Month', value: '30', translateKey: 'filter.time.1m' },
+    { name: '3 Months', value: '90', translateKey: 'filter.time.3m' },
+    { name: '6 Months', value: '180', translateKey: 'filter.time.6m' },
+    { name: '1 Year', value: '365', translateKey: 'filter.time.1y' }
 ];
 
 export const FILTER_VIEWS = [
-    { name: 'All', value: 'all' },
-    { name: '> 1000', value: '1000' },
-    { name: '> 5000', value: '5000' },
-    { name: '> 10k', value: '10000' },
-    { name: '> 50k', value: '50000' },
-    { name: '> 100k', value: '100000' }
+    { name: 'All', value: 'all', translateKey: 'filter.all' },
+    { name: '> 1000', value: '1000', translateKey: 'filter.views.1k' },
+    { name: '> 5000', value: '5000', translateKey: 'filter.views.5k' },
+    { name: '> 10k', value: '10000', translateKey: 'filter.views.10k' },
+    { name: '> 50k', value: '50000', translateKey: 'filter.views.50k' },
+    { name: '> 100k', value: '100000', translateKey: 'filter.views.100k' }
 ];
 
 export const FILTER_DURATION = [
-    { name: 'All', value: 'all' },
-    { name: '> 5 mins', value: '5' },
-    { name: '> 10 mins', value: '10' },
-    { name: '> 30 mins', value: '30' },
-    { name: '> 60 mins', value: '60' }
+    { name: 'All', value: 'all', translateKey: 'filter.all' },
+    { name: '> 5 mins', value: '5', translateKey: 'filter.duration.5m' },
+    { name: '> 10 mins', value: '10', translateKey: 'filter.duration.10m' },
+    { name: '> 30 mins', value: '30', translateKey: 'filter.duration.30m' },
+    { name: '> 60 mins', value: '60', translateKey: 'filter.duration.60m' }
 ];
 
 export const FILTER_FIELDS = [

@@ -340,25 +340,25 @@ const Search = () => {
                             <>
                                 {thepyCategory && (
                                     <div className="flex items-center gap-1 bg-[var(--color-surface-hover)] text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
-                                        {ThePYService.SORT_FIELDS.find(c => c.value === thepyCategory)?.name || thepyCategory}
+                                        {ThePYService.SORT_FIELDS.find(c => c.value === thepyCategory)?.translateKey ? t(ThePYService.SORT_FIELDS.find(c => c.value === thepyCategory)!.translateKey) : (ThePYService.SORT_FIELDS.find(c => c.value === thepyCategory)?.name || thepyCategory)}
                                         <button onClick={() => updateThepyFilter('thepy_category', '')} className="ml-1 hover:text-[var(--color-text)] transition-colors"><X size={14} /></button>
                                     </div>
                                 )}
                                 {thepyTime && (
                                     <div className="flex items-center gap-1 bg-[var(--color-surface-hover)] text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
-                                        {ThePYService.FILTER_TIME.find(c => c.value === thepyTime)?.name || thepyTime}
+                                        {ThePYService.FILTER_TIME.find(c => c.value === thepyTime)?.translateKey ? t(ThePYService.FILTER_TIME.find(c => c.value === thepyTime)!.translateKey) : (ThePYService.FILTER_TIME.find(c => c.value === thepyTime)?.name || thepyTime)}
                                         <button onClick={() => updateThepyFilter('thepy_time', '')} className="ml-1 hover:text-[var(--color-text)] transition-colors"><X size={14} /></button>
                                     </div>
                                 )}
                                 {thepyViews && (
                                     <div className="flex items-center gap-1 bg-[var(--color-surface-hover)] text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
-                                        {ThePYService.FILTER_VIEWS.find(c => c.value === thepyViews)?.name || thepyViews}
+                                        {ThePYService.FILTER_VIEWS.find(c => c.value === thepyViews)?.translateKey ? t(ThePYService.FILTER_VIEWS.find(c => c.value === thepyViews)!.translateKey) : (ThePYService.FILTER_VIEWS.find(c => c.value === thepyViews)?.name || thepyViews)}
                                         <button onClick={() => updateThepyFilter('thepy_views', '')} className="ml-1 hover:text-[var(--color-text)] transition-colors"><X size={14} /></button>
                                     </div>
                                 )}
                                 {thepyLength && (
                                     <div className="flex items-center gap-1 bg-[var(--color-surface-hover)] text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
-                                        {ThePYService.FILTER_DURATION.find(c => c.value === thepyLength)?.name || thepyLength}
+                                        {ThePYService.FILTER_DURATION.find(c => c.value === thepyLength)?.translateKey ? t(ThePYService.FILTER_DURATION.find(c => c.value === thepyLength)!.translateKey) : (ThePYService.FILTER_DURATION.find(c => c.value === thepyLength)?.name || thepyLength)}
                                         <button onClick={() => updateThepyFilter('thepy_length', '')} className="ml-1 hover:text-[var(--color-text)] transition-colors"><X size={14} /></button>
                                     </div>
                                 )}
@@ -657,7 +657,7 @@ const Search = () => {
                                     {isThepy && (
                                         <div className="flex flex-col gap-6">
                                             <div>
-                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">Category</h3>
+                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">{t('search.filter.category')}</h3>
                                                 <div className="flex flex-wrap gap-2">
                                                     {ThePYService.SORT_FIELDS.map(cat => (
                                                         <button
@@ -668,14 +668,14 @@ const Search = () => {
                                                                 }`}
                                                             onClick={() => updateThepyFilter('thepy_category', cat.value === 'all' ? '' : cat.value)}
                                                         >
-                                                            {cat.name}
+                                                            {cat.translateKey ? t(cat.translateKey) : cat.name}
                                                         </button>
                                                     ))}
                                                 </div>
                                             </div>
 
                                             <div>
-                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">Time</h3>
+                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">{t('search.filter.time')}</h3>
                                                 <div className="flex flex-wrap gap-2">
                                                     {ThePYService.FILTER_TIME.map(time => (
                                                         <button
@@ -686,14 +686,14 @@ const Search = () => {
                                                                 }`}
                                                             onClick={() => updateThepyFilter('thepy_time', time.value === 'all' ? '' : time.value)}
                                                         >
-                                                            {time.name}
+                                                            {time.translateKey ? t(time.translateKey) : time.name}
                                                         </button>
                                                     ))}
                                                 </div>
                                             </div>
 
                                             <div>
-                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">Views</h3>
+                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">{t('search.filter.views')}</h3>
                                                 <div className="flex flex-wrap gap-2">
                                                     {ThePYService.FILTER_VIEWS.map(view => (
                                                         <button
@@ -704,14 +704,14 @@ const Search = () => {
                                                                 }`}
                                                             onClick={() => updateThepyFilter('thepy_views', view.value === 'all' ? '' : view.value)}
                                                         >
-                                                            {view.name}
+                                                            {view.translateKey ? t(view.translateKey) : view.name}
                                                         </button>
                                                     ))}
                                                 </div>
                                             </div>
 
                                             <div>
-                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">Length</h3>
+                                                <h3 className="text-sm font-medium text-[var(--color-text-muted)] mb-3">{t('search.filter.length')}</h3>
                                                 <div className="flex flex-wrap gap-2">
                                                     {ThePYService.FILTER_DURATION.map(dur => (
                                                         <button
@@ -722,7 +722,7 @@ const Search = () => {
                                                                 }`}
                                                             onClick={() => updateThepyFilter('thepy_length', dur.value === 'all' ? '' : dur.value)}
                                                         >
-                                                            {dur.name}
+                                                            {dur.translateKey ? t(dur.translateKey) : dur.name}
                                                         </button>
                                                     ))}
                                                 </div>
