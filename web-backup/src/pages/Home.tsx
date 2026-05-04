@@ -64,7 +64,7 @@ const Home = () => {
     const { unreadCount } = useNotifications();
     const [sources, setSources] = useState(INITIAL_SOURCES);
     const [novelSources, setNovelSources] = useState(INITIAL_NOVEL_SOURCES);
-    const [movieSources, setMovieSources] = useState(INITIAL_MOVIE_SOURCES);
+    const [movieSources] = useState(INITIAL_MOVIE_SOURCES);
 
     // Check for unlock
     useState(() => {

@@ -1,14 +1,5 @@
-XHR
-GET
-https://backend-worker.laoto.workers.dev/api/bookmarks
-[HTTP/3 401  134ms]
-
-XHR
-GET
-https://backend-worker.mialui1112.workers.dev/api/bookmarks
-[HTTP/2 401  185ms]
-
-XHR
-GET
-https://backend-worker.luanhock22.workers.dev/api/bookmarks
-[HTTP/3 401  50ms]
+Worker Error: Cannot read properties of undefined (reading 'fetch')
+TypeError: Cannot read properties of undefined (reading 'fetch')
+    at Object.fetch (worker.js:28:41)
+Failed to load resource: the server responded with a status of 500 ()Understand this error
+home:1  Failed to load resource: the server responded with a status of 500 ()

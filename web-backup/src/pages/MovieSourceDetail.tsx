@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Search, Loader2, X, Filter } from 'lucide-react';
+import { ArrowLeft, Search, Loader2 } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { useSettings } from '../contexts/SettingsContext';
 import * as KKPhimService from '../services/kkphim';
 import { KKPhimCard } from '../components/KKPhimCard';
-import { getProxiedImageUrl } from '../utils/imageProxy';
 
 const MovieSourceDetail = () => {
     const { t } = useSettings();

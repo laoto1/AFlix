@@ -311,7 +311,7 @@ export const TTSPanel: React.FC<TTSPanelProps> = ({ blocks, themeStyles, isAutoS
         setErrorMsg('');
 
         try {
-            let audioSrc = audioCacheRef.current[idx];
+            let audioSrc: string | Promise<string | null> | null | undefined = audioCacheRef.current[idx];
 
             if (audioSrc instanceof Promise) {
                 setIsLoadingAudio(true);

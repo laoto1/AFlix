@@ -14,14 +14,14 @@ export default function MovieDetail() {
     const { sourceId, slug } = useParams();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    
+
     const [selectedServer, setSelectedServer] = useState<number>(0);
     const [selectedEpisode, setSelectedEpisode] = useState<any>(null);
     const [isWatching, setIsWatching] = useState(false);
     const [showTrailer, setShowTrailer] = useState(false);
     const [initialTime, setInitialTime] = useState<number>(0);
     const currentTimeRef = useRef<number>(0);
-    
+
     const playerRef = useRef<HTMLDivElement>(null);
     const [isCopied, setIsCopied] = useState(false);
 
@@ -53,11 +53,11 @@ export default function MovieDetail() {
             const firstServer = detailData?.data?.episodes?.[0];
             if (firstServer?.server_data?.length > 0) {
                 setSelectedServer(0);
-                
+
                 // If there is history, try to find the matching episode in the server data
                 let targetEp = firstServer.server_data[0];
                 const epQuery = searchParams.get('ep');
-                
+
                 if (epQuery) {
                     const match = firstServer.server_data.find((e: any) => e.slug === epQuery || e.name === epQuery);
                     if (match) targetEp = match;
@@ -118,7 +118,7 @@ export default function MovieDetail() {
     // Sync episode from URL on initial load or URL change
     useEffect(() => {
         if (!detailData?.data?.episodes || detailData.data.episodes.length === 0) return;
-        
+
         const epQuery = searchParams.get('ep');
         if (epQuery) {
             setIsWatching(true);
@@ -144,7 +144,7 @@ export default function MovieDetail() {
             const movie = detailData.data.movie;
             const domain = 'https://phimimg.com';
             const posterUrl = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${domain}/${movie.thumb_url}`;
-            
+
             // Use axios, it will auto-attach token via interceptor
             axios.post('/api/history', {
                 sourceId,
@@ -156,7 +156,7 @@ export default function MovieDetail() {
                 thumbUrl: posterUrl
             }).catch(console.error);
         };
-        
+
         // Save initially when episode loads
         saveHistory();
 
@@ -188,7 +188,7 @@ export default function MovieDetail() {
         const domain = 'https://phimimg.com';
         const posterUrl = movie.poster_url?.startsWith('http') ? movie.poster_url : `${domain}/${movie.poster_url}`;
         const finalPosterUrl = getProxiedImageUrl(posterUrl);
-        
+
         const url = window.location.href;
         let pageTitle = movie.name;
         if (movie.origin_name && movie.origin_name !== movie.name) {
@@ -197,7 +197,7 @@ export default function MovieDetail() {
         if (isWatching && selectedEpisode) {
             pageTitle = `Đang xem ${selectedEpisode.name} - ${pageTitle}`;
         }
-        
+
         let description = movie.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || '';
         if (description.length === 200) description += '...';
 
@@ -220,7 +220,7 @@ export default function MovieDetail() {
         setMeta('og:image', finalPosterUrl, true);
         setMeta('og:url', url, true);
         setMeta('og:type', 'video.movie', true);
-        
+
         setMeta('twitter:card', 'summary_large_image');
         setMeta('twitter:title', pageTitle);
         setMeta('twitter:description', description);
@@ -240,7 +240,7 @@ export default function MovieDetail() {
 
     const movie = detailData.data.movie;
     const episodes = detailData.data.episodes || [];
-    
+
     const domain = 'https://phimimg.com';
     const posterUrl = movie.poster_url?.startsWith('http') ? movie.poster_url : `${domain}/${movie.poster_url}`;
 
@@ -260,7 +260,7 @@ export default function MovieDetail() {
         <div className="min-h-screen bg-[#0f0f0f] text-white pb-20">
             {/* Navigation Bar */}
             <div className="fixed top-0 inset-x-0 h-14 bg-gradient-to-b from-black/80 to-transparent z-50 flex items-center px-4">
-                <button 
+                <button
                     onClick={() => navigate(-1)}
                     className="p-2 rounded-full bg-black/40 backdrop-blur hover:bg-black/60 transition"
                 >
@@ -271,9 +271,9 @@ export default function MovieDetail() {
             {/* Full-width Hero Section */}
             <div className="w-full relative h-[60vh] md:h-[80vh]">
                 <div className="absolute inset-0">
-                    <img 
-                        src={getProxiedImageUrl(posterUrl)} 
-                        alt="Poster" 
+                    <img
+                        src={getProxiedImageUrl(posterUrl)}
+                        alt="Poster"
                         className="w-full h-full object-cover"
                     />
                     {/* Gradients to blend with background and text */}
@@ -287,7 +287,7 @@ export default function MovieDetail() {
                         <div className="md:w-2/3">
                             <h1 className="text-4xl md:text-6xl font-extrabold mb-2 drop-shadow-lg leading-tight text-white">{movie.origin_name && t('nav.home') !== 'Trang chủ' ? movie.origin_name : movie.name}</h1>
                             <h2 className="text-lg md:text-xl text-gray-300 font-medium mb-6 drop-shadow-md">{movie.origin_name && t('nav.home') !== 'Trang chủ' ? movie.name : movie.origin_name}</h2>
-                            
+
                             <div className="flex flex-wrap items-center gap-3 mb-8">
                                 {movie.quality && <span className="px-2.5 py-1 bg-[var(--color-primary)] text-black text-xs md:text-sm font-bold rounded-md shadow-sm">{movie.quality}</span>}
                                 {movie.lang && <span className="px-2.5 py-1 bg-white/20 backdrop-blur-md text-white text-xs md:text-sm font-bold rounded-md shadow-sm">{movie.lang}</span>}
@@ -304,21 +304,21 @@ export default function MovieDetail() {
 
                             {!isWatching && (
                                 <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                                    <button 
+                                    <button
                                         onClick={handleWatchNow}
                                         className="flex items-center justify-center gap-2 px-8 py-3 md:py-4 rounded-full bg-[var(--color-primary)] text-black text-lg font-bold hover:scale-105 transition shadow-lg shadow-[var(--color-primary)]/30"
                                     >
                                         <Play size={24} fill="currentColor" /> {continueWatchingInfo ? `Xem tiếp ${continueWatchingInfo.chapter_id.replace(/^tap-/i, 'Tập ')}` : t('movie.watch_now')}
                                     </button>
                                     {movie.trailer_url && (
-                                        <button 
+                                        <button
                                             onClick={() => setShowTrailer(true)}
                                             className="flex items-center justify-center gap-2 px-8 py-3 md:py-4 rounded-full bg-white/20 backdrop-blur-md text-white text-lg font-bold hover:bg-white/30 transition shadow-lg border border-white/10"
                                         >
                                             <Play size={24} /> {t('movie.watch_trailer')}
                                         </button>
                                     )}
-                                    <button 
+                                    <button
                                         onClick={handleShare}
                                         className="flex items-center justify-center gap-2 px-6 py-3 md:py-4 rounded-full bg-white/10 backdrop-blur-md text-white text-lg font-bold hover:bg-white/20 transition shadow-lg border border-white/10"
                                     >
@@ -326,20 +326,20 @@ export default function MovieDetail() {
                                     </button>
                                 </div>
                             )}
-                            
+
                             {isWatching && (
                                 <div className="flex mb-6">
-                                    <button 
+                                    <button
                                         onClick={handleShare}
                                         className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-white/10 backdrop-blur-md text-white font-bold hover:bg-white/20 transition border border-white/10"
                                     >
-                                        {isCopied ? <Check size={20} className="text-green-400" /> : <Share2 size={20} />} {isCopied ? 'Đã Copy Link Chia Sẻ' : 'Copy Link Discord'}
+                                        {isCopied ? <Check size={20} className="text-green-400" /> : <Share2 size={20} />} {isCopied ? 'Đã Copy Link Chia Sẻ' : 'Chia sẻ'}
                                     </button>
                                 </div>
                             )}
-                            
+
                             {/* Short Synopsis on Desktop */}
-                            <div 
+                            <div
                                 className="hidden md:block text-base text-gray-200 leading-relaxed max-w-3xl line-clamp-4 drop-shadow-md font-medium"
                                 dangerouslySetInnerHTML={{ __html: movie.content }}
                             />
@@ -355,7 +355,7 @@ export default function MovieDetail() {
                     <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
                         <Info size={16} /> {t('movie.synopsis')}
                     </h3>
-                    <div 
+                    <div
                         className="text-sm text-gray-300 leading-relaxed"
                         dangerouslySetInnerHTML={{ __html: movie.content }}
                     />
@@ -378,11 +378,11 @@ export default function MovieDetail() {
             {/* Player & Episodes Section (Only visible when watching) */}
             {isWatching && (
                 <div ref={playerRef} className="max-w-6xl mx-auto px-4 md:px-8 mt-10">
-                    
+
                     {/* The Player */}
                     <div className="w-full aspect-video bg-black relative shadow-2xl rounded-xl overflow-hidden mb-8 border border-white/10 group/player">
                         {selectedEpisode && (
-                            <NetflixPlayer 
+                            <NetflixPlayer
                                 src={selectedEpisode.link_m3u8}
                                 poster={getProxiedImageUrl(posterUrl)}
                                 title={movie.name}
@@ -425,11 +425,10 @@ export default function MovieDetail() {
                                         <button
                                             key={idx}
                                             onClick={() => handleSelectServer(idx)}
-                                            className={`px-5 py-2.5 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${
-                                                selectedServer === idx 
-                                                ? 'bg-[var(--color-primary)] text-black' 
-                                                : 'bg-white/5 hover:bg-white/10'
-                                            }`}
+                                            className={`px-5 py-2.5 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${selectedServer === idx
+                                                    ? 'bg-[var(--color-primary)] text-black'
+                                                    : 'bg-white/5 hover:bg-white/10'
+                                                }`}
                                         >
                                             {server.server_name}
                                         </button>
@@ -447,11 +446,10 @@ export default function MovieDetail() {
                                                 handleSelectEpisode(ep);
                                                 playerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                             }}
-                                            className={`relative p-3 rounded-xl flex flex-col items-center justify-center gap-1 transition-all overflow-hidden group ${
-                                                isPlaying 
-                                                ? 'bg-[var(--color-primary)] text-black font-bold ring-2 ring-[var(--color-primary)] ring-offset-2 ring-offset-[#1a1a1a]' 
-                                                : 'bg-black/40 hover:bg-white/10 text-gray-300 border border-white/5 hover:border-white/20'
-                                            }`}
+                                            className={`relative p-3 rounded-xl flex flex-col items-center justify-center gap-1 transition-all overflow-hidden group ${isPlaying
+                                                    ? 'bg-[var(--color-primary)] text-black font-bold ring-2 ring-[var(--color-primary)] ring-offset-2 ring-offset-[#1a1a1a]'
+                                                    : 'bg-black/40 hover:bg-white/10 text-gray-300 border border-white/5 hover:border-white/20'
+                                                }`}
                                         >
                                             <span className="text-sm truncate w-full text-center">{ep.name}</span>
                                             {isPlaying && (
@@ -472,18 +470,18 @@ export default function MovieDetail() {
             {showTrailer && movie.trailer_url && (
                 <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
                     <div className="w-full max-w-5xl bg-black rounded-xl overflow-hidden shadow-2xl border border-white/10 relative">
-                        <button 
+                        <button
                             onClick={() => setShowTrailer(false)}
                             className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-[var(--color-primary)] hover:text-black rounded-full flex items-center justify-center z-10 transition-colors text-white"
                         >
                             ✕
                         </button>
                         <div className="w-full aspect-video">
-                            <iframe 
-                                src={getEmbedUrl(movie.trailer_url)} 
+                            <iframe
+                                src={getEmbedUrl(movie.trailer_url)}
                                 className="w-full h-full"
-                                frameBorder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                             ></iframe>
                         </div>

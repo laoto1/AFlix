@@ -4,8 +4,8 @@ import Hls from 'hls.js';
 import { useInView } from 'react-intersection-observer';
 import { 
     Play, Pause, Volume2, VolumeX, Maximize, Minimize, 
-    RotateCcw, RotateCw, Loader2, X, Lock, Unlock, Settings2, SkipForward,
-    Gauge, Subtitles, ListVideo, Sun, Moon, Lightbulb
+    RotateCcw, RotateCw, Loader2, X, Lock, Unlock, SkipForward,
+    Gauge, Subtitles, ListVideo, Sun, Lightbulb
 } from 'lucide-react';
 import { getProxiedImageUrl } from '../utils/imageProxy';
 import { useSettings } from '../contexts/SettingsContext';
@@ -30,6 +30,8 @@ interface NetflixPlayerProps {
     season?: number;
     episodeNumber?: number;
     movieOverview?: string;
+    initialTime?: number;
+    onTimeUpdate?: (time: number) => void;
 }
 
 const formatTime = (timeInSeconds: number) => {
@@ -45,7 +47,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
  
     src, poster, title, episodeName, onBack, onNext, hasNext,
     episodes, episodesList, selectedServer, onSelectServer, currentEpisodeSlug, onSelectEpisode,
-    imdbId, tmdbId, tmdbType, season, episodeNumber, movieOverview
+    imdbId, tmdbId, tmdbType, season, episodeNumber, movieOverview, initialTime, onTimeUpdate
 }) => {
     const { t } = useSettings();
     const containerRef = useRef<HTMLDivElement>(null);
@@ -69,12 +71,12 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
     const [skipAnim, setSkipAnim] = useState<'forward' | 'backward' | null>(null);
     const [hudIndicator, setHudIndicator] = useState<{type: 'volume'|'brightness', val: number} | null>(null);
 
-    const controlsTimeoutRef = useRef<NodeJS.Timeout>();
-    const skipTimeoutRef = useRef<NodeJS.Timeout>();
-    const playAnimTimeoutRef = useRef<NodeJS.Timeout>();
-    const hudTimeoutRef = useRef<NodeJS.Timeout>();
+    const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const skipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const playAnimTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const hudTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const isSpeedLongPress = useRef(false);
-    const speedPressTimer = useRef<NodeJS.Timeout>();
+    const speedPressTimer = useRef<NodeJS.Timeout | null>(null);
     const lastTimeRef = useRef(0);
     const lastEpisodeNameRef = useRef(episodeName);
 
@@ -85,7 +87,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         }
     }, [episodeName]);
 
-    const dragStart = useRef<{y: number, type: 'brightness'|'volume', startVal: number, active: boolean} | null>(null);
+    const dragStart = useRef<{x: number, y: number, type: 'brightness'|'volume', startVal: number, active: boolean} | null>(null);
     const progressBarRef = useRef<HTMLInputElement>(null);
 
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -201,6 +203,9 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
                 if (lastTimeRef.current > 0) {
                     video.currentTime = lastTimeRef.current;
+                } else if (initialTime && initialTime > 0) {
+                    video.currentTime = initialTime;
+                    lastTimeRef.current = initialTime;
                 }
                 video.play().catch(() => console.log('Auto-play prevented'));
             });
@@ -209,6 +214,9 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
             video.addEventListener('loadedmetadata', () => {
                 if (lastTimeRef.current > 0) {
                     video.currentTime = lastTimeRef.current;
+                } else if (initialTime && initialTime > 0) {
+                    video.currentTime = initialTime;
+                    lastTimeRef.current = initialTime;
                 }
                 video.play().catch(() => console.log('Auto-play prevented'));
             }, { once: true });
@@ -302,7 +310,13 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         const video = videoRef.current;
         if (!video) return;
 
-        const handleTimeUpdate = () => setCurrentTime(video.currentTime);
+        const handleTimeUpdate = () => {
+            setCurrentTime(video.currentTime);
+            if (onTimeUpdate && Math.abs(video.currentTime - lastTimeRef.current) > 1) {
+                onTimeUpdate(video.currentTime);
+                lastTimeRef.current = video.currentTime;
+            }
+        };
         const handleDurationChange = () => setDuration(video.duration);
         const handlePlay = () => setIsPlaying(true);
         const handlePause = () => setIsPlaying(false);
@@ -900,7 +914,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
 };
 
 // Sub-component for scroll-reveal animation
-const EpisodeRow = ({ ep, index, title, poster, currentEpisodeSlug, onSelectEpisode, setShowEpisodes, showEpisodes, tmdbEpisodeData, movieOverview }: any) => {
+const EpisodeRow = ({ ep, index, title, poster, currentEpisodeSlug, onSelectEpisode, setShowEpisodes, showEpisodes, tmdbEpisodeData }: any) => {
     const { t } = useSettings();
     const { ref, inView } = useInView({
         triggerOnce: true,

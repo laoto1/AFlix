@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Play, Info, Calendar, Clock, Star, Layers, Activity } from 'lucide-react';
-import Hls from 'hls.js';
+import axios from 'axios';
 import * as KKPhimService from '../services/kkphim';
 import { getProxiedImageUrl } from '../utils/imageProxy';
 import { NetflixPlayer } from '../components/NetflixPlayer';
@@ -17,6 +17,8 @@ export default function MovieDetail() {
     const [selectedEpisode, setSelectedEpisode] = useState<any>(null);
     const [isWatching, setIsWatching] = useState(false);
     const [showTrailer, setShowTrailer] = useState(false);
+    const [initialTime, setInitialTime] = useState<number>(0);
+    const currentTimeRef = useRef<number>(0);
     
     const playerRef = useRef<HTMLDivElement>(null);
 
@@ -29,13 +31,35 @@ export default function MovieDetail() {
         enabled: !!slug
     });
 
+    const { data: historyRes } = useQuery({
+        queryKey: ['history', slug],
+        queryFn: async () => {
+            const res = await axios.get(`/api/history?comicSlug=${slug}`);
+            return res.data;
+        },
+        enabled: !!slug,
+    });
+    const historyData = historyRes;
+
+    const continueWatchingInfo = historyData?.history?.[0];
+
     const handleWatchNow = () => {
         setIsWatching(true);
         if (!selectedEpisode && detailData?.data?.episodes?.length > 0) {
-            const firstServer = detailData.data.episodes[0];
+            const firstServer = detailData?.data?.episodes?.[0];
             if (firstServer?.server_data?.length > 0) {
                 setSelectedServer(0);
-                setSelectedEpisode(firstServer.server_data[0]);
+                
+                // If there is history, try to find the matching episode in the server data
+                let targetEp = firstServer.server_data[0];
+                if (continueWatchingInfo) {
+                    const match = firstServer.server_data.find((e: any) => e.slug === continueWatchingInfo.chapter_id || e.name === continueWatchingInfo.chapter_id);
+                    if (match) {
+                        targetEp = match;
+                        setInitialTime(continueWatchingInfo.page_number || 0);
+                    }
+                }
+                setSelectedEpisode(targetEp);
             }
         }
         setTimeout(() => {
@@ -53,11 +77,64 @@ export default function MovieDetail() {
             );
             if (match) {
                 setSelectedEpisode(match);
+                setInitialTime(0);
             } else {
                 setSelectedEpisode(currentEpisodes[serverIdx].server_data[0]);
+                setInitialTime(0);
             }
         }
     };
+
+    const handleSelectEpisode = (ep: any) => {
+        setSelectedEpisode(ep);
+        setInitialTime(0);
+        currentTimeRef.current = 0;
+    };
+
+    // Intelligent History Tracking
+    useEffect(() => {
+        if (!selectedEpisode || !detailData?.data?.movie || !sourceId || !slug || !isWatching) return;
+
+        const saveHistory = () => {
+            if (currentTimeRef.current <= 0) return; // Don't save if haven't watched anything yet
+            const movie = detailData.data.movie;
+            const domain = 'https://phimimg.com';
+            const posterUrl = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${domain}/${movie.thumb_url}`;
+            
+            // Use axios, it will auto-attach token via interceptor
+            axios.post('/api/history', {
+                sourceId,
+                comicSlug: slug,
+                comicName: movie.name,
+                chapterId: selectedEpisode.slug || selectedEpisode.name,
+                pageNumber: Math.floor(currentTimeRef.current),
+                totalPages: 1,
+                thumbUrl: posterUrl
+            }).catch(console.error);
+        };
+        
+        // Save initially when episode loads
+        saveHistory();
+
+        // Save when user switches tabs or minimizes
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'hidden') saveHistory();
+        };
+
+        // Save when user closes the tab
+        const handleBeforeUnload = () => {
+            saveHistory();
+        };
+
+        window.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            saveHistory(); // Save on unmount (navigation)
+            window.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [selectedEpisode, detailData, sourceId, slug, isWatching]);
 
     if (isLoading) return (
         <div className="min-h-screen flex items-center justify-center bg-[#121212]">
@@ -71,7 +148,6 @@ export default function MovieDetail() {
     
     const domain = 'https://phimimg.com';
     const posterUrl = movie.poster_url?.startsWith('http') ? movie.poster_url : `${domain}/${movie.poster_url}`;
-    const thumbUrl = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${domain}/${movie.thumb_url}`;
 
     // Convert youtube watch URL to embed URL
     const getEmbedUrl = (url: string) => {
@@ -137,7 +213,7 @@ export default function MovieDetail() {
                                         onClick={handleWatchNow}
                                         className="flex items-center justify-center gap-2 px-8 py-3 md:py-4 rounded-full bg-[var(--color-primary)] text-black text-lg font-bold hover:scale-105 transition shadow-lg shadow-[var(--color-primary)]/30"
                                     >
-                                        <Play size={24} fill="currentColor" /> {t('movie.watch_now')}
+                                        <Play size={24} fill="currentColor" /> {continueWatchingInfo ? `Xem tiếp ${continueWatchingInfo.chapter_id.replace(/^tap-/i, 'Tập ')}` : t('movie.watch_now')}
                                     </button>
                                     {movie.trailer_url && (
                                         <button 
@@ -203,7 +279,7 @@ export default function MovieDetail() {
                                 onNext={() => {
                                     const currentIdx = episodes[selectedServer].server_data.findIndex((e: any) => e.slug === selectedEpisode.slug);
                                     if (currentIdx < episodes[selectedServer].server_data.length - 1) {
-                                        setSelectedEpisode(episodes[selectedServer].server_data[currentIdx + 1]);
+                                        handleSelectEpisode(episodes[selectedServer].server_data[currentIdx + 1]);
                                     }
                                 }}
                                 episodesList={episodes}
@@ -211,13 +287,15 @@ export default function MovieDetail() {
                                 onSelectServer={handleSelectServer}
                                 episodes={episodes[selectedServer]?.server_data}
                                 currentEpisodeSlug={selectedEpisode.slug}
-                                onSelectEpisode={(ep) => setSelectedEpisode(ep)}
+                                onSelectEpisode={handleSelectEpisode}
                                 imdbId={movie.imdb?.id || movie.tmdb?.id || ''}
                                 tmdbId={movie.tmdb?.id || ''}
                                 tmdbType={movie.tmdb?.type || 'movie'}
                                 season={movie.origin_name?.match(/Season (\d+)/i) ? parseInt(movie.origin_name.match(/Season (\d+)/i)[1], 10) : movie.name?.match(/Phần (\d+)/i) ? parseInt(movie.name.match(/Phần (\d+)/i)[1], 10) : 1}
                                 episodeNumber={selectedEpisode.name.match(/\d+/) ? parseInt(selectedEpisode.name.match(/\d+/)[0], 10) : 1}
                                 movieOverview={movie.content}
+                                initialTime={initialTime}
+                                onTimeUpdate={(time) => { currentTimeRef.current = time; }}
                             />
                         )}
                     </div>

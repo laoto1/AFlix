@@ -1,6 +1,6 @@
 class OGRewriter {
-    constructor(private metaTags: Record<string, string>, private title: string) {}
-    
+    constructor(private metaTags: Record<string, string>, private title: string) { }
+
     element(element: any) {
         if (element.tagName === 'title') {
             element.setInnerContent(this.title);
@@ -18,10 +18,10 @@ export default {
     async fetch(request: Request, env: any, ctx: any): Promise<Response> {
         try {
             const url = new URL(request.url);
-            
+
             // Fetch the static asset (Cloudflare Workers Assets handles SPA fallback)
             const response = await env.ASSETS.fetch(request);
-            
+
             // Only rewrite HTML for /movie/ routes
             if (!url.pathname.startsWith('/movie/')) {
                 return response;
@@ -29,12 +29,12 @@ export default {
 
             const clonedResponse = new Response(response.body, response);
             const pathSegments = url.pathname.split('/').filter(Boolean);
-            
+
             if (pathSegments.length >= 3 && pathSegments[0] === 'movie') {
                 const sourceId = pathSegments[1];
                 const slug = pathSegments[2];
                 const ep = url.searchParams.get('ep');
-                
+
                 let movieName = '';
                 let description = 'Xem phim, Đọc truyên tranh, tiểu thuyết trực tuyến';
                 let posterUrl = 'https://i.ibb.co/TqNn8by1/3in1.gif?q=80&w=1200&auto=format&fit=crop';
@@ -48,7 +48,7 @@ export default {
                         }
                         if (ep) {
                             const epName = ep.replace(/-/g, ' ').replace(/^tap/i, 'Tập');
-                            movieName = `Đang xem ${epName} - ${movieName}`;
+                            movieName = `${epName} - ${movieName}`;
                         }
                         description = res.movie.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || description;
                         posterUrl = res.movie.poster_url || res.movie.thumb_url;
@@ -56,9 +56,9 @@ export default {
                     }
                 } else if (sourceId === 'thepy') {
                     let epName = ep ? ep.replace(/-/g, ' ').replace(/^tap/i, 'Tập') : '';
-                    movieName = epName ? `Đang xem ${epName} - Phim ${slug.replace(/-/g, ' ')}` : `Phim ${slug.replace(/-/g, ' ')}`;
+                    movieName = epName ? `${epName} - Phim ${slug.replace(/-/g, ' ')}` : `Phim ${slug.replace(/-/g, ' ')}`;
                 }
-                
+
                 if (movieName) {
                     // @ts-ignore
                     return new HTMLRewriter()
@@ -74,7 +74,7 @@ export default {
                         .transform(clonedResponse);
                 }
             }
-            
+
             return clonedResponse;
         } catch (e: any) {
             return new Response(`Worker Error: ${e.message}\n${e.stack}`, { status: 500 });

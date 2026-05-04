@@ -9955,12 +9955,12 @@ auth.post("/", async (c) => {
       const existing = await db.execute("SELECT * FROM users WHERE username = ? OR email = ?", [username, username]);
       const rows = existing || [];
       if (rows.length === 0) {
-        return c.json({ error: `Debug-1: Account (${username}) not found on DB`, rows: existing }, 401);
+        return c.json({ error: "T\xE0i kho\u1EA3n kh\xF4ng t\u1ED3n t\u1EA1i" }, 401);
       }
       const user = rows[0];
       const isMatch = await bcryptjs_default.compare(password, user.password_hash);
       if (!isMatch) {
-        return c.json({ error: "Debug-2: Password hash verification failed", db_hash: user.password_hash }, 401);
+        return c.json({ error: "M\u1EADt kh\u1EA9u kh\xF4ng \u0111\xFAng" }, 401);
       }
       const token = import_jsonwebtoken.default.sign({ userId: user.id, username: user.username }, JWT_SECRET, { expiresIn: "7d" });
       return c.json({
@@ -10065,7 +10065,7 @@ bookmarks.use("*", async (c, next2) => {
     return c.json({ error: "Unauthorized" }, 401);
   }
   const token = authHeader.split(" ")[1];
-  const JWT_SECRET = c.env.JWT_SECRET || "fallback_secret_key";
+  const JWT_SECRET = c.env.JWT_SECRET || "fallback_secret";
   try {
     const decoded = import_jsonwebtoken3.default.verify(token, JWT_SECRET);
     c.set("userId", decoded.userId);

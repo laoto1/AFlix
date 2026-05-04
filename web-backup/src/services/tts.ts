@@ -177,6 +177,7 @@ export const generateGeminiAudio = async (text: string, keys: GeminiKey[], model
                 // Force clear the internal singleton instance to reload the new ONNX model
                 if (globalPiperSession) {
                     try {
+                        // @ts-ignore
                         const { TtsSession } = await import('../lib/piper-tts-web.js');
                         if (TtsSession && (TtsSession as any)._instance) {
                             (TtsSession as any)._instance = null;

@@ -682,7 +682,7 @@ app.get(
     <meta property="og:image" content="${posterUrl}">
     <meta property="og:url" content="${c.req.url}">
     <meta property="og:type" content="video.movie">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="${movieName}">
     <meta name="twitter:description" content="${description}">
     <meta name="twitter:image" content="${posterUrl}">

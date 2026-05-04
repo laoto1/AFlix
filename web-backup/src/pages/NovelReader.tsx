@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, ChevronLeft, ChevronRight, Settings, Minus, Plus, Loader2, Headphones, Lock } from 'lucide-react';
+import axios from 'axios';
 import * as STVService from '../services/sangtacviet';
 import * as MTCService from '../services/metruyenchu';
 import { TTSPanel } from '../components/TTSPanel';
@@ -9,6 +10,7 @@ import { TTSPanel } from '../components/TTSPanel';
 const NovelReader = () => {
     const { sourceId, host, bookId, chapterId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const queryClient = useQueryClient();
     const [fontSize, setFontSize] = useState(() => parseInt(localStorage.getItem('novel-font-size') || '18'));
     const [lineHeight, setLineHeight] = useState(() => parseFloat(localStorage.getItem('novel-line-height') || '1.5'));
@@ -30,21 +32,28 @@ const NovelReader = () => {
     const lastScrollTimeRef = useRef<number | null>(null);
     const userScrollTimeoutRef = useRef<number | null>(null);
 
-    const getService = () => sourceId === 'metruyenchu' ? MTCService : STVService;
 
     // Fetch chapter content from scraper API
     const { data: chapterContent, isLoading: isLoadingContent, error: contentError } = useQuery({
         queryKey: ['novel-chapter-content', host, bookId, chapterId],
-        queryFn: () => getService().fetchNovelChapterContent(bookId!, chapterId!),
+        queryFn: () => sourceId === 'metruyenchu' ? MTCService.fetchNovelChapterContent(bookId!, chapterId!) : STVService.fetchNovelChapterContent(host!, bookId!, chapterId!),
         enabled: !!host && !!bookId && !!chapterId,
         staleTime: 1000 * 60 * 30, // 30 minutes cache
         retry: 2,
     });
 
+    // Fetch novel detail to get thumbnail for history
+    const { data: detailData } = useQuery({
+        queryKey: ['novel-detail', sourceId, host, bookId],
+        queryFn: () => sourceId === 'metruyenchu' ? MTCService.fetchNovelDetail(bookId!) : STVService.fetchNovelDetail(host!, bookId!),
+        enabled: !!host && !!bookId,
+        staleTime: 1000 * 60 * 30,
+    });
+
     // Fetch chapter list for prev/next navigation  
     const { data: chaptersData } = useQuery({
         queryKey: ['novel-chapters', sourceId, host, bookId],
-        queryFn: () => getService().fetchNovelChapters(bookId!),
+        queryFn: () => sourceId === 'metruyenchu' ? MTCService.fetchNovelChapters(bookId!) : STVService.fetchNovelChapters(host!, bookId!),
         enabled: !!host && !!bookId,
     });
 
@@ -60,6 +69,8 @@ const NovelReader = () => {
     const chapterName = item?.name || currentChapter?.name || `Chương ${chapterId}`;
     const bookName = item?.book_name || item?.bookName || '';
     const content = item?.content || '';
+    const novelDetailItem = sourceId === 'metruyenchu' ? detailData?.data : detailData?.data?.item;
+    const novelCover = location.state?.thumbUrl || item?.cover || novelDetailItem?.thumb_url || '';
 
     // Parse content into blocks for rendering and TTS sync
     const blocks = useMemo(() => {
@@ -81,7 +92,7 @@ const NovelReader = () => {
                 const cId = nextCh._id || nextCh.id;
                 queryClient.prefetchQuery({
                     queryKey: ['novel-chapter-content', host, bookId, cId],
-                    queryFn: () => getService().fetchNovelChapterContent(bookId!, cId),
+                    queryFn: () => sourceId === 'metruyenchu' ? MTCService.fetchNovelChapterContent(bookId!, cId) : STVService.fetchNovelChapterContent(host!, bookId!, cId),
                     staleTime: 1000 * 60 * 30,
                 });
             }
@@ -105,12 +116,65 @@ const NovelReader = () => {
         setAutoScrollSpeed(1);
     };
 
-    // Scroll to top when chapter changes
+    // History tracking periodic save with scroll position
     useEffect(() => {
-        window.scrollTo(0, 0);
+        if (!bookName || !sourceId || !bookId || !chapterId || !content) return;
+
+        const saveHistory = () => {
+            const scrollY = window.scrollY || document.documentElement.scrollTop;
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            const percentage = Math.floor((scrollY / maxScroll) * 10000);
+            
+            const isMTC = sourceId === 'metruyenchu';
+            axios.post('/api/history', {
+                sourceId: isMTC ? 'metruyenchu' : 'sangtacviet',
+                comicSlug: isMTC ? bookId : `${host}|${bookId}`,
+                comicName: bookName,
+                chapterId: chapterId,
+                pageNumber: percentage,
+                totalPages: 10000,
+                thumbUrl: novelCover
+            }).catch(console.error);
+        };
+
+        // Initial save
+        const initialTimer = window.setTimeout(saveHistory, 1500);
+        
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'hidden') saveHistory();
+        };
+
+        const handleBeforeUnload = () => {
+            saveHistory();
+        };
+
+        window.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            saveHistory(); // Save on unmount (navigation)
+            window.clearTimeout(initialTimer);
+            window.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [bookName, sourceId, bookId, chapterId, content, novelCover]);
+
+    // Scroll to initial position or top when chapter changes
+    useEffect(() => {
+        const initialScroll = location.state?.initialScroll;
+        if (initialScroll > 0) {
+            // Need a slight delay to ensure content is fully rendered before scrolling
+            const timer = setTimeout(() => {
+                const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+                window.scrollTo({ top: (initialScroll / 10000) * maxScroll, behavior: 'instant' });
+            }, 300);
+            return () => clearTimeout(timer);
+        } else {
+            window.scrollTo(0, 0);
+        }
         // Pause auto-scrolling when navigating to a new chapter
         setIsAutoScrolling(false);
-    }, [chapterId]);
+    }, [chapterId, location.state?.initialScroll, content]);
 
     // Disable native auto-scrolling when TTS is active or playing to avoid conflict
     useEffect(() => {

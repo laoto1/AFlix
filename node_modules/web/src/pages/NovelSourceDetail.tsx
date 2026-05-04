@@ -71,7 +71,7 @@ const NovelSourceDetail = () => {
         },
         getNextPageParam: (lastPage: any) => {
             if (sourceId === 'metruyenchu') {
-                if (!lastPage?.data?.pagination) return undefined;
+                if (!lastPage?.data?.pagination || !lastPage?.data?.items || lastPage.data.items.length === 0) return undefined;
                 if (activeTab === 'latest') return undefined; // No infinite scroll for latest tab
                 const { currentPage } = lastPage.data.pagination;
                 return currentPage < 50 ? currentPage + 1 : undefined; // MTC roughly 50 pages limit

@@ -195,11 +195,25 @@ const SourceDetail = () => {
                                     className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
                                 />
                                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#121212] via-[#121212]/80 to-transparent p-2 pt-12 flex flex-col justify-end">
-                                    {item.chaptersLatest && item.chaptersLatest.length > 0 && (
-                                        <div className="mb-1 w-max px-1.5 py-0.5 rounded bg-black/50 backdrop-blur-sm border border-white/10 text-[10px] md:text-xs text-[#8C8CFF] font-medium font-mono">
-                                            {item.chaptersLatest[0].chapter_name}
+                                    {item.category && item.category.length > 0 && (
+                                        <div className="mb-1 flex flex-wrap gap-1">
+                                            {item.category.slice(0, 2).map((cat: any, i: number) => (
+                                                <span 
+                                                    key={`${cat.slug || cat}-${i}`} 
+                                                    className="px-1.5 py-0.5 rounded bg-[var(--color-primary)]/20 text-[var(--color-primary)] text-[8px] md:text-[10px] font-medium whitespace-nowrap z-10"
+                                                >
+                                                    {cat.name || cat}
+                                                </span>
+                                            ))}
                                         </div>
                                     )}
+                                    <div className="mb-1 flex items-center gap-1.5 flex-wrap">
+                                        {item.chaptersLatest && item.chaptersLatest.length > 0 && (
+                                            <div className="w-max px-1.5 py-0.5 rounded bg-black/50 backdrop-blur-sm border border-white/10 text-[9px] md:text-[11px] text-[#8C8CFF] font-medium font-mono">
+                                                Chương {item.chaptersLatest[0].chapter_name || item.chaptersLatest[0].filename}
+                                            </div>
+                                        )}
+                                    </div>
                                     <h3 className="text-[var(--color-text)] text-xs md:text-sm font-medium line-clamp-2 drop-shadow-md">
                                         {item.name}
                                     </h3>
