@@ -111,7 +111,7 @@ const MovieSourceDetail = () => {
                                     : 'bg-[var(--color-surface-hover)] text-[var(--color-text)] hover:bg-[#3c3c3c]'
                                     }`}
                             >
-                                {cat.slug === 'phim-moi-cap-nhat' ? `${t('mtc.tabs.latest')}${cat.title.replace('Mới nhất', '')}` : t(`kkphim.type.${cat.slug.replace('-', '')}`) === `kkphim.type.${cat.slug.replace('-', '')}` ? cat.title : t(`kkphim.type.${cat.slug.replace('-', '')}`)}
+                                {sourceId === 'thepy' ? (cat.translateKey ? t(cat.translateKey) : cat.title) : (cat.slug === 'phim-moi-cap-nhat' ? `${t('mtc.tabs.latest')}${cat.title.replace('Mới nhất', '')}` : t(`kkphim.type.${cat.slug.replace('-', '')}`) === `kkphim.type.${cat.slug.replace('-', '')}` ? cat.title : t(`kkphim.type.${cat.slug.replace('-', '')}`))}
                             </button>
                         ))}
                     </div>
@@ -165,7 +165,7 @@ const MovieSourceDetail = () => {
                                     : 'bg-[var(--color-bg)] text-[var(--color-text)] border-[var(--color-border)] hover:bg-[var(--color-surface-hover)]'
                                 }`}
                             >
-                                {c.name}
+                                {(c as any).translateKey ? t((c as any).translateKey) : c.name}
                             </button>
                         ))}
                     </div>

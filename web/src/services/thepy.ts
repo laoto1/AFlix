@@ -20,9 +20,9 @@ const decryptPayload = (data: any) => {
 };
 
 export const CATEGORIES = [
-    { name: 'Mới nhất', slug: 'recent' },
-    { name: 'Yêu thích', slug: 'myfavs' },
-    { name: 'Bộ lọc', slug: 'filters' }
+    { name: 'Mới nhất', slug: 'recent', translateKey: 'thepy.tab.recent' },
+    { name: 'Yêu thích', slug: 'myfavs', translateKey: 'thepy.tab.myfavs' },
+    { name: 'Bộ lọc', slug: 'filters', translateKey: 'thepy.tab.filters' }
 ];
 
 const mapItem = (item: any) => ({
@@ -44,7 +44,7 @@ const mapItem = (item: any) => ({
 export const fetchHome = async () => {
     return {
         data: {
-            categories: CATEGORIES.map(c => ({ title: c.name, slug: c.slug }))
+            categories: CATEGORIES.map(c => ({ title: c.name, slug: c.slug, translateKey: c.translateKey }))
         }
     };
 };

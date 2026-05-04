@@ -304,7 +304,10 @@ const translations: Record<Language, Record<string, string>> = {
         'thepy.category.china': 'China',
         'thepy.category.taiwan': 'Taiwan',
         'thepy.category.japan': 'Japan',
-        'thepy.category.eu': 'Europe/America'
+        'thepy.category.eu': 'Europe/America',
+        'thepy.tab.recent': 'Latest',
+        'thepy.tab.myfavs': 'Favorites',
+        'thepy.tab.filters': 'Filters'
 
     },
     vi: {
@@ -594,7 +597,10 @@ const translations: Record<Language, Record<string, string>> = {
         'thepy.category.china': 'Trung Quốc',
         'thepy.category.taiwan': 'Đài Loan',
         'thepy.category.japan': 'Nhật Bản',
-        'thepy.category.eu': 'Âu Mỹ'
+        'thepy.category.eu': 'Âu Mỹ',
+        'thepy.tab.recent': 'Mới nhất',
+        'thepy.tab.myfavs': 'Yêu thích',
+        'thepy.tab.filters': 'Bộ lọc'
 
     },
     zh: {
@@ -852,7 +858,10 @@ const translations: Record<Language, Record<string, string>> = {
         'thepy.category.china': '中国',
         'thepy.category.taiwan': '台湾',
         'thepy.category.japan': '日本',
-        'thepy.category.eu': '欧美'
+        'thepy.category.eu': '欧美',
+        'thepy.tab.recent': '最新',
+        'thepy.tab.myfavs': '收藏',
+        'thepy.tab.filters': '过滤'
 
     },
     ja: {
@@ -1144,7 +1153,10 @@ const translations: Record<Language, Record<string, string>> = {
         'thepy.category.china': '中国',
         'thepy.category.taiwan': '台湾',
         'thepy.category.japan': '日本',
-        'thepy.category.eu': '欧米'
+        'thepy.category.eu': '欧米',
+        'thepy.tab.recent': '最新',
+        'thepy.tab.myfavs': 'お気に入り',
+        'thepy.tab.filters': 'フィルター'
 
     }
 };
