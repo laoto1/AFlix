@@ -634,7 +634,13 @@ app.route('/api/unlock', unlockRouter);
 app.route('/api/proxy', proxyRouter);
 
 // --- SEO / OG Tags Interceptor for Discord/Facebook ---
-app.get('/movie/:sourceId/:slug', async (c) => {
+app.get(
+    '/movie/:sourceId/:slug',
+    cache({
+        cacheName: 'flix-seo-cache',
+        cacheControl: 'max-age=86400',
+    }),
+    async (c) => {
     const sourceId = c.req.param('sourceId');
     const slug = c.req.param('slug');
     const ep = c.req.query('ep');
