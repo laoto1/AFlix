@@ -784,7 +784,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
 
             {/* Standard Controls Overlay */}
             <div 
-                className={`absolute inset-0 bg-black/40 transition-opacity duration-500 z-40 pointer-events-none ${
+                className={`absolute inset-0 bg-transparent transition-opacity duration-500 z-40 pointer-events-none ${
                     showControls ? 'opacity-100' : 'opacity-0'
                 }`}
             >
@@ -823,13 +823,14 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                 {/* Center Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <button 
-                        onClick={togglePlay} 
-                        className={`transition-all duration-300 pointer-events-auto drop-shadow-2xl ${
-                            !isPlaying ? 'scale-100 text-white hover:scale-110 active:scale-95 opacity-100' : 
-                            (playAnim ? 'scale-150 opacity-0 text-white' : 'scale-50 opacity-0 pointer-events-none')
+                        onClick={(e) => { e.stopPropagation(); togglePlay(); }} 
+                        className={`transition-all duration-300 drop-shadow-2xl text-white ${
+                            showControls 
+                                ? 'scale-100 opacity-100 pointer-events-auto hover:scale-110 active:scale-95'
+                                : (playAnim ? 'scale-150 opacity-0 pointer-events-none' : 'scale-50 opacity-0 pointer-events-none')
                         }`}
                     >
-                        {!isPlaying ? <Play size={64} sm:size={80} fill="currentColor" /> : <Pause size={64} sm:size={80} fill="currentColor" />}
+                        {!isPlaying ? <Play size={64} className="sm:w-20 sm:h-20" fill="currentColor" /> : <Pause size={64} className="sm:w-20 sm:h-20" fill="currentColor" />}
                     </button>
                 </div>
 
