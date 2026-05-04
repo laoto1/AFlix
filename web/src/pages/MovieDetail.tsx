@@ -107,8 +107,7 @@ export default function MovieDetail() {
     };
 
     const handleShare = () => {
-        const epSlug = selectedEpisode?.slug || searchParams.get('ep');
-        const shareUrl = `https://backend-worker.laoto.workers.dev/movie/${sourceId}/${slug}${epSlug ? `?ep=${epSlug}` : ''}`;
+        const shareUrl = window.location.href;
         navigator.clipboard.writeText(shareUrl).then(() => {
             setIsCopied(true);
             setTimeout(() => setIsCopied(false), 2000);
