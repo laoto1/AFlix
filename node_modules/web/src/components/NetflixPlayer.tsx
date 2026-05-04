@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { 
     Play, Pause, Volume2, VolumeX, Maximize, Minimize, 
     RotateCcw, RotateCw, Loader2, X, Lock, Unlock, SkipForward,
-    Gauge, Subtitles, ListVideo, Sun, Lightbulb, Upload
+    Gauge, Subtitles, ListVideo, Sun, Lightbulb, Upload, FastForward
 } from 'lucide-react';
 import { getProxiedImageUrl } from '../utils/imageProxy';
 import { useSettings } from '../contexts/SettingsContext';
@@ -69,7 +69,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
     // Animation & Feedback triggers
     const [playAnim, setPlayAnim] = useState(false);
     const [skipAnim, setSkipAnim] = useState<'forward' | 'backward' | null>(null);
-    const [hudIndicator, setHudIndicator] = useState<{type: 'volume'|'brightness', val: number} | null>(null);
+    const [hudIndicator, setHudIndicator] = useState<{type: 'volume'|'brightness'|'seek', val: number | string} | null>(null);
 
     const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const skipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -87,7 +87,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         }
     }, [episodeName]);
 
-    const dragStart = useRef<{x: number, y: number, type: 'brightness'|'volume', startVal: number, active: boolean} | null>(null);
+    const dragStart = useRef<{x: number, y: number, type: 'brightness'|'volume'|'seek'|'undetermined', startVal: number, active: boolean, isLeft: boolean} | null>(null);
     const progressBarRef = useRef<HTMLInputElement>(null);
 
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -435,7 +435,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         setIsMuted(!isMuted);
     };
 
-    const showHud = (type: 'volume' | 'brightness', val: number) => {
+    const showHud = (type: 'volume' | 'brightness' | 'seek', val: number | string) => {
         setHudIndicator({ type, val });
         if (hudTimeoutRef.current) clearTimeout(hudTimeoutRef.current);
         hudTimeoutRef.current = setTimeout(() => setHudIndicator(null), 1500);
@@ -567,7 +567,7 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
-    // Pointer Dragging for Brightness and Volume
+    // Pointer Dragging for Brightness, Volume, and Seek
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
         if (isLocked) return;
         const rect = e.currentTarget.getBoundingClientRect();
@@ -576,9 +576,10 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         dragStart.current = {
             x: e.clientX,
             y: e.clientY,
-            type: isLeft ? 'brightness' : 'volume',
-            startVal: isLeft ? brightness : volume,
-            active: false // Only activate if moved
+            type: 'undetermined',
+            startVal: 0, // determined when moving
+            active: false, // Only activate if moved > 10px
+            isLeft
         };
         try {
             e.currentTarget.setPointerCapture(e.pointerId);
@@ -593,29 +594,35 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
             return;
         }
 
-        const deltaY = dragStart.current.y - e.clientY; 
-        const deltaX = e.clientX - dragStart.current.x;
+        const deltaY = dragStart.current.y - e.clientY; // Positive is UP
+        const deltaX = e.clientX - dragStart.current.x; // Positive is RIGHT
         
-        // If moved more than 10px in either direction
-        if (Math.abs(deltaY) > 10 || Math.abs(deltaX) > 10) {
-            dragStart.current.active = true;
+        if (!dragStart.current.active) {
+            if (Math.abs(deltaY) > 10 || Math.abs(deltaX) > 10) {
+                dragStart.current.active = true;
+                const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+                if (isHorizontal) {
+                    dragStart.current.type = 'seek';
+                    dragStart.current.startVal = currentTime;
+                } else {
+                    dragStart.current.type = dragStart.current.isLeft ? 'brightness' : 'volume';
+                    dragStart.current.startVal = dragStart.current.isLeft ? brightness : volume;
+                }
+            }
         }
 
         if (!dragStart.current.active) return;
 
         const rect = e.currentTarget.getBoundingClientRect();
-        // Determine whether horizontal or vertical drag is dominant
-        const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
-        const deltaVal = isHorizontal 
-            ? deltaX / (rect.width * 0.4)  // full horizontal drag is 40% width
-            : deltaY / (rect.height * 0.7); // full vertical drag is 70% height
         
         if (dragStart.current.type === 'brightness') {
+            const deltaVal = deltaY / (rect.height * 0.7);
             let newB = dragStart.current.startVal + deltaVal;
             newB = Math.max(0.1, Math.min(1, newB));
             setBrightness(newB);
             showHud('brightness', newB);
-        } else {
+        } else if (dragStart.current.type === 'volume') {
+            const deltaVal = deltaY / (rect.height * 0.7);
             let newV = dragStart.current.startVal + deltaVal;
             newV = Math.max(0, Math.min(1, newV));
             setVolume(newV);
@@ -625,12 +632,27 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
             }
             setIsMuted(newV === 0);
             showHud('volume', newV);
+        } else if (dragStart.current.type === 'seek') {
+            const seekSeconds = (deltaX / rect.width) * 90; // 90 seconds for full width drag
+            let newTime = dragStart.current.startVal + seekSeconds;
+            newTime = Math.max(0, Math.min(duration || 100, newTime));
+            
+            const diff = newTime - dragStart.current.startVal;
+            const sign = diff >= 0 ? '+' : '-';
+            const diffStr = `${sign}${Math.round(Math.abs(diff))}s`;
+            
+            showHud('seek', `${formatTime(newTime)} [${diffStr}]`);
         }
     };
 
     const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
         if (dragStart.current) {
             const wasActive = dragStart.current.active;
+            const type = dragStart.current.type;
+            const deltaX = e.clientX - dragStart.current.x;
+            const startVal = dragStart.current.startVal;
+            const rect = e.currentTarget.getBoundingClientRect();
+
             dragStart.current = null;
             try {
                 e.currentTarget.releasePointerCapture(e.pointerId);
@@ -644,6 +666,13 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                 } else {
                     setShowControls(prev => !prev);
                 }
+            } else if (type === 'seek' && videoRef.current) {
+                const seekSeconds = (deltaX / rect.width) * 90;
+                let newTime = startVal + seekSeconds;
+                newTime = Math.max(0, Math.min(duration || 100, newTime));
+                videoRef.current.currentTime = newTime;
+                setCurrentTime(newTime);
+                setHudIndicator(null);
             }
         }
     };
@@ -721,14 +750,23 @@ export const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                 style={{ opacity: 1 - brightness }}
             />
 
-            {/* HUD Indicator (Volume/Brightness Dragging) */}
+            {/* HUD Indicator (Volume/Brightness/Seek Dragging) */}
             {hudIndicator && (
                 <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md rounded-full px-4 py-2 flex items-center gap-2 text-white z-40 animate-in fade-in zoom-in duration-200">
-                    {hudIndicator.type === 'volume' ? <Volume2 size={20} /> : <Sun size={20} />}
-                    <div className="w-24 h-1.5 bg-white/30 rounded-full overflow-hidden">
-                        <div className="h-full bg-white transition-all duration-75" style={{ width: `${hudIndicator.val * 100}%` }} />
-                    </div>
-                    <span className="text-xs font-bold w-8">{Math.round(hudIndicator.val * 100)}%</span>
+                    {hudIndicator.type === 'seek' ? (
+                        <div className="flex items-center gap-2 font-bold font-mono">
+                            <FastForward size={20} />
+                            <span>{hudIndicator.val}</span>
+                        </div>
+                    ) : (
+                        <>
+                            {hudIndicator.type === 'volume' ? <Volume2 size={20} /> : <Sun size={20} />}
+                            <div className="w-24 h-1.5 bg-white/30 rounded-full overflow-hidden">
+                                <div className="h-full bg-white transition-all duration-75" style={{ width: `${(hudIndicator.val as number) * 100}%` }} />
+                            </div>
+                            <span className="text-xs font-bold w-8">{Math.round((hudIndicator.val as number) * 100)}%</span>
+                        </>
+                    )}
                 </div>
             )}
 
