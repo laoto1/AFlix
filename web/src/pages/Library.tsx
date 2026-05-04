@@ -41,6 +41,13 @@ const Library = () => {
         );
     }
 
+    const filteredBookmarks = bookmarks.filter((item) => {
+        if (activeTab === 'manga') return ['otruyen', 'nettruyen', 'nhentai'].includes(item.source_id);
+        if (activeTab === 'novel') return ['sangtacviet', 'metruyenchu'].includes(item.source_id);
+        if (activeTab === 'movie') return ['kkphim', 'thepy', 'phimapi'].includes(item.source_id);
+        return false;
+    });
+
     return (
         <div className="flex flex-col min-h-full bg-[var(--color-bg)] text-[var(--color-text)]">
             {/* App Bar / Header */}
@@ -73,14 +80,13 @@ const Library = () => {
 
             {/* Content */}
             <div className="p-4 flex-1">
-                {activeTab === 'manga' ? (
-                    isLoading ? (
-                        <div className="flex justify-center p-10">
+                {isLoading ? (
+                    <div className="flex justify-center p-10">
                             <Loader2 className="animate-spin text-[var(--color-primary)]" size={32} />
                         </div>
                     ) : error ? (
                         <div className="text-center p-10 text-red-500">{t('library.failed')}</div>
-                    ) : bookmarks.length === 0 ? (
+                    ) : filteredBookmarks.length === 0 ? (
                         <div className="flex flex-col items-center justify-center p-20 text-[var(--color-text-muted)]">
                             <Bookmark size={48} className="mb-4 opacity-50" />
                             <p>{t('library.empty')}</p>
@@ -93,7 +99,7 @@ const Library = () => {
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                            {bookmarks.map((item) => {
+                            {filteredBookmarks.map((item) => {
                                 const thumbSource = item.thumb_url?.startsWith('http')
                                     ? item.thumb_url
                                     : getImageUrl(item.thumb_url);
@@ -107,7 +113,20 @@ const Library = () => {
                                 return (
                                     <div
                                         key={`${item.source_id}-${item.comic_slug}`}
-                                        onClick={() => navigate(`/comic/${item.source_id}/${item.comic_slug}`)}
+                                        onClick={() => {
+                                            if (activeTab === 'manga') navigate(`/comic/${item.source_id}/${item.comic_slug}`);
+                                            else if (activeTab === 'novel') {
+                                                if (item.source_id === 'metruyenchu') {
+                                                    navigate(`/novel/metruyenchu/metruyenchu/${item.comic_slug}`);
+                                                } else {
+                                                    const parts = item.comic_slug.split('|');
+                                                    const host = parts.length > 1 ? parts[0] : 'truyenfull';
+                                                    const bookId = parts.length > 1 ? parts[1] : item.comic_slug;
+                                                    navigate(`/novel/${item.source_id}/${host}/${bookId}`);
+                                                }
+                                            }
+                                            else if (activeTab === 'movie') navigate(`/movie/${item.source_id}/${item.comic_slug}`);
+                                        }}
                                         className="relative aspect-[2/3] w-full rounded-md overflow-hidden bg-[#242424] cursor-pointer group hover:opacity-90 transition-opacity"
                                     >
                                         <img
@@ -151,11 +170,7 @@ const Library = () => {
                             })}
                         </div>
                     )
-                ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-[var(--color-text-muted)] min-h-[50vh]">
-                        <p className="opacity-70">{t('home.coming_soon')}</p>
-                    </div>
-                )}
+                }
             </div>
         </div>
     );
