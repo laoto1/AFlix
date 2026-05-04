@@ -2,15 +2,14 @@ class OGRewriter {
     constructor(private metaTags: Record<string, string>, private title: string) {}
     
     element(element: any) {
-        if (element.tagName === 'head') {
-            element.append(`<title>${this.title}</title>`, { html: true });
-            for (const [property, content] of Object.entries(this.metaTags)) {
-                element.append(`<meta property="${property}" content="${content.replace(/"/g, '&quot;')}">`, { html: true });
-                if (property.startsWith('og:')) {
-                    element.append(`<meta name="${property.replace('og:', 'twitter:')}" content="${content.replace(/"/g, '&quot;')}">`, { html: true });
-                }
-            }
-            element.append(`<meta name="twitter:card" content="summary_large_image">`, { html: true });
+        if (element.tagName === 'title') {
+            element.setInnerContent(this.title);
+            return;
+        }
+
+        const prop = element.getAttribute('property') || element.getAttribute('name');
+        if (prop && this.metaTags[prop]) {
+            element.setAttribute('content', this.metaTags[prop].replace(/"/g, '&quot;'));
         }
     }
 }
@@ -63,12 +62,14 @@ export default {
                 if (movieName) {
                     // @ts-ignore
                     return new HTMLRewriter()
-                        .on('head', new OGRewriter({
+                        .on('title, meta', new OGRewriter({
                             'og:title': movieName,
+                            'twitter:title': movieName,
                             'og:description': description,
+                            'twitter:description': description,
                             'og:image': posterUrl,
-                            'og:url': url.toString(),
-                            'og:type': 'video.movie'
+                            'twitter:image': posterUrl,
+                            'og:url': url.toString()
                         }, movieName))
                         .transform(clonedResponse);
                 }
