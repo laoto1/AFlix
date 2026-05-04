@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { ArrowLeft, BookOpen, Loader2, ChevronDown, ChevronUp, Globe, Share2 } from 'lucide-react';
+import { ArrowLeft, BookOpen, Loader2, ChevronDown, ChevronUp, Globe, Share2, Bookmark } from 'lucide-react';
 import * as STVService from '../services/sangtacviet';
 import * as MTCService from '../services/metruyenchu';
 import { getProxiedImageUrl } from '../utils/imageProxy';
@@ -14,6 +14,8 @@ const NovelDetail = () => {
     const [activeHost, setActiveHost] = useState(host || '');
     const [activeBookId, setActiveBookId] = useState(bookId || '');
     const [isCopied, setIsCopied] = useState(false);
+    const [isBookmarked, setIsBookmarked] = useState(false);
+    const token = localStorage.getItem('token');
 
 
     // Fetch novel detail
@@ -68,6 +70,37 @@ const NovelDetail = () => {
         });
     };
 
+    useEffect(() => {
+        const checkSlug = sourceId === 'metruyenchu' ? bookId : `${host}|${bookId}`;
+        if (token && checkSlug) {
+            axios.get(`/api/bookmarks?comicSlug=${checkSlug}`).then(res => {
+                setIsBookmarked(res.data.isBookmarked);
+            }).catch(console.error);
+        }
+    }, [token, host, bookId, sourceId]);
+
+    const handleBookmarkToggle = async () => {
+        if (!novel || !token) return;
+        const checkSlug = sourceId === 'metruyenchu' ? bookId : `${host}|${bookId}`;
+
+        try {
+            if (isBookmarked) {
+                await axios.delete('/api/bookmarks', { data: { comicSlug: checkSlug } });
+                setIsBookmarked(false);
+            } else {
+                await axios.post('/api/bookmarks', {
+                    sourceId,
+                    comicSlug: checkSlug,
+                    comicName: novel.name,
+                    thumbUrl: novel.thumb_url
+                });
+                setIsBookmarked(true);
+            }
+        } catch (err) {
+            console.error('Failed to toggle bookmark', err);
+        }
+    };
+
     const continueReadingInfo = historyData?.history?.[0];
 
     if (detailLoading) {
@@ -87,6 +120,13 @@ const NovelDetail = () => {
                         <ArrowLeft size={20} />
                     </button>
                     <h1 className="text-lg font-medium text-[var(--color-text)] truncate flex-1">{novel?.name || 'Chi tiết'}</h1>
+                    <button
+                        onClick={handleBookmarkToggle}
+                        className="p-2 rounded-full transition-colors text-[var(--color-text)] hover:bg-[var(--color-surface-hover)]"
+                        title="Đánh dấu"
+                    >
+                        <Bookmark size={20} fill={isBookmarked ? 'currentColor' : 'none'} className={isBookmarked ? 'text-[var(--color-primary)]' : ''} />
+                    </button>
                     <button
                         onClick={handleShare}
                         className={`p-2 rounded-full transition-colors ${isCopied ? 'text-green-500 bg-green-500/10' : 'text-[var(--color-text)] hover:bg-[var(--color-surface-hover)]'}`}

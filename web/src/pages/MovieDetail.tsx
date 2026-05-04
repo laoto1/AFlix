@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Play, Info, Calendar, Clock, Star, Layers, Activity, Share2, Check } from 'lucide-react';
+import { ArrowLeft, Play, X, Star, Calendar, Clock, Layers, Maximize, PlayCircle, Loader2, Volume2, VolumeX, List, Server, Share2, Check, Bookmark } from 'lucide-react';
 import axios from 'axios';
 import * as KKPhimService from '../services/kkphim';
 import * as ThePYService from '../services/thepy';
@@ -19,11 +19,14 @@ export default function MovieDetail() {
     const [selectedEpisode, setSelectedEpisode] = useState<any>(null);
     const [isWatching, setIsWatching] = useState(false);
     const [showTrailer, setShowTrailer] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isCopied, setIsCopied] = useState(false);
+    const [isBookmarked, setIsBookmarked] = useState(false);
     const [initialTime, setInitialTime] = useState<number>(0);
     const currentTimeRef = useRef<number>(0);
 
     const playerRef = useRef<HTMLDivElement>(null);
-    const [isCopied, setIsCopied] = useState(false);
+    const token = localStorage.getItem('token');
 
     const { data: detailData, isLoading, error } = useQuery({
         queryKey: ['movie-detail', sourceId, slug],
@@ -113,6 +116,38 @@ export default function MovieDetail() {
             setIsCopied(true);
             setTimeout(() => setIsCopied(false), 2000);
         });
+    };
+
+    useEffect(() => {
+        if (token && slug) {
+            axios.get(`/api/bookmarks?comicSlug=${slug}`).then(res => {
+                setIsBookmarked(res.data.isBookmarked);
+            }).catch(console.error);
+        }
+    }, [token, slug]);
+
+    const handleBookmarkToggle = async () => {
+        if (!detailData?.data?.movie || !token) return;
+        const movie = detailData.data.movie;
+        const domain = 'https://phimimg.com';
+        const posterUrl = movie.poster_url?.startsWith('http') ? movie.poster_url : `${domain}/${movie.poster_url}`;
+
+        try {
+            if (isBookmarked) {
+                await axios.delete('/api/bookmarks', { data: { comicSlug: slug } });
+                setIsBookmarked(false);
+            } else {
+                await axios.post('/api/bookmarks', {
+                    sourceId,
+                    comicSlug: slug,
+                    comicName: movie.name,
+                    thumbUrl: posterUrl
+                });
+                setIsBookmarked(true);
+            }
+        } catch (err) {
+            console.error('Failed to toggle bookmark', err);
+        }
     };
 
     // Sync episode from URL on initial load or URL change
@@ -324,6 +359,12 @@ export default function MovieDetail() {
                                     >
                                         {isCopied ? <Check size={24} className="text-green-400" /> : <Share2 size={24} />} {isCopied ? 'Đã Copy' : 'Chia sẻ'}
                                     </button>
+                                    <button
+                                        onClick={handleBookmarkToggle}
+                                        className="flex items-center justify-center gap-2 px-6 py-3 md:py-4 rounded-full bg-white/10 backdrop-blur-md text-white text-lg font-bold hover:bg-white/20 transition shadow-lg border border-white/10"
+                                    >
+                                        <Bookmark size={24} fill={isBookmarked ? 'currentColor' : 'none'} className={isBookmarked ? 'text-[var(--color-primary)]' : ''} />
+                                    </button>
                                 </div>
                             )}
 
@@ -334,6 +375,12 @@ export default function MovieDetail() {
                                         className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-white/10 backdrop-blur-md text-white font-bold hover:bg-white/20 transition border border-white/10"
                                     >
                                         {isCopied ? <Check size={20} className="text-green-400" /> : <Share2 size={20} />} {isCopied ? 'Đã Copy Link Chia Sẻ' : 'Chia sẻ'}
+                                    </button>
+                                    <button
+                                        onClick={handleBookmarkToggle}
+                                        className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-white/10 backdrop-blur-md text-white font-bold hover:bg-white/20 transition border border-white/10"
+                                    >
+                                        <Bookmark size={20} fill={isBookmarked ? 'currentColor' : 'none'} className={isBookmarked ? 'text-[var(--color-primary)]' : ''} />
                                     </button>
                                 </div>
                             )}

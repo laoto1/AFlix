@@ -63,7 +63,7 @@ const SECRET_THEPY_SOURCE = {
     name: 'thePY',
     url: 'https://theporny.com',
     language: 'VI',
-    icon: 'https://theporny.com/favicon.ico',
+    icon: 'https://theporny.com/assets/favicon_x.jpeg',
 };
 
 const Home = () => {
