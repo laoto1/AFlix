@@ -21,7 +21,10 @@ async function getUserFromAuth(c: any) {
     try {
         const token = authHeader.substring(7);
         const decoded = jwt.verify(token, c.env.JWT_SECRET) as any;
-        return decoded; // Expected to have { id, username }
+        return {
+            id: decoded.userId || decoded.id,
+            username: decoded.username
+        };
     } catch {
         return null;
     }
