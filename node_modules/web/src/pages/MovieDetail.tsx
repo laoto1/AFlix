@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Play, Star, Calendar, Clock, Layers, Share2, Check, Bookmark, Info, Activity } from 'lucide-react';
+import { ArrowLeft, Play, Star, Calendar, Clock, Layers, Share2, Check, Bookmark, Info, Activity, Users } from 'lucide-react';
 import axios from 'axios';
 import * as KKPhimService from '../services/kkphim';
 import * as ThePYService from '../services/thepy';
+import { fetchTMDBCredits } from '../services/tmdb';
 import { getProxiedImageUrl } from '../utils/imageProxy';
 import { NetflixPlayer } from '../components/NetflixPlayer';
 import { useSettings } from '../contexts/SettingsContext';
@@ -36,6 +37,17 @@ export default function MovieDetail() {
         },
         enabled: !!slug
     });
+    const movieData = detailData?.data?.item || detailData?.data?.movie || detailData?.data;
+    const hasTmdb = !!movieData?.tmdb?.id && !!movieData?.tmdb?.type;
+
+    const { data: tmdbData } = useQuery({
+        queryKey: ['tmdb-credits', movieData?.tmdb?.type, movieData?.tmdb?.id],
+        queryFn: () => fetchTMDBCredits(movieData.tmdb.type, movieData.tmdb.id),
+        enabled: hasTmdb,
+        staleTime: 1000 * 60 * 60 * 24, // 24h
+    });
+
+    const tmdbCast = tmdbData?.data?.cast || [];
 
     const { data: historyRes } = useQuery({
         queryKey: ['history', slug],
@@ -177,7 +189,8 @@ export default function MovieDetail() {
             if (currentTimeRef.current <= 0) return; // Don't save if haven't watched anything yet
             const movie = detailData.data.movie;
             const domain = 'https://phimimg.com';
-            const posterUrl = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${domain}/${movie.thumb_url}`;
+            const rawThumb = movie.thumb_url || movie.poster_url;
+            const posterUrl = (rawThumb && rawThumb.startsWith('http')) ? rawThumb : `${domain}/${rawThumb}`;
 
             // Use axios, it will auto-attach token via interceptor
             axios.post('/api/history', {
@@ -220,7 +233,8 @@ export default function MovieDetail() {
 
         const movie = detailData.data.movie;
         const domain = 'https://phimimg.com';
-        const posterUrl = movie.poster_url?.startsWith('http') ? movie.poster_url : `${domain}/${movie.poster_url}`;
+        const rawPoster = movie.poster_url || movie.thumb_url;
+        const posterUrl = (rawPoster && rawPoster.startsWith('http')) ? rawPoster : `${domain}/${rawPoster}`;
         const finalPosterUrl = getProxiedImageUrl(posterUrl);
 
         const url = window.location.href;
@@ -276,7 +290,8 @@ export default function MovieDetail() {
     const episodes = detailData.data.episodes || [];
 
     const domain = 'https://phimimg.com';
-    const posterUrl = movie.poster_url?.startsWith('http') ? movie.poster_url : `${domain}/${movie.poster_url}`;
+    const rawPoster = movie.poster_url || movie.thumb_url;
+    const posterUrl = (rawPoster && rawPoster.startsWith('http')) ? rawPoster : `${domain}/${rawPoster}`;
 
     // Convert youtube watch URL to embed URL
     const getEmbedUrl = (url: string) => {
@@ -419,6 +434,59 @@ export default function MovieDetail() {
                         </span>
                     ))}
                 </div>
+
+                {/* Actors */}
+                {tmdbCast.length > 0 ? (
+                    <div className="mt-6">
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2 mb-3">
+                            <Users size={16} /> Diễn viên
+                        </h3>
+                        <div className="flex overflow-x-auto gap-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+                            {tmdbCast.slice(0, 15).map((actor: any, idx: number) => (
+                                <Link
+                                    key={actor.id}
+                                    to={`/search/${sourceId}?q=${encodeURIComponent(movie.actor?.[idx] || actor.name)}`}
+                                    className="flex-none w-28 group"
+                                >
+                                    <div className="w-28 h-40 rounded-lg bg-white/5 border border-white/10 overflow-hidden mb-2 shadow-sm group-hover:border-[var(--color-primary)] transition-colors relative">
+                                        {actor.profile_path ? (
+                                            <img 
+                                                src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`} 
+                                                alt={actor.name} 
+                                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
+                                                loading="lazy" 
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-gray-500 bg-[#1e1e1e]">
+                                                <Users size={32} />
+                                            </div>
+                                        )}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </div>
+                                    <h4 className="text-sm font-bold text-gray-200 line-clamp-1 group-hover:text-[var(--color-primary)] transition-colors">{actor.name}</h4>
+                                    <p className="text-xs text-gray-500 line-clamp-1">{actor.character}</p>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                ) : movie.actor && movie.actor.length > 0 && movie.actor[0] !== "" ? (
+                    <div className="mt-4">
+                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2 mb-2">
+                            <Users size={16} /> Diễn viên
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                            {movie.actor.map((actorName: string, idx: number) => (
+                                <Link
+                                    key={`${actorName}-${idx}`}
+                                    to={`/search/${sourceId}?q=${encodeURIComponent(actorName)}`}
+                                    className="text-sm px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-colors cursor-pointer"
+                                >
+                                    {actorName}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                ) : null}
             </div>
 
             {/* Player & Episodes Section (Only visible when watching) */}

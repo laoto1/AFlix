@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Square, Check, X, Key, Loader2, Volume2, Settings2, RefreshCw, Lock } from 'lucide-react';
 import { testGeminiKey, generateGeminiAudio, clearTTSCache } from '../services/tts';
 import type { GeminiKey } from '../services/tts';
+import toast from 'react-hot-toast';
 
 interface TTSPanelProps {
     blocks: string[]; // Array of text blocks
@@ -237,13 +238,32 @@ export const TTSPanel: React.FC<TTSPanelProps> = ({ blocks, themeStyles, isAutoS
     };
 
     const handleResetAudio = async () => {
-        if (window.confirm("Bạn có chắc muốn xóa toàn bộ bộ đệm âm thanh đã tạo cho truyện này không?\n(Việc này sẽ bắt buộc máy tải/tạo lại từ đầu khi nhấn Play)")) {
-            await clearTTSCache();
-            audioCacheRef.current = {};
-            cacheVersionRef.current += 1;
-            stopAudio();
-            alert("Đã xóa bộ đệm âm thanh thành công!");
-        }
+        toast((t) => (
+            <div className="flex flex-col gap-3">
+                <p className="text-sm font-medium">Bạn có chắc muốn xóa toàn bộ bộ đệm âm thanh đã tạo cho truyện này không?<br/>(Việc này sẽ bắt buộc máy tải/tạo lại từ đầu khi nhấn Play)</p>
+                <div className="flex gap-2 justify-end mt-2">
+                    <button 
+                        onClick={() => toast.dismiss(t.id)}
+                        className="px-3 py-1.5 text-xs bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
+                    >
+                        Hủy
+                    </button>
+                    <button 
+                        onClick={async () => {
+                            toast.dismiss(t.id);
+                            await clearTTSCache();
+                            audioCacheRef.current = {};
+                            cacheVersionRef.current += 1;
+                            stopAudio();
+                            toast.success("Đã xóa bộ đệm âm thanh thành công!");
+                        }}
+                        className="px-3 py-1.5 text-xs bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+                    >
+                        Xác nhận
+                    </button>
+                </div>
+            </div>
+        ), { duration: Infinity });
     };
 
     const prefetchParagraph = async (idx: number) => {

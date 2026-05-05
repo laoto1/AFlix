@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCachedChapters, saveCachedChapters } from '../utils/mtcCache';
 
 // ── MeTruyenChu Novel Service ──
 
@@ -50,9 +51,117 @@ export async function fetchNovelDetail(bookid: string) {
     return res.data;
 }
 
-export async function fetchNovelChapters(bookid: string) {
-    const res = await axios.get(`/api/metruyenchu?action=chapters&bookid=${bookid}`);
-    return res.data;
+export async function fetchNovelChapters(bookid: string, onProgress?: (chapters: any[]) => void) {
+    let allChapters: any[] = [];
+    let page = 1;
+
+    // Try to get from cache first
+    try {
+        const cached = await getCachedChapters(bookid);
+        if (cached && cached.length > 0) {
+            allChapters = [...cached];
+            if (onProgress) {
+                onProgress([...allChapters]);
+            }
+            
+            // Calculate which page to resume from. 
+            // e.g. 150 chapters -> page 2 might have new ones. We should refetch the last page to be safe.
+            page = Math.max(1, Math.ceil(allChapters.length / 100));
+            
+            // Remove the last page's chapters from allChapters so we can refetch them cleanly without complex merging
+            const safeCount = (page - 1) * 100;
+            allChapters = allChapters.slice(0, safeCount);
+        }
+    } catch (e) {
+        console.error('Failed to load MTC cache', e);
+    }
+    
+    // Fetch starting page
+    const res = await axios.get(`/api/metruyenchu?action=chapters&bookid=${bookid}&page=${page}`);
+    const firstPageData = res.data?.data?.chapters || [];
+    
+    // If we had cache and the page we fetched is empty, we just return the cache
+    if (firstPageData.length === 0 && allChapters.length > 0) {
+        return {
+            status: 'success',
+            data: { chapters: allChapters }
+        };
+    }
+
+    allChapters = [...allChapters, ...firstPageData];
+    allChapters = Array.from(new Map(allChapters.map(c => [c.id || c._id, c])).values());
+
+    if (onProgress) {
+        onProgress([...allChapters]);
+    }
+
+    if (firstPageData.length < 100) {
+        // We reached the end
+        saveCachedChapters(bookid, allChapters).catch(console.error);
+        return {
+            status: 'success',
+            data: { chapters: allChapters }
+        };
+    }
+
+    // Since Metruyenchu returns 100 per page, we fetch the remaining pages sequentially or batched
+    // To prevent rate limiting from the worker or source, we fetch sequentially but it might take a while if > 1000 chapters
+    // For MTC, limit might be capped, so we paginate until empty
+    let hasMore = true;
+    page++;
+
+    while (hasMore) {
+        // Fetch 3 pages concurrently to reduce API load and avoid rate limits
+        const promises = [];
+        for (let i = 0; i < 3; i++) {
+            promises.push(axios.get(`/api/metruyenchu?action=chapters&bookid=${bookid}&page=${page + i}`));
+        }
+        
+        const results = await Promise.allSettled(promises);
+        let emptyHit = false;
+
+        for (const p of results) {
+            if (p.status === 'fulfilled') {
+                const chapters = p.value.data?.data?.chapters || [];
+                if (chapters.length > 0) {
+                    allChapters = allChapters.concat(chapters);
+                }
+                if (chapters.length < 100) {
+                    emptyHit = true;
+                }
+            } else {
+                emptyHit = true; // Stop on error to prevent infinite loops
+            }
+        }
+
+        if (onProgress) {
+            const uniqueSoFar = Array.from(new Map(allChapters.map(c => [c.id || c._id, c])).values());
+            allChapters = uniqueSoFar;
+            onProgress(uniqueSoFar);
+        }
+        
+        // Save intermediate cache so if user leaves early, we don't lose progress
+        saveCachedChapters(bookid, allChapters).catch(console.error);
+
+        if (emptyHit) break;
+        page += 3;
+
+        // Add delay between batches to prevent spamming the source
+        await new Promise(resolve => setTimeout(resolve, 800));
+    }
+
+    // Remove duplicates just in case
+    const uniqueChapters = Array.from(new Map(allChapters.map(c => [c.id || c._id, c])).values());
+
+    // Save final complete cache
+    saveCachedChapters(bookid, uniqueChapters).catch(console.error);
+
+    return {
+        status: 'success',
+        data: {
+            chapters: uniqueChapters
+        }
+    };
 }
 
 export async function fetchNovelChapterContent(bookid: string, chapterId: string) {

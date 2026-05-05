@@ -57,7 +57,16 @@ const Search = () => {
     const [nhentaiTagQuery, setNhentaiTagQuery] = useState('');
 
     // User text input query
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState(searchParams.get('q') || '');
+    
+    // Sync URL q parameter to query state
+    useEffect(() => {
+        const q = searchParams.get('q');
+        if (q !== null && q !== query) {
+            setQuery(q);
+        }
+    }, [searchParams.get('q')]);
+
     const debouncedQuery = useDebounce(query, 500);
 
     const isTextSearch = debouncedQuery.length > 2;
@@ -155,6 +164,8 @@ const Search = () => {
         initialPageParam: 1,
         enabled: isSearchEnabled,
     });
+
+
 
     // Reset and refetch when query changes
     useEffect(() => {

@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { ArrowLeft, BookOpen, Loader2, ChevronDown, ChevronUp, Globe, Share2, Bookmark } from 'lucide-react';
+import { ArrowLeft, BookOpen, Loader2, ChevronDown, ChevronUp, Globe, Share2, Bookmark, Download } from 'lucide-react';
 import * as STVService from '../services/sangtacviet';
 import * as MTCService from '../services/metruyenchu';
 import { getProxiedImageUrl } from '../utils/imageProxy';
+import { NovelDownloader } from '../components/NovelDownloader';
 
 const NovelDetail = () => {
     const { sourceId, host, bookId } = useParams();
@@ -15,6 +16,8 @@ const NovelDetail = () => {
     const [activeBookId, setActiveBookId] = useState(bookId || '');
     const [isCopied, setIsCopied] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
+    const [isDownloaderOpen, setIsDownloaderOpen] = useState(false);
+    const [streamedChapters, setStreamedChapters] = useState<any[]>([]);
     const token = localStorage.getItem('token');
 
 
@@ -28,7 +31,11 @@ const NovelDetail = () => {
     // Fetch chapters for the active host
     const { data: chaptersData, isLoading: chaptersLoading } = useQuery({
         queryKey: ['novel-chapters', sourceId, activeHost, activeBookId],
-        queryFn: () => sourceId === 'metruyenchu' ? MTCService.fetchNovelChapters(activeBookId) : STVService.fetchNovelChapters(activeHost, activeBookId),
+        queryFn: () => sourceId === 'metruyenchu' 
+            ? MTCService.fetchNovelChapters(activeBookId, (partialChapters) => {
+                setStreamedChapters(partialChapters);
+            }) 
+            : STVService.fetchNovelChapters(activeHost, activeBookId),
         enabled: !!activeHost && !!activeBookId,
     });
 
@@ -45,7 +52,11 @@ const NovelDetail = () => {
     const historyData = historyRes;
 
     const novel = sourceId === 'metruyenchu' ? detailData?.data : detailData?.data?.item;
-    const chapters = sourceId === 'metruyenchu' ? (chaptersData?.data?.chapters || []) : (chaptersData?.data?.items || []);
+    let chapters = sourceId === 'metruyenchu' ? (chaptersData?.data?.chapters || []) : (chaptersData?.data?.items || []);
+    if (sourceId === 'metruyenchu' && chapters.length === 0 && streamedChapters.length > 0) {
+        chapters = streamedChapters;
+    }
+
     const availableHosts: any[] = novel?.available_hosts || [];
     const sortedChapters = sortAsc ? chapters : [...chapters].reverse();
 
@@ -201,23 +212,34 @@ const NovelDetail = () => {
                         </div>
                     )}
 
-                    {/* Start Reading Button */}
+                    {/* Start Reading & Download Buttons */}
                     {chapters.length > 0 && (
-                        <button
-                            onClick={() => {
-                                const targetChapter = continueReadingInfo ? continueReadingInfo.chapter_id : (chapters[0]._id || chapters[0].id);
-                                navigate(`/novel-read/${sourceId}/${activeHost}/${activeBookId}/${targetChapter}`, {
-                                    state: { 
-                                        thumbUrl: novel.thumb_url,
-                                        initialScroll: continueReadingInfo?.chapter_id === targetChapter ? continueReadingInfo?.page_number : 0
-                                    }
-                                });
-                            }}
-                            className="w-full py-3 rounded-xl bg-[var(--color-primary)] text-white font-medium flex items-center justify-center gap-2 mb-4 hover:opacity-90 transition-opacity"
-                        >
-                            <BookOpen size={18} />
-                            {continueReadingInfo ? `Đọc tiếp ${chapters.find((c: any) => (c._id || c.id) === continueReadingInfo.chapter_id)?.name || continueReadingInfo.chapter_id.replace(/^chuong-/i, 'Chương ').replace(/-[a-zA-Z0-9]+$/, '')}` : 'Bắt đầu đọc'}
-                        </button>
+                        <div className="flex gap-2 mb-4">
+                            <button
+                                onClick={() => {
+                                    const targetChapter = continueReadingInfo ? continueReadingInfo.chapter_id : (chapters[0]._id || chapters[0].id);
+                                    navigate(`/novel-read/${sourceId}/${activeHost}/${activeBookId}/${targetChapter}`, {
+                                        state: { 
+                                            thumbUrl: novel.thumb_url,
+                                            initialScroll: continueReadingInfo?.chapter_id === targetChapter ? continueReadingInfo?.page_number : 0
+                                        }
+                                    });
+                                }}
+                                className="flex-1 py-3 rounded-xl bg-[var(--color-primary)] text-white font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                            >
+                                <BookOpen size={18} />
+                                <span className="line-clamp-1">
+                                    {continueReadingInfo ? `Đọc tiếp ${chapters.find((c: any) => (c._id || c.id) === continueReadingInfo.chapter_id)?.name || continueReadingInfo.chapter_id.replace(/^chuong-/i, 'Chương ').replace(/-[a-zA-Z0-9]+$/, '')}` : 'Bắt đầu đọc'}
+                                </span>
+                            </button>
+                            <button
+                                onClick={() => setIsDownloaderOpen(true)}
+                                className="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium flex items-center justify-center transition-colors"
+                                title="Tải xuống (.txt)"
+                            >
+                                <Download size={20} />
+                            </button>
+                        </div>
                     )}
 
                     {/* Available Hosts */}
@@ -245,10 +267,13 @@ const NovelDetail = () => {
                     {/* Chapter List */}
                     <div>
                         <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-sm font-medium text-[var(--color-text)]">
+                            <h3 className="text-sm font-medium text-[var(--color-text)] flex items-center gap-2">
                                 Danh sách chương ({chapters.length})
                                 {activeHost !== host && (
-                                    <span className="text-xs text-[var(--color-primary)] ml-2">• {activeHost}</span>
+                                    <span className="text-xs text-[var(--color-primary)] ml-1">• {activeHost}</span>
+                                )}
+                                {chaptersLoading && sourceId === 'metruyenchu' && streamedChapters.length > 0 && (
+                                    <Loader2 className="animate-spin text-[var(--color-primary)] ml-1" size={14} title="Đang tiếp tục tải thêm chương..." />
                                 )}
                             </h3>
                             <button
@@ -260,7 +285,7 @@ const NovelDetail = () => {
                             </button>
                         </div>
 
-                        {chaptersLoading ? (
+                        {chaptersLoading && chapters.length === 0 ? (
                             <div className="flex justify-center py-8">
                                 <Loader2 className="animate-spin text-[var(--color-primary)]" size={24} />
                             </div>
@@ -269,7 +294,7 @@ const NovelDetail = () => {
                                 Không tìm thấy chương nào. Thử chọn nguồn khác.
                             </div>
                         ) : (
-                            <div className="space-y-0.5">
+                            <div className="space-y-0.5 max-h-96 overflow-y-auto border border-white/10 rounded-lg p-1 bg-[var(--color-bg)]/50 custom-scrollbar">
                                 {sortedChapters.map((ch: any) => (
                                     <Link
                                         key={ch._id || ch.id}
@@ -284,6 +309,16 @@ const NovelDetail = () => {
                     </div>
                 </div>
             )}
+
+            <NovelDownloader
+                isOpen={isDownloaderOpen}
+                onClose={() => setIsDownloaderOpen(false)}
+                novelName={novel?.name || 'Novel'}
+                sourceId={sourceId!}
+                host={activeHost}
+                bookId={activeBookId}
+                chapters={chapters}
+            />
         </div>
     );
 };

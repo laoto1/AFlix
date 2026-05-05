@@ -6,7 +6,8 @@ export type DownloadStatus = 'pending' | 'downloading' | 'completed' | 'error' |
 export interface DownloadChapter {
     chapterName: string;
     chapterId: string;
-    chapterApiUrl: string;
+    chapterApiUrl?: string; // Optional for novels, used for comics
+    chapterApiData?: string; // For STV novels
     status: DownloadStatus;
     progress: number;
 }
@@ -22,12 +23,15 @@ export interface DownloadItem {
     chapters: DownloadChapter[];
     isSingleZip?: boolean;
     isPaused?: boolean;
+    type?: 'comic' | 'novel'; // Added to distinguish novel vs comic
+    host?: string; // For STV
+    bookId?: string; // For STV/MTC
 }
 
 interface DownloadContextType {
     queue: DownloadItem[];
     addDownloads: (comicDetails: {
-        comicName: string, sourceId: string, comicSlug: string, thumbUrl: string, isSingleZip?: boolean
+        comicName: string, sourceId: string, comicSlug: string, thumbUrl: string, isSingleZip?: boolean, type?: 'comic' | 'novel', host?: string, bookId?: string
     }, items: Omit<DownloadChapter, 'status' | 'progress'>[]) => void;
     removeDownload: (id: string) => void;
     clearAll: () => void;
@@ -92,8 +96,8 @@ export const DownloadProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
             const item = queue[nextItemIndex];
 
-            // Handle Single Zip
-            if (item.isSingleZip) {
+            // Handle Novel Download
+            if (item.type === 'novel') {
                 setQueue(prev => {
                     const newQ = [...prev];
                     const idx = newQ.findIndex(q => q.id === item.id);
@@ -102,10 +106,65 @@ export const DownloadProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 });
 
                 try {
+                    import('../utils/downloader').then(async ({ downloadNovelAsTxt }) => {
+                        await downloadNovelAsTxt(
+                            item.comicName,
+                            item.sourceId,
+                            item.host || '',
+                            item.bookId || '',
+                            item.chapters.map(c => ({ chapterName: c.chapterName, chapterId: c.chapterId, chapterApiData: c.chapterApiData })),
+                            (progress) => {
+                                setQueue(prev => {
+                                    const idx = prev.findIndex(q => q.id === item.id);
+                                    if (idx === -1) return prev;
+                                    const newQ = [...prev];
+                                    newQ[idx] = { ...newQ[idx], progress: progress.percent };
+                                    return newQ;
+                                });
+                            }
+                        );
+
+                        setQueue(prev => {
+                            const idx = prev.findIndex(q => q.id === item.id);
+                            if (idx === -1) return prev;
+                            const newQ = [...prev];
+                            newQ[idx] = {
+                                ...newQ[idx],
+                                status: 'completed',
+                                progress: 100,
+                                chapters: newQ[idx].chapters.map(c => ({ ...c, status: 'completed', progress: 100 }))
+                            };
+                            return newQ;
+                        });
+                        isProcessingRef.current = false;
+                        setTimeout(() => { }, 100);
+                    }).catch(error => {
+                        console.error('Failed to import downloader or download novel:', error);
+                        setQueue(prev => {
+                            const idx = prev.findIndex(q => q.id === item.id);
+                            if (idx === -1) return prev;
+                            const newQ = [...prev];
+                            newQ[idx] = { ...newQ[idx], status: 'error', progress: 0 };
+                            return newQ;
+                        });
+                        isProcessingRef.current = false;
+                        setTimeout(() => { }, 100);
+                    });
+                } catch (e) {
+                    isProcessingRef.current = false;
+                    setTimeout(() => { }, 100);
+                }
+                return;
+            }
+
+            // Handle Single Zip
+            if (item.isSingleZip) {
+
+                try {
                     import('../utils/downloader').then(async ({ downloadComicAsSingleZip }) => {
                         await downloadComicAsSingleZip(
                             item.comicName,
-                            item.chapters,
+                            item.chapters.map(c => ({ chapterName: c.chapterName, chapterApiUrl: c.chapterApiUrl || '' })),
                             (progress) => {
                                 setQueue(prev => {
                                     const idx = prev.findIndex(q => q.id === item.id);
@@ -185,7 +244,7 @@ export const DownloadProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 await downloadChapterAsZip(
                     item.comicName,
                     chapter.chapterName,
-                    chapter.chapterApiUrl,
+                    chapter.chapterApiUrl || '',
                     (progress) => {
                         setQueue(prev => {
                             const idx = prev.findIndex(q => q.id === item.id);
@@ -245,7 +304,7 @@ export const DownloadProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }, [isDownloading, queue]);
 
     const addDownloads = (
-        comicDetails: { comicName: string, sourceId: string, comicSlug: string, thumbUrl: string, isSingleZip?: boolean },
+        comicDetails: { comicName: string, sourceId: string, comicSlug: string, thumbUrl: string, isSingleZip?: boolean, type?: 'comic' | 'novel', host?: string, bookId?: string },
         items: Omit<DownloadChapter, 'status' | 'progress'>[]
     ) => {
         setQueue(prev => {
@@ -301,7 +360,10 @@ export const DownloadProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                     progress: 0,
                     chapters: newChapters,
                     isSingleZip: comicDetails.isSingleZip,
-                    isPaused: false
+                    isPaused: false,
+                    type: comicDetails.type || 'comic',
+                    host: comicDetails.host,
+                    bookId: comicDetails.bookId
                 });
             }
 

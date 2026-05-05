@@ -168,9 +168,9 @@ export const fetchList = async (slug: string, page: number = 1, filters: Record<
     const res = await fetch(`${BASE}/v1/api/danh-sach/${slug}?${params.toString()}`).then(r => r.json());
     return {
         data: {
-            items: res.data.items,
-            pagination: res.data.params.pagination,
-            APP_DOMAIN_CDN_IMAGE: res.data.APP_DOMAIN_CDN_IMAGE || 'https://phimimg.com/'
+            items: res.data?.items || [],
+            pagination: res.data?.params?.pagination,
+            APP_DOMAIN_CDN_IMAGE: res.data?.APP_DOMAIN_CDN_IMAGE || 'https://phimimg.com/'
         }
     };
 };
@@ -184,9 +184,9 @@ export const fetchSearch = async (keyword: string, page: number = 1) => {
     const res = await fetch(`${BASE}/v1/api/tim-kiem?keyword=${encodeURIComponent(keyword)}&page=${page}`).then(r => r.json());
     return {
         data: {
-            items: res.data.items,
-            pagination: res.data.params.pagination,
-            APP_DOMAIN_CDN_IMAGE: res.data.APP_DOMAIN_CDN_IMAGE || 'https://phimimg.com/'
+            items: res.data?.items || [],
+            pagination: res.data?.params?.pagination,
+            APP_DOMAIN_CDN_IMAGE: res.data?.APP_DOMAIN_CDN_IMAGE || 'https://phimimg.com/'
         }
     };
 };

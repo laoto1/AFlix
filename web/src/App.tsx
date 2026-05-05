@@ -23,6 +23,10 @@ import Library from './pages/Library';
 import Search from './pages/Search';
 import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile';
+import CommunityCreateNovel from './pages/CommunityCreateNovel';
+import CommunityNovelDetail from './pages/CommunityNovelDetail';
+import CommunityNovelReader from './pages/CommunityNovelReader';
+import CommunityAddChapter from './pages/CommunityAddChapter';
 import Notifications from './pages/Notifications';
 import Downloads from './pages/Downloads';
 
@@ -94,6 +98,12 @@ const AppContent = () => {
         {/* Movie routes */}
         <Route path="/movie-source/:sourceId" element={<ProtectedRoute><MovieSourceDetail /></ProtectedRoute>} />
         <Route path="/movie/:sourceId/:slug" element={<ProtectedRoute><MovieDetail /></ProtectedRoute>} />
+
+        {/* Group / Community routes */}
+        <Route path="/community/create" element={<ProtectedRoute><CommunityCreateNovel /></ProtectedRoute>} />
+        <Route path="/community/novel/:id" element={<ProtectedRoute><CommunityNovelDetail /></ProtectedRoute>} />
+        <Route path="/community/novel/:id/chapter/:chapterId" element={<ProtectedRoute><CommunityNovelReader /></ProtectedRoute>} />
+        <Route path="/community/novel/:id/add-chapter" element={<ProtectedRoute><CommunityAddChapter /></ProtectedRoute>} />
       </Routes>
     </>
   );

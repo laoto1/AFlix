@@ -2,6 +2,8 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
 import { workerPool } from './workerPool';
+import * as MTCService from '../services/metruyenchu';
+import * as STVService from '../services/sangtacviet';
 
 export interface DownloadProgress {
     loaded: number;
@@ -234,6 +236,80 @@ export const downloadComicAsSingleZip = async (
 
     } catch (error) {
         console.error('Failed to download comic as single zip:', error);
+        throw error;
+    }
+};
+
+/**
+ * Downloads multiple novel chapters and compiles them into a single TXT file.
+ */
+export const downloadNovelAsTxt = async (
+    novelName: string,
+    sourceId: string,
+    host: string,
+    bookId: string,
+    chapters: { chapterName: string, chapterId: string, chapterApiData?: string }[],
+    onProgress?: (progress: DownloadProgress) => void
+): Promise<void> => {
+    try {
+        const totalToDownload = chapters.length;
+        if (totalToDownload === 0) throw new Error('No chapters to download');
+
+        if (onProgress) {
+            onProgress({ loaded: 0, total: totalToDownload, percent: 0 });
+        }
+
+        const compiledText: string[] = [`${novelName}\n\n`];
+        
+        const htmlToText = (html: string) => {
+            const temp = document.createElement('div');
+            temp.innerHTML = html.replace(/<br\s*[\/]?>/gi, '\n').replace(/<\/p>/gi, '\n\n');
+            return temp.textContent || temp.innerText || "";
+        };
+
+        const concurrencyLimit = 3;
+        let currentIndex = 0;
+        let downloadedCount = 0;
+
+        const worker = async () => {
+            while (currentIndex < chapters.length) {
+                const idx = currentIndex++;
+                const chapter = chapters[idx];
+                const cId = chapter.chapterApiData || chapter.chapterId;
+                
+                try {
+                    const res = sourceId === 'metruyenchu' 
+                        ? await MTCService.fetchNovelChapterContent(bookId, cId)
+                        : await STVService.fetchNovelChapterContent(host, bookId, cId);
+                    
+                    const data = sourceId === 'metruyenchu' ? res.data : res.data;
+                    const chapterNameStr = data?.name || chapter.chapterName || `Chương ${idx + 1}`;
+                    const content = data?.content || '';
+                    
+                    compiledText[idx + 1] = `\n\n${chapterNameStr}\n\n${htmlToText(content)}`;
+                } catch (error) {
+                    compiledText[idx + 1] = `\n\n${chapter.chapterName || 'Chương lỗi'}\n\n(Lỗi tải chương này)`;
+                }
+
+                downloadedCount++;
+                if (onProgress) {
+                    onProgress({ loaded: downloadedCount, total: totalToDownload, percent: Math.round((downloadedCount / totalToDownload) * 100) });
+                }
+            }
+        };
+
+        const workers = Array.from({ length: concurrencyLimit }, () => worker());
+        await Promise.all(workers);
+
+        // Download Blob
+        const finalContent = compiledText.join('');
+        const blob = new Blob([finalContent], { type: 'text/plain;charset=utf-8' });
+        
+        const safeNovelName = novelName.replace(/[<>:"/\\|?*]+/g, '_');
+        saveAs(blob, `${safeNovelName}_${chapters[0].chapterName}-${chapters[chapters.length-1].chapterName}.txt`);
+
+    } catch (error) {
+        console.error('Failed to download novel:', error);
         throw error;
     }
 };

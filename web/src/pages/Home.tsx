@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Globe, Bell } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
 import { useNotifications } from '../contexts/NotificationContext';
+import CommunityTab from '../components/CommunityTab';
 
 const INITIAL_SOURCES = [
     {
@@ -67,7 +68,7 @@ const SECRET_THEPY_SOURCE = {
 };
 
 const Home = () => {
-    const [activeTab, setActiveTab] = useState<'manga' | 'novel' | 'movie'>('manga');
+    const [activeTab, setActiveTab] = useState<'manga' | 'novel' | 'movie' | 'community'>('manga');
     const { t } = useSettings();
     const { unreadCount } = useNotifications();
     const [sources, setSources] = useState(INITIAL_SOURCES);
@@ -105,7 +106,7 @@ const Home = () => {
                 </div>
                 {/* Media Tabs */}
                 <div className="flex px-4 gap-4">
-                    {(['manga', 'novel', 'movie'] as const).map(tab => (
+                    {(['manga', 'novel', 'movie', 'community'] as const).map(tab => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
@@ -114,7 +115,7 @@ const Home = () => {
                                 : 'border-transparent text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
                                 }`}
                         >
-                            {t(`nav.${tab}`)}
+                            {tab === 'community' ? 'Nhóm' : t(`nav.${tab}`)}
                         </button>
                     ))}
                 </div>
@@ -122,7 +123,9 @@ const Home = () => {
 
             {/* Content */}
             <div className="p-4 flex-1">
-                {activeTab === 'manga' ? (
+                {activeTab === 'community' ? (
+                    <CommunityTab />
+                ) : activeTab === 'manga' ? (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         {sources.map((source) => (
                             <Link

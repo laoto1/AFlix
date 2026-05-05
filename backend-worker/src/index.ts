@@ -12,6 +12,8 @@ export interface Env {
     TELEGRAM_CHAT_ID: string;
     NETTRUYEN_DOMAINS: string;
     STV_CHAPTER_API?: string;  // Railway Docker service URL for chapter scraping
+    ADMIN_SECRET?: string;     // Secret key for TeleCloud admin
+    TMDB_API_KEY?: string;     // TMDB Bearer Token or API Key
 }
 
 const app = new Hono<{ Bindings: Env }>();
@@ -29,6 +31,9 @@ import nettruyenRouter from './routes/nettruyen';
 import nhentaiRouter from './routes/nhentai';
 import nhentaiTagsRouter from './routes/nhentai-tags';
 import kkphimRouter from './routes/kkphim';
+import telecloudRouter from './routes/telecloud';
+import tmdbRouter from './routes/tmdb';
+import communityRouter from './routes/community';
 // Note: sangtacviet is not fully migrated to Hono yet, but we will mount it later if needed.
 
 import { cache } from 'hono/cache';
@@ -36,7 +41,7 @@ import { cache } from 'hono/cache';
 app.use('*', cors({
     origin: '*',
     allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE'],
-    allowHeaders: ['Content-Type', 'Authorization'],
+    allowHeaders: ['Content-Type', 'Authorization', 'x-admin-key'],
     exposeHeaders: ['Content-Length', 'x-request-id'],
     maxAge: 86400,
 }));
@@ -49,6 +54,9 @@ app.route('/api/nettruyen', nettruyenRouter);
 app.route('/api/nhentai', nhentaiRouter);
 app.route('/api/nhentai-tags', nhentaiTagsRouter);
 app.route('/api/kkphim', kkphimRouter);
+app.route('/api/telecloud', telecloudRouter);
+app.route('/api/tmdb', tmdbRouter);
+app.route('/api/community', communityRouter);
 
 app.route('/api/metruyenchu', metruyenchuRouter);
 

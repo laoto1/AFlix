@@ -1,16 +1,19 @@
 import { useDownloadQueue } from '../contexts/DownloadContext';
-import { Play, Pause, Trash2, DownloadCloud } from 'lucide-react';
+import { Play, Pause, Trash2, DownloadCloud, Image as ImageIcon, BookText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../contexts/SettingsContext';
+import { useState } from 'react';
 
 const Downloads = () => {
     const { queue, resumeQueue, pauseQueue, removeDownload, clearAll, isDownloading, pauseItem, resumeItem } = useDownloadQueue();
     const navigate = useNavigate();
     const { t } = useSettings();
+    const [activeTab, setActiveTab] = useState<'comic' | 'novel'>('comic');
 
-    const pendingCount = queue.filter(q => q.status === 'pending').length;
-    const activeOrPending = queue.filter(q => q.status === 'pending' || q.status === 'downloading');
-    const completed = queue.filter(q => q.status === 'completed');
+    const filteredQueue = queue.filter(q => (q.type || 'comic') === activeTab);
+    const pendingCount = filteredQueue.filter(q => q.status === 'pending').length;
+    const activeOrPending = filteredQueue.filter(q => q.status === 'pending' || q.status === 'downloading');
+    const completed = filteredQueue.filter(q => q.status === 'completed');
 
     return (
         <div className="flex flex-col h-full bg-[var(--color-bg)]">
@@ -53,9 +56,33 @@ const Downloads = () => {
                 </div>
             </header>
 
+            {/* Tabs */}
+            <div className="flex border-b border-[var(--color-border)]">
+                <button
+                    onClick={() => setActiveTab('comic')}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors relative ${activeTab === 'comic' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
+                        }`}
+                >
+                    <ImageIcon size={18} /> Truyện tranh
+                    {activeTab === 'comic' && (
+                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[var(--color-primary)] rounded-t-full" />
+                    )}
+                </button>
+                <button
+                    onClick={() => setActiveTab('novel')}
+                    className={`flex-1 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors relative ${activeTab === 'novel' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
+                        }`}
+                >
+                    <BookText size={18} /> Tiểu thuyết
+                    {activeTab === 'novel' && (
+                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[var(--color-primary)] rounded-t-full" />
+                    )}
+                </button>
+            </div>
+
             {/* Content */}
-            <div className="p-4 flex flex-col gap-4">
-                {queue.length === 0 ? (
+            <div className="p-4 flex flex-col gap-4 overflow-y-auto">
+                {filteredQueue.length === 0 ? (
                     <div className="flex flex-col items-center justify-center p-20 text-[var(--color-text-muted)]">
                         <DownloadCloud size={48} className="mb-4 opacity-50" />
                         <p>{t('downloads.no_downloads')}</p>
@@ -80,7 +107,7 @@ const Downloads = () => {
                                                     <img src={item.thumbUrl} alt={item.comicName} className="w-full h-full object-cover opacity-90" />
                                                 ) : (
                                                     <div className="w-full h-full flex items-center justify-center">
-                                                        <DownloadCloud size={20} className="text-[var(--color-text-muted)] opacity-50" />
+                                                        {item.type === 'novel' ? <BookText size={20} className="text-[var(--color-text-muted)] opacity-50" /> : <ImageIcon size={20} className="text-[var(--color-text-muted)] opacity-50" />}
                                                     </div>
                                                 )}
                                             </div>
@@ -149,7 +176,11 @@ const Downloads = () => {
                                             <div className="w-10 h-10 shrink-0 rounded bg-[var(--color-surface-hover)] overflow-hidden">
                                                 {item.thumbUrl ? (
                                                     <img src={item.thumbUrl} alt={item.comicName} className="w-full h-full object-cover" />
-                                                ) : null}
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center">
+                                                        {item.type === 'novel' ? <BookText size={16} className="text-[var(--color-text-muted)] opacity-50" /> : <ImageIcon size={16} className="text-[var(--color-text-muted)] opacity-50" />}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <h3 className="text-[var(--color-text)] text-sm line-clamp-1">{item.comicName}</h3>

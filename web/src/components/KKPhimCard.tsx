@@ -27,7 +27,8 @@ export const KKPhimCard: React.FC<KKPhimCardProps> = ({ movie: initialMovie, sou
         : initialMovie;
 
     const domain = 'https://phimimg.com'; // Ophim image CDN
-    const thumbUrl = movie.thumb_url?.startsWith('http') ? movie.thumb_url : `${domain}/${movie.thumb_url || movie.poster_url}`;
+    const rawThumb = movie.thumb_url || movie.poster_url;
+    const thumbUrl = (rawThumb && rawThumb.startsWith('http')) ? rawThumb : `${domain}/${rawThumb}`;
     
     // For Search page, some categories might be in different format
     const categories = movie.category || movie.categories || [];

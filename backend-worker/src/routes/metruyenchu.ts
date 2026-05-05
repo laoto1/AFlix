@@ -262,6 +262,14 @@ metruyenchu.get('/', async (c) => {
         if (action === 'chapters') {
             if (!bookid) return c.json({ error: 'Missing bookid' }, 400 as any);
 
+            const cacheKey = new Request(c.req.url.toString(), c.req.raw);
+            const edgeCache = caches.default;
+
+            try {
+                const cachedResponse = await edgeCache.match(cacheKey);
+                if (cachedResponse) return cachedResponse;
+            } catch (e) {}
+
             const items: any[] = [];
             let targetNumericId = await getNumericIdForSlug(bookid as string);
             if (!targetNumericId) return c.json({ error: 'Cannot find numeric ID for chapters' }, 404 as any);
@@ -294,7 +302,13 @@ metruyenchu.get('/', async (c) => {
                 console.error("Error fetching chapters:", err);
             }
 
-            return c.json({ status: 'success', data: { chapters: items } });
+            const res = c.json({ status: 'success', data: { chapters: items } });
+            res.headers.set('Cache-Control', 'public, max-age=7200'); // Cache on Edge for 2 hours
+            try {
+                c.executionCtx.waitUntil(edgeCache.put(cacheKey, res.clone()));
+            } catch (e) {}
+
+            return res;
         }
 
         // ── CHAPTER CONTENT ──
