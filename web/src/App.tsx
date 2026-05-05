@@ -24,6 +24,7 @@ import Search from './pages/Search';
 import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile';
 import CommunityCreateNovel from './pages/CommunityCreateNovel';
+import CommunityEditNovel from './pages/CommunityEditNovel';
 import CommunityNovelDetail from './pages/CommunityNovelDetail';
 import CommunityNovelReader from './pages/CommunityNovelReader';
 import CommunityAddChapter from './pages/CommunityAddChapter';
@@ -101,6 +102,7 @@ const AppContent = () => {
 
         {/* Group / Community routes */}
         <Route path="/community/create" element={<ProtectedRoute><CommunityCreateNovel /></ProtectedRoute>} />
+        <Route path="/community/novel/:id/edit" element={<ProtectedRoute><CommunityEditNovel /></ProtectedRoute>} />
         <Route path="/community/novel/:id" element={<ProtectedRoute><CommunityNovelDetail /></ProtectedRoute>} />
         <Route path="/community/novel/:id/chapter/:chapterId" element={<ProtectedRoute><CommunityNovelReader /></ProtectedRoute>} />
         <Route path="/community/novel/:id/add-chapter" element={<ProtectedRoute><CommunityAddChapter /></ProtectedRoute>} />

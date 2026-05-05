@@ -84,7 +84,7 @@ const CommunityNovelDetail = () => {
         );
     }
 
-    const isOwner = user && user.id === novelData.owner_id;
+    const isOwner = user && String(user.id) === String(novelData.owner_id);
 
     return (
         <div className="flex flex-col min-h-screen bg-[var(--color-bg)]">
@@ -134,6 +134,11 @@ const CommunityNovelDetail = () => {
                     <span className="px-3 py-1 bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/30 text-[var(--color-primary)] text-xs font-medium rounded-md">
                         {novelData.status}
                     </span>
+                    {novelData.updated_at && (
+                        <span className="px-3 py-1 bg-[#1e1e1e] border border-[#333] text-gray-400 text-xs font-medium rounded-md">
+                            Cập nhật: {new Date(novelData.updated_at).toLocaleDateString('vi-VN')}
+                        </span>
+                    )}
                 </div>
 
                 {/* Description */}
@@ -152,12 +157,20 @@ const CommunityNovelDetail = () => {
                             Danh sách chương <span className="text-sm font-normal text-gray-500">({novelData.chapters?.length || 0})</span>
                         </h2>
                         {isOwner && (
-                            <Link 
-                                to={`/community/novel/${id}/add-chapter`}
-                                className="flex items-center gap-1 px-3 py-1.5 bg-[#2a2a2a] hover:bg-[#333] border border-[#444] rounded-lg text-sm font-medium text-white transition-colors"
-                            >
-                                <Plus size={16} /> Thêm chương
-                            </Link>
+                            <div className="flex items-center gap-2">
+                                <Link 
+                                    to={`/community/novel/${id}/edit`}
+                                    className="flex items-center gap-1 px-3 py-1.5 bg-[#1a1a1a] hover:bg-[#222] border border-[#333] rounded-lg text-sm font-medium text-gray-300 transition-colors"
+                                >
+                                    Sửa truyện
+                                </Link>
+                                <Link 
+                                    to={`/community/novel/${id}/add-chapter`}
+                                    className="flex items-center gap-1 px-3 py-1.5 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)] text-white border border-[var(--color-primary)] rounded-lg text-sm font-medium transition-colors"
+                                >
+                                    <Plus size={16} /> Thêm chương
+                                </Link>
+                            </div>
                         )}
                     </div>
 
