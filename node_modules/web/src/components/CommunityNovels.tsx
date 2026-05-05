@@ -18,7 +18,7 @@ const CommunityNovels = () => {
     const { data, isLoading } = useQuery({
         queryKey: ['communityNovels', filter],
         queryFn: async () => {
-            const res = await axios.get(`${import.meta.env.VITE_CLOUDFLARE_WORKERS}/api/community/novels?tab=${filter}`);
+            const res = await axios.get(`https://share.laoto.workers.dev/api/community/novels?tab=${filter}`);
             return res.data;
         }
     });

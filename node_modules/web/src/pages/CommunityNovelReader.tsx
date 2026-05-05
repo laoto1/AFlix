@@ -36,7 +36,7 @@ const CommunityNovelReader = () => {
     const { data: novelData } = useQuery({
         queryKey: ['communityNovel', id],
         queryFn: async () => {
-            const res = await axios.get(`${import.meta.env.VITE_CLOUDFLARE_WORKERS}/api/community/novels/${id}`);
+            const res = await axios.get(`https://share.laoto.workers.dev/api/community/novels/${id}`);
             return res.data?.data;
         }
     });
@@ -45,7 +45,7 @@ const CommunityNovelReader = () => {
     const { data: chapterData, isLoading } = useQuery({
         queryKey: ['communityChapter', id, chapterId],
         queryFn: async () => {
-            const res = await axios.get(`${import.meta.env.VITE_CLOUDFLARE_WORKERS}/api/community/novels/${id}/chapters/${chapterId}`);
+            const res = await axios.get(`https://share.laoto.workers.dev/api/community/novels/${id}/chapters/${chapterId}`);
             return res.data?.data;
         }
     });

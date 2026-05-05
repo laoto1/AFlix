@@ -18,7 +18,7 @@ export const getProxiedImageUrl = (url: string | undefined | null): string => {
     }
 
     if (needsProxy) {
-        const workersStr = import.meta.env.VITE_CLOUDFLARE_WORKERS || '';
+        const workersStr = 'https://share.laoto.workers.dev';
         const workers = workersStr.split(',').map((s: string) => s.trim()).filter(Boolean);
         const workerUrl = workers.length > 0 ? workers[0] : '';
 

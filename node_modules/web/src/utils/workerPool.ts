@@ -13,7 +13,7 @@ class WorkerPool {
     readonly HEAL_TIME = 5 * 60 * 1000; // 5 minutes before retrying a dead worker
 
     constructor() {
-        const workersStr = import.meta.env.VITE_CLOUDFLARE_WORKERS || '';
+        const workersStr = 'https://share.laoto.workers.dev';
         this.workers = workersStr.split(',').map((s: string) => s.trim()).filter(Boolean);
     }
 

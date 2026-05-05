@@ -20,7 +20,7 @@ const CommunityAddChapter = () => {
 
         setIsSubmitting(true);
         try {
-            const res = await axios.post(`${import.meta.env.VITE_CLOUDFLARE_WORKERS}/api/community/novels/${id}/chapters`, {
+            const res = await axios.post(`https://share.laoto.workers.dev/api/community/novels/${id}/chapters`, {
                 title: title.trim(),
                 content_text: content.trim()
             }, {

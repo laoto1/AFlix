@@ -20,7 +20,7 @@ const CommunityNovelDetail = () => {
         if (!id) return;
         const trackView = async () => {
             try {
-                await axios.post(`${import.meta.env.VITE_CLOUDFLARE_WORKERS}/api/community/novels/${id}/view`, {
+                await axios.post(`https://share.laoto.workers.dev/api/community/novels/${id}/view`, {
                     viewer_hash: user ? user.id : undefined // anonymous uses IP on backend
                 });
             } catch (e) {}
@@ -33,7 +33,7 @@ const CommunityNovelDetail = () => {
         queryFn: async () => {
             const headers: any = {};
             if (token) headers.Authorization = `Bearer ${token}`;
-            const res = await axios.get(`${import.meta.env.VITE_CLOUDFLARE_WORKERS}/api/community/novels/${id}`, { headers });
+            const res = await axios.get(`https://share.laoto.workers.dev/api/community/novels/${id}`, { headers });
             return res.data?.data;
         }
     });
@@ -45,7 +45,7 @@ const CommunityNovelDetail = () => {
         }
         setIsLiking(true);
         try {
-            const res = await axios.post(`${import.meta.env.VITE_CLOUDFLARE_WORKERS}/api/community/novels/${id}/like`, {}, {
+            const res = await axios.post(`https://share.laoto.workers.dev/api/community/novels/${id}/like`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.data.status === 'success') {

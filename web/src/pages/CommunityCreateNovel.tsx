@@ -75,7 +75,7 @@ const CommunityCreateNovel = () => {
                     const resizedBase64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
                     
                     // Upload via existing ImgBB endpoint
-                    const res = await axios.post(`${import.meta.env.VITE_CLOUDFLARE_WORKERS}/api/upload`, { image: resizedBase64 });
+                    const res = await axios.post(`https://share.laoto.workers.dev/api/upload`, { image: resizedBase64 });
                     if (res.data.url) {
                         setCoverUrl(res.data.url);
                         toast.success('Tải ảnh bìa thành công!');
@@ -100,7 +100,7 @@ const CommunityCreateNovel = () => {
 
         setIsSubmitting(true);
         try {
-            const res = await axios.post(`${import.meta.env.VITE_CLOUDFLARE_WORKERS}/api/community/novels`, {
+            const res = await axios.post(`https://share.laoto.workers.dev/api/community/novels`, {
                 title: title.trim(),
                 description: description.trim(),
                 cover_url: coverUrl,
