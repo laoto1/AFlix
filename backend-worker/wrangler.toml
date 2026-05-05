@@ -17,5 +17,4 @@ TIDB_HOST = "gateway01.ap-southeast-1.prod.aws.tidbcloud.com"
 TIDB_PORT = "4000"
 TIDB_USER = "3t4pehrLoQRtKrH.root"
 TIDB_DATABASE = "test"
-# Store TIDB_PASSWORD in standard vars or secrets. Since the original .env wasn't hidden, we can mount it here
 TIDB_PASSWORD = "0Kooyu5MbL9ra688"
