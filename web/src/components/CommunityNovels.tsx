@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -33,7 +33,7 @@ const CommunityNovels = () => {
     const navigate = useNavigate();
 
     // Debounce search
-    useState(() => {
+    useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearch(search);
         }, 500);
