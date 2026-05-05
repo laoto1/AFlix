@@ -165,9 +165,44 @@ communityRouter.get('/novels/:id', async (c) => {
                     created_at: ch.created_at
                 })),
                 is_liked: isLiked,
-                owner_id: novel.user_id // to show "Add chapter" button
+                owner_id: novel.user_id, // to show "Add chapter" button
+                updated_at: novel.updated_at
             }
         });
+    } catch (e: any) {
+        return c.json({ status: 'error', message: e.message }, 500 as any);
+    }
+});
+
+// 3.5 Edit Novel
+communityRouter.put('/novels/:id', async (c) => {
+    try {
+        const user = await getUserFromAuth(c);
+        if (!user) return c.json({ status: 'error', message: 'Unauthorized' }, 401 as any);
+
+        const novelId = c.req.param('id');
+        const db = getDbConnection(c.env);
+        
+        const novelRes = await db.execute(`SELECT user_id FROM community_novels WHERE id = ?`, [novelId]);
+        if (!(novelRes as any).length || String((novelRes as any)[0].user_id) !== String(user.id)) {
+            return c.json({ status: 'error', message: 'Forbidden. You are not the owner.' }, 403 as any);
+        }
+
+        const body = await c.req.json();
+        await db.execute(`
+            UPDATE community_novels 
+            SET title = ?, description = ?, cover_url = ?, categories = ?, status = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `, [
+            body.title, 
+            body.description, 
+            body.cover_url, 
+            JSON.stringify(body.categories || []), 
+            body.status || 'ongoing',
+            novelId
+        ]);
+
+        return c.json({ status: 'success' });
     } catch (e: any) {
         return c.json({ status: 'error', message: e.message }, 500 as any);
     }
@@ -237,7 +272,7 @@ communityRouter.post('/novels/:id/chapters', async (c) => {
         const db = getDbConnection(c.env);
         
         const novelRes = await db.execute(`SELECT user_id FROM community_novels WHERE id = ?`, [novelId]);
-        if (!(novelRes as any).length || (novelRes as any)[0].user_id !== user.id) {
+        if (!(novelRes as any).length || String((novelRes as any)[0].user_id) !== String(user.id)) {
             return c.json({ status: 'error', message: 'Forbidden. You are not the owner.' }, 403 as any);
         }
 
