@@ -21,6 +21,7 @@ const CommunityEditNovel = () => {
     const [description, setDescription] = useState('');
     const [coverUrl, setCoverUrl] = useState('');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [customCategory, setCustomCategory] = useState('');
     const [status, setStatus] = useState('ongoing');
     
     const [isUploading, setIsUploading] = useState(false);
@@ -73,6 +74,21 @@ const CommunityEditNovel = () => {
             }
             setSelectedCategories(prev => [...prev, cat]);
         }
+    };
+
+    const addCustomCategory = () => {
+        const cat = customCategory.trim();
+        if (!cat) return;
+        if (selectedCategories.includes(cat)) {
+            setCustomCategory('');
+            return;
+        }
+        if (selectedCategories.length >= 3) {
+            toast.error('Chỉ được chọn tối đa 3 thể loại!');
+            return;
+        }
+        setSelectedCategories(prev => [...prev, cat]);
+        setCustomCategory('');
     };
 
     const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -239,6 +255,31 @@ const CommunityEditNovel = () => {
                                     {cat}
                                 </button>
                             ))}
+                            {selectedCategories.filter(cat => !CATEGORIES.includes(cat)).map(cat => (
+                                <button
+                                    key={cat}
+                                    onClick={() => toggleCategory(cat)}
+                                    className="px-3 py-1.5 rounded-full text-xs font-medium border transition-colors bg-[var(--color-primary)] border-[var(--color-primary)] text-white"
+                                >
+                                    {cat} ✕
+                                </button>
+                            ))}
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                            <input
+                                type="text"
+                                value={customCategory}
+                                onChange={e => setCustomCategory(e.target.value)}
+                                onKeyDown={e => e.key === 'Enter' && addCustomCategory()}
+                                placeholder="Nhập thể loại khác và ấn Enter..."
+                                className="flex-1 px-3 py-2 bg-[#1e1e1e] border border-[#333] rounded-lg text-sm text-white outline-none focus:border-[var(--color-primary)] transition-colors"
+                            />
+                            <button
+                                onClick={addCustomCategory}
+                                className="px-4 py-2 bg-[#2a2a2a] hover:bg-[#333] border border-[#444] rounded-lg text-sm font-medium text-white transition-colors"
+                            >
+                                Thêm
+                            </button>
                         </div>
                     </div>
                     
