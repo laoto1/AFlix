@@ -14,6 +14,15 @@ function uuidv4() {
     });
 }
 
+// Helper to safely parse JSON from DB
+const parseCategories = (cat: any) => {
+    if (!cat) return [];
+    if (typeof cat === 'string') {
+        try { return JSON.parse(cat); } catch { return []; }
+    }
+    return Array.isArray(cat) ? cat : [];
+};
+
 // Helper to extract user info from JWT
 async function getUserFromAuth(c: any) {
     const authHeader = c.req.header('Authorization');
@@ -72,7 +81,7 @@ communityRouter.get('/novels', async (c) => {
                     chapters_count: '?', // We can fetch this later or store it
                     view_count: item.view_count,
                     like_count: item.like_count,
-                    categories: item.categories ? JSON.parse(item.categories) : [],
+                    categories: parseCategories(item.categories),
                     status: item.status,
                     updated_at: item.updated_at
                 })),
@@ -148,7 +157,7 @@ communityRouter.get('/novels/:id', async (c) => {
                 status: novel.status,
                 view_count: novel.view_count,
                 like_count: novel.like_count,
-                categories: novel.categories ? JSON.parse(novel.categories).map((c: string) => ({ name: c, slug: c })) : [],
+                categories: parseCategories(novel.categories).map((c: string) => ({ name: c, slug: c })),
                 chapters: (chaptersRes as any).map((ch: any) => ({
                     id: ch.id,
                     name: ch.title,
